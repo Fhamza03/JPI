@@ -1,13 +1,11 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Signup from "./Signup";
+import Signup from "./Components/Signup";
 
-function App() {
+export default function App() {
   return (
     <div className="App">
+      {/* <Header /> */}
       <Signup />
     </div>
   );
 }
-
-export default App;
