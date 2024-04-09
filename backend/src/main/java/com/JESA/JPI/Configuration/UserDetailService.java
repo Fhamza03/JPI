@@ -1,0 +1,38 @@
+package com.JESA.JPI.Configuration;
+
+import com.JESA.JPI.Model.UserModel;
+import com.JESA.JPI.Repository.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class UserDetailService implements UserDetailsService {
+    @Autowired
+    UserRepo userRepo;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<UserModel> user = userRepo.findByUsername(username);
+        if (user.isPresent()) {
+            var userObj = user.get();
+            return User.builder()
+                    .username(userObj.getUsername())
+                    .password(userObj.getUserPassword())
+                    .roles(getRoles(userObj))
+                    .build();
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+    private String[] getRoles(UserModel user) {
+        if (user.getUserRole() == null) {
+            return new String[]{"USER"};
+        }
+        return user.getUserRole().split(",");
+    }
+}
