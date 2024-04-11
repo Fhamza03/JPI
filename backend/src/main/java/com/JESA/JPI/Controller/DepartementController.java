@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DepartementController {
     @Autowired
     DepartementService departementService;
-    @PostMapping("/index")
+    @PostMapping("/createDepartement")
     public DepartementModel saveToDatabase(@RequestBody DepartementModel departement){
         try {
             return departementService.CreateDepartement(departement);
