@@ -23,17 +23,11 @@ public class UserDetailService implements UserDetailsService {
             return User.builder()
                     .username(userObj.getUsername())
                     .password(userObj.getUserPassword())
-                    .roles(getRoles(userObj))
+                    .roles(userObj.getUserRole())
                     .build();
         } else {
             throw new UsernameNotFoundException(username);
         }
-    }
-    private String[] getRoles(UserModel user) {
-        if (user.getUserRole() == null) {
-            return new String[]{"USER"};
-        }
-        return user.getUserRole().split(",");
     }
 
 }

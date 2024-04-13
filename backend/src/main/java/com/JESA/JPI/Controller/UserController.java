@@ -3,6 +3,7 @@ package com.JESA.JPI.Controller;
 import com.JESA.JPI.Model.UserModel;
 import com.JESA.JPI.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,9 +50,17 @@ public class UserController {
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserModel user, HttpServletRequest request) {
         try {
+            // Load user details
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+
+            // Set session attributes
+            HttpSession session = request.getSession();
+            session.setAttribute("username", userDetails.getUsername());
+            session.setAttribute("role", userDetails.getAuthorities());
+
             // Authenticate user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getUserPassword()));
@@ -59,18 +68,11 @@ public class UserController {
             // Set authentication in security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Load user details
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-
-            // Set session attributes
-            HttpSession session = request.getSession();
-            session.setAttribute("username", userDetails.getUsername());
-            session.setAttribute("roles", userDetails.getAuthorities());
-
             LOGGER.info("User logged in: " + userDetails.getUsername());
 
-            // Return successful response
-            return ResponseEntity.ok("Login successful");
+            // Extract role without prefix and return successful response
+            String role = userDetails.getAuthorities().iterator().next().getAuthority();
+            return ResponseEntity.ok(role);
         } catch (UsernameNotFoundException e) {
             LOGGER.warning("User not found: " + user.getUsername());
             // Return unauthorized response for invalid credentials
@@ -81,6 +83,19 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred during login");
         }
     }
+    @PostMapping("/logoutUser")
+    public ResponseEntity<String> Logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            return ResponseEntity.ok("Logout successful");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred during logout");
+        }
+    }
+
     @GetMapping("/user/hello")
     public String getTextUser(){
         return "hello user";

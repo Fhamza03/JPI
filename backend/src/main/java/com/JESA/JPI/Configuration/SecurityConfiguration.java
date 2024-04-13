@@ -31,18 +31,23 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/signup","/").permitAll();
+                    registry.requestMatchers("/signup","/login","/logout").permitAll();
                     registry.requestMatchers("/admin/**").hasRole("ADMIN");
                     registry.requestMatchers("/user/**").hasRole("USER");
                     registry.anyRequest().authenticated();
                 })
-//                .formLogin(httpSecurityFormLoginConfigurer -> {
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/logoutUser")
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                )
+                .build();
+        //                .formLogin(httpSecurityFormLoginConfigurer -> {
 //                    httpSecurityFormLoginConfigurer
-//                            .loginPage("/")
+//                            .loginPage("/login")
 //                            .successHandler(new AuthenticationSuccessHandler())
 //                            .permitAll();
 //                })
-                .build();
     }
 
     @Bean
