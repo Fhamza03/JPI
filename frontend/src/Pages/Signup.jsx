@@ -245,7 +245,7 @@ export default function SignUp() {
                   </button>
                   <p>
                     Already have an account?{" "}
-                    <a href="#" className="text-black hover:underline">
+                    <a href="/" className="text-black hover:underline">
                       Login here
                     </a>
                   </p>

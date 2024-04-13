@@ -1,7 +1,11 @@
-import React from 'react'
+import React from "react";
+import LogoutButton from "../Components/LogoutButton";
 
 export default function admin() {
   return (
-    <div>admin</div>
-  )
+    <>
+      <h5>admin</h5>
+      <LogoutButton />
+    </>
+  );
 }
