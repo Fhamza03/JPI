@@ -30,21 +30,18 @@ export default function Login() {
   
       if (response.ok) {
         console.log("Login successful");
-        // Retrieve role from response text
         const role = await response.text();
+        sessionStorage.setItem('role', role)
+        console.log(role)
         if (role === "ROLE_ADMIN") {
-          // Redirect to admin page
           history.push("/admin");
         } else if (role === "ROLE_USER") {
-          // Redirect to user page
           history.push("/user");
         } else {
-          // Invalid role
           console.error("Invalid role:", role);
         }
       } else {
         console.error("Login failed:", await response.text());
-        // Handle failed login, e.g., display error message
       }
     } catch (error) {
       console.error("Login error:", error);
