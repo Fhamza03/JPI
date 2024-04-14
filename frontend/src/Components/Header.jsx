@@ -1,157 +1,77 @@
 import React from "react";
-import JpiLogo from "../images/JpiLogo.png";
+import UserProfile from "./UserProfile";
 
-export default function Header() {
+const Header = () => {
   return (
     <>
-      <header class="pb-6 bg-white lg:pb-0">
-        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <nav class="flex items-center justify-between h-16 lg:h-20">
-            <div class="flex-shrink-0">
-              <a href="#" title="JESA PROJECT INFORMATION" class="flex">
-              <img class="w-auto h-48 lg:h-48" src={JpiLogo} alt="" />
-              </a>
+      {/* component */}
+      <nav className="bg-sky-700 w-full flex relative justify-between items-center mx-auto px-8 h-20">
+        {/* logo */}
+        <div className="inline-flex">
+          <h1 className="text-sm text-xl font-sans">
+            <b className="text-white">Engineering Modular System Project Information</b>
+          </h1>
+        </div>
+        {/* end logo */}
+        {/* Search bar */}
+        <div className="max-w-2xl mx-auto">
+          <form className="flex items-center">
+            <label htmlFor="simple-search" className="sr-only">
+              Search
+            </label>
+            <div className="relative w-full">
+              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <input
+                type="text"
+                id="simple-search"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search"
+                required=""
+              />
             </div>
-
             <button
-              type="button"
-              class="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100"
+              type="submit"
+              className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               <svg
-                class="block w-6 h-6"
-                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 8h16M4 16h16"
-                />
-              </svg>
-
-              <svg
-                class="hidden w-6 h-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
             </button>
-
-            <div class="hidden lg:flex lg:items-center lg:ml-auto lg:space-x-10">
-              <a
-                href="#"
-                title=""
-                class="text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-              >
-                {" "}
-                Features{" "}
-              </a>
-
-              <a
-                href="#"
-                title=""
-                class="text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-              >
-                {" "}
-                Solutions{" "}
-              </a>
-
-              <a
-                href="#"
-                title=""
-                class="text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-              >
-                {" "}
-                Resources{" "}
-              </a>
-
-              <a
-                href="#"
-                title=""
-                class="text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-              >
-                {" "}
-                Pricing{" "}
-              </a>
-            </div>
-
-            <a
-              href="#"
-              title=""
-              class="items-center justify-center hidden px-4 py-3 ml-10 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md lg:inline-flex hover:bg-blue-700 focus:bg-blue-700"
-              role="button"
-            >
-              {" "}
-              Get started now{" "}
-            </a>
-          </nav>
-
-          <nav class="pt-4 pb-6 bg-white border border-gray-200 rounded-md shadow-md lg:hidden">
-            <div class="flow-root">
-              <div class="flex flex-col px-6 -my-2 space-y-1">
-                <a
-                  href="#"
-                  title=""
-                  class="inline-flex py-2 text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-                >
-                  {" "}
-                  Features{" "}
-                </a>
-
-                <a
-                  href="#"
-                  title=""
-                  class="inline-flex py-2 text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-                >
-                  {" "}
-                  Solutions{" "}
-                </a>
-
-                <a
-                  href="#"
-                  title=""
-                  class="inline-flex py-2 text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-                >
-                  {" "}
-                  Resources{" "}
-                </a>
-
-                <a
-                  href="#"
-                  title=""
-                  class="inline-flex py-2 text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-                >
-                  {" "}
-                  Pricing{" "}
-                </a>
-              </div>
-            </div>
-
-            <div class="px-6 mt-6">
-              <a
-                href="#"
-                title=""
-                class="inline-flex justify-center px-4 py-3 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md tems-center hover:bg-blue-700 focus:bg-blue-700"
-                role="button"
-              >
-                {" "}
-                Get started now{" "}
-              </a>
-            </div>
-          </nav>
+          </form>
         </div>
-      </header>
+        {/* end search bar */}
+        {/* User profile */}
+        <div className="flex-initial">
+          <UserProfile />
+        </div>
+        {/* end user profile */}
+      </nav>
     </>
   );
-}
+};
+
+export default Header;

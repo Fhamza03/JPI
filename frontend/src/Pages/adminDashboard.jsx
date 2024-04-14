@@ -1,11 +1,13 @@
 import React from "react";
-import LogoutButton from "../Components/LogoutButton";
+import AdminSideBar from "../Components/AdminSideBar";
+import Header from "../Components/Header";
+import UserProfile from "../Components/UserProfile";
 
 export default function adminDashboard() {
   return (
     <>
-      <h5>Welcom to admin Dashboard !</h5>
-      <LogoutButton />
+       <Header />
+      <AdminSideBar />
     </>
   );
 }
