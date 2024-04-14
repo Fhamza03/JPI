@@ -1,10 +1,10 @@
 import React from "react";
 import LogoutButton from "../Components/LogoutButton";
 
-export default function admin() {
+export default function userDashboard() {
   return (
     <>
-      <h5>admin</h5>
+      <h5>Welcome to user Dashboard !</h5>
       <LogoutButton />
     </>
   );

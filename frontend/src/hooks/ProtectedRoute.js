@@ -1,9 +1,10 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-const ProtectedRoute = ({ component: Component, role, ...rest }) => {
-  console.log("Role:", role); // Log the role
-  console.log("Path:", rest.path); // Log the path
+const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const role = sessionStorage.getItem("role");
+  console.log("Role:", role);
+  console.log("Path:", rest.path);
 
   return (
     <Route

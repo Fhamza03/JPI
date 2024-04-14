@@ -9,6 +9,7 @@ const LogoutButton = () => {
       await fetch("http://localhost:8080/logoutUser", {
         method: "POST",
       });
+      sessionStorage.clear();
       history.push("/");
     } catch (error) {
       console.error("Logout error:", error);

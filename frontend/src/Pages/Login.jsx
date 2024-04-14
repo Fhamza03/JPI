@@ -9,7 +9,7 @@ export default function Login() {
     userPassword: "",
   });
 
-  const history = useHistory(); // Get history object
+  const history = useHistory();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +19,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send login request with credentials
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
         headers: {
@@ -27,16 +26,16 @@ export default function Login() {
         },
         body: JSON.stringify(credentials),
       });
-  
+
       if (response.ok) {
         console.log("Login successful");
         const role = await response.text();
-        sessionStorage.setItem('role', role)
-        console.log(role)
+        sessionStorage.setItem("role", role);
+        console.log(role);
         if (role === "ROLE_ADMIN") {
-          history.push("/admin");
+          history.push("/admin/adminDashboard");
         } else if (role === "ROLE_USER") {
-          history.push("/user");
+          history.push("/user/userDashboard");
         } else {
           console.error("Invalid role:", role);
         }
@@ -45,10 +44,8 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      // Handle error, e.g., display error message
     }
   };
-  
 
   return (
     <div className="flex h-screen">
