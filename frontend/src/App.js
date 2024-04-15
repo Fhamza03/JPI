@@ -5,6 +5,12 @@ import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
 import adminDashboard from "./Pages/adminDashboard";
 import userDashboard from "./Pages/userDashboard";
+import NewProject from "./Pages/NewProject";
+import NewDatabase from "./Pages/NewDatabase";
+import NewArea from "./Pages/NewArea";
+import NewSubArea from "./Pages/NewSubArea";
+import NewDepartement from "./Pages/NewDepartement";
+import NewTask from "./Pages/NewTask";
 
 export default function App() {
   const role = sessionStorage.getItem("role");
@@ -15,6 +21,12 @@ export default function App() {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/" component={Login} />
           <ProtectedRoute exact path="/admin/adminDashboard" component={adminDashboard} role={role}/>
+          <ProtectedRoute exact path="/admin/NewProject" component={NewProject} role={role} />
+          <ProtectedRoute exact path="/admin/NewDatabase" component={NewDatabase} role={role} />
+          <ProtectedRoute exact path="/admin/NewArea" component={NewArea} role={role} />
+          <ProtectedRoute exact path="/admin/NewSubArea" component={NewSubArea} role={role} />
+          <ProtectedRoute exact path="/admin/NewDepartement" component={NewDepartement} role={role} />
+          <ProtectedRoute exact path="/admin/NewTask" component={NewTask} role={role} />
           <ProtectedRoute exact path="/user/userDashboard" component={userDashboard} role={role} />
         </Switch>
       </div>
