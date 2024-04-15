@@ -1,11 +1,12 @@
 import React from "react";
-import LogoutButton from "../Components/LogoutButton";
+import Header from "../Components/Header";
+import Projects from "../Components/Projects";
 
 export default function userDashboard() {
   return (
     <>
-      <h5>Welcome to user Dashboard !</h5>
-      <LogoutButton />
+      <Header />
+      <Projects />
     </>
   );
 }
