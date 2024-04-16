@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
@@ -31,8 +32,8 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/signup","/login","/logout").permitAll();
-                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
+                    registry.requestMatchers("/signup","/login").permitAll();
+                    registry.requestMatchers("/admin/**").permitAll();
                     registry.requestMatchers("/user/**").hasRole("USER");
                     registry.anyRequest().authenticated();
                 })
@@ -42,12 +43,6 @@ public class SecurityConfiguration {
                         .permitAll()
                 )
                 .build();
-        //                .formLogin(httpSecurityFormLoginConfigurer -> {
-//                    httpSecurityFormLoginConfigurer
-//                            .loginPage("/login")
-//                            .successHandler(new AuthenticationSuccessHandler())
-//                            .permitAll();
-//                })
     }
 
     @Bean

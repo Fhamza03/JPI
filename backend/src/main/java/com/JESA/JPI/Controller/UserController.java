@@ -90,6 +90,7 @@ public class UserController {
             if (session != null) {
                 session.invalidate();
             }
+            LOGGER.info("User logged out");
             return ResponseEntity.ok("Logout successful");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred during logout");
