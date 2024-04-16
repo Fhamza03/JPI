@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Projects() {
+export default function AdminProjectsList() {
   const [selectedLocation, setSelectedLocation] = useState("All");
 
   // Dummy database locations for testing
@@ -10,8 +10,9 @@ export default function Projects() {
   const handleLocationChange = (e) => {
     setSelectedLocation(e.target.value);
   };
+
   return (
-    <>
+    <div>
       <section className="container px-4 mx-auto">
         <div className="mt-6 md:flex md:items-center md:justify-between">
           <div className="relative flex items-center">
@@ -114,6 +115,12 @@ export default function Projects() {
                       >
                         Server
                       </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                      >
+                        Options
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900"></tbody>
@@ -173,6 +180,6 @@ export default function Projects() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
