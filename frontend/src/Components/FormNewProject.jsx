@@ -20,20 +20,25 @@ export default function FormNewProject() {
     event.preventDefault();
 
     // Validate if all fields are filled
-    const allFieldsFilled = Object.values(project).every((value) => value !== "");
+    const allFieldsFilled = Object.values(project).every(
+      (value) => value !== ""
+    );
     if (!allFieldsFilled) {
       setShowErrorAlert(true);
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8080/admin/createProject", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(project),
-      });
+      const response = await fetch(
+        "http://localhost:8080/admin/createProject",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(project),
+        }
+      );
 
       if (response.ok) {
         console.log("Project created successfully");
@@ -64,8 +69,8 @@ export default function FormNewProject() {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="max-w-4xl bg-white shadow-md rounded-lg overflow-hidden mt-5 mb-6 p-6 w-full">
+    <div className="flex justify-center mt-8">
+      <div className="max-w-4xl bg-white shadow-2xl rounded-lg overflow-hidden mt-5 mb-6 p-6 w-full">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
@@ -78,7 +83,7 @@ export default function FormNewProject() {
               type="text"
               id="projectName"
               name="projectName"
-              className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+              className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
               placeholder="Enter project name"
               value={project.projectName}
               onChange={handleChange}
@@ -95,7 +100,7 @@ export default function FormNewProject() {
               type="text"
               id="projectCode"
               name="projectCode"
-              className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+              className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
               placeholder="Enter project code"
               value={project.projectCode}
               onChange={handleChange}
@@ -113,7 +118,7 @@ export default function FormNewProject() {
                 type="text"
                 id="serverName"
                 name="serverName"
-                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                 placeholder="Enter server name"
                 value={project.serverName}
                 onChange={handleChange}
@@ -130,7 +135,7 @@ export default function FormNewProject() {
                 type="text"
                 id="location"
                 name="location"
-                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                 placeholder="Enter location"
                 value={project.location}
                 onChange={handleChange}
@@ -149,7 +154,7 @@ export default function FormNewProject() {
                 type="text"
                 id="lineOfBusiness"
                 name="lineOfBusiness"
-                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                 placeholder="Enter line of business"
                 value={project.lineOfBusiness}
                 onChange={handleChange}
@@ -166,7 +171,7 @@ export default function FormNewProject() {
                 type="text"
                 id="leadOffice"
                 name="leadOffice"
-                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                 placeholder="Enter lead office"
                 value={project.leadOffice}
                 onChange={handleChange}
@@ -185,7 +190,7 @@ export default function FormNewProject() {
                 type="text"
                 id="leadServer"
                 name="leadServer"
-                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                 placeholder="Enter lead server"
                 value={project.leadServer}
                 onChange={handleChange}
@@ -202,7 +207,7 @@ export default function FormNewProject() {
                 type="text"
                 id="databaseLocation"
                 name="databaseLocation"
-                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+                className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                 placeholder="Enter database location"
                 value={project.databaseLocation}
                 onChange={handleChange}
@@ -217,7 +222,7 @@ export default function FormNewProject() {
               type="text"
               id="client"
               name="client"
-              className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500"
+              className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
               placeholder="Enter client name"
               value={project.client}
               onChange={handleChange}
@@ -260,7 +265,7 @@ export default function FormNewProject() {
                     </div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
                       <p className="text-sm font-medium text-gray-900">
-                        Successfully saved!
+                        Project created successfully !
                       </p>
                     </div>
                     <div className="ml-4 flex flex-shrink-0">
