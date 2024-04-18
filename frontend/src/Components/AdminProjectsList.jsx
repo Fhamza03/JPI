@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import FormNewDatabase from "./FormNewDatabase";
 
 export default function AdminProjectsList() {
   const [projects, setProjects] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [databaseLocations, setDatabaseLocations] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [lastClickTime, setLastClickTime] = useState(0);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   // Fetch projects and database locations when the component mounts
   useEffect(() => {
@@ -60,6 +64,35 @@ export default function AdminProjectsList() {
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
+
+  const history = useHistory();
+
+  const handleClick = (projectId) => {
+    const now = new Date().getTime();
+    const timeDiff = now - lastClickTime;
+    setLastClickTime(now);
+
+    if (timeDiff < 300) {
+      // Adjust this value as needed
+      handleDoubleClick(projectId);
+    }
+  };
+
+  const handleDoubleClick = (projectId) => {
+    console.log('Double-clicked project ID:', projectId);
+    const selected = projects.find((project) => project.projectId === projectId);
+    console.log('Selected project:', selected); // Log the selected project
+    setSelectedProject(selected); // Set the selected project state
+    console.log('Selected project state:', selectedProject); // Log the selected project state
+    history.push({
+      pathname: '/admin/NewDatabase',
+      state: { project: selected } // Pass the selected project as state
+    });
+};
+
+
+
+
 
   return (
     <div>
@@ -188,7 +221,10 @@ export default function AdminProjectsList() {
                   {/* Table body */}
                   <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
                     {searchedProjects.map((project) => (
-                      <tr key={project.projectId}>
+                      <tr
+                        key={project.projectId}
+                        onClick={() => handleClick(project.projectId)}
+                      >
                         {/* Project details cells */}
                         <td className="text-center p-4 border-b border-blue-gray-50">
                           {project.databaseLocation}
@@ -310,6 +346,12 @@ export default function AdminProjectsList() {
           </div>
         </div>
       </section>
+      {/* Check if selectedProject is not null before rendering FormNewDatabase */}
+      {selectedProject ? (
+        <FormNewDatabase project={selectedProject} />
+      ) : (
+        <div>No project selected</div>
+      )}
     </div>
   );
 }
