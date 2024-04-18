@@ -350,7 +350,7 @@ export default function AdminProjectsList() {
       {selectedProject ? (
         <FormNewDatabase project={selectedProject} />
       ) : (
-        <div>No project selected</div>
+        <div></div>
       )}
     </div>
   );
