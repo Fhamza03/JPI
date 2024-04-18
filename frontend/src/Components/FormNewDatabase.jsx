@@ -1,12 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function FormNewDatabase() {
   const location = useLocation();
   const { project } = location.state || {}; // Access project from location state
 
-  console.log("Location state:", location.state);
-  console.log("Project:", project);
+  const [showDatabaseInput, setShowDatabaseInput] = useState(false);
+  const [databaseInfo, setDatabaseInfo] = useState("");
+
+  const handleToggleDatabaseInput = () => {
+    setShowDatabaseInput(!showDatabaseInput);
+  };
+
+  const handleSaveDatabaseInfo = async () => {
+    try {
+      if (!project || !project.projectId) {
+        console.error("Project or projectId not found");
+        return;
+      }
+
+      const projectId = project.projectId;
+      const response = await fetch(`http://localhost:8080/admin/createDatabase/${projectId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          databaseType: databaseInfo,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Database info saved successfully");
+        // Clear the input field after saving
+        setDatabaseInfo("");
+        // Optionally, you can close the input field after saving
+        setShowDatabaseInput(false);
+      } else {
+        console.error("Failed to save database info");
+      }
+    } catch (error) {
+      console.error("Error saving database info:", error);
+    }
+  };
 
   if (!project) {
     return <div>No project selected</div>;
@@ -20,6 +56,29 @@ export default function FormNewDatabase() {
           {/* Right part content */}
           <h2 className="text-xl font-bold mb-4">Project Databases</h2>
           {/* Render database details here if needed */}
+          {showDatabaseInput && (
+            <div className="flex items-center">
+              <input
+                type="text"
+                value={databaseInfo}
+                onChange={(e) => setDatabaseInfo(e.target.value)}
+                className="mr-2 border rounded px-2 py-1 focus:outline-none"
+                placeholder="Enter database information"
+              />
+              <button
+                onClick={handleSaveDatabaseInfo}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                Save
+              </button>
+            </div>
+          )}
+          <button
+            onClick={handleToggleDatabaseInput}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
+          >
+            {showDatabaseInput ? "Hide Database Input" : "Show Database Input"}
+          </button>
         </div>
         {/* Left part */}
         <div className="w-1/2 p-4 bg-gray-200 ml-3">

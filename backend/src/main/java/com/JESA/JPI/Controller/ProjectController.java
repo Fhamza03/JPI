@@ -38,7 +38,7 @@ public class ProjectController {
             throw new RuntimeException("FAILED TO DELETE PROJECT");
         }
     }
-    @GetMapping("/admin/getAllProjects")
+    @GetMapping("/getAllProjects")
     public List<ProjectModel> allProjects() {
         try {
             return projectService.getAllProjects();

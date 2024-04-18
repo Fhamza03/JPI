@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                     registry.requestMatchers("/signup","/login").permitAll();
                     registry.requestMatchers("/admin/**").permitAll();
                     registry.requestMatchers("/user/**").hasRole("USER");
+                    registry.requestMatchers("/**").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .logout((logout) -> logout

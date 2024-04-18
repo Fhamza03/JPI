@@ -19,7 +19,7 @@ export default function AdminProjectsList() {
   const fetchProjects = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/admin/getAllProjects"
+        "http://localhost:8080/getAllProjects"
       );
       if (response.ok) {
         const data = await response.json();

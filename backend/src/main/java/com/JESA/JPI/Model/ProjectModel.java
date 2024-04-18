@@ -1,5 +1,6 @@
 package com.JESA.JPI.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ProjectModel {
     private String LineOfBusiness;
     private String ServerName;
     @OneToMany(mappedBy = "project")
+    @JsonIgnore
     private List<DatabaseModel> databases;
 
     public Integer getProjectId() {
