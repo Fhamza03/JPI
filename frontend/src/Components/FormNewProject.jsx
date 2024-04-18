@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 
 export default function FormNewProject() {
+  const history = useHistory();
+  const location = useLocation();
+
   const [project, setProject] = useState({
     projectName: "",
     projectCode: "",
@@ -12,6 +16,13 @@ export default function FormNewProject() {
     client: "",
     databaseLocation: "",
   });
+
+  useEffect(() => {
+    if (location.state && location.state.project) {
+      const { project: initialProject } = location.state;
+      setProject(initialProject);
+    }
+  }, [location.state]);
 
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
@@ -66,6 +77,14 @@ export default function FormNewProject() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProject({ ...project, [name]: value });
+  };
+
+  const handleSuccessAlertClose = () => {
+    setShowSuccessAlert(false);
+  };
+
+  const handleErrorAlertClose = () => {
+    setShowErrorAlert(false);
   };
 
   return (
@@ -233,7 +252,7 @@ export default function FormNewProject() {
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Create Project
+              Save Project
             </button>
           </div>
         </form>
@@ -265,7 +284,7 @@ export default function FormNewProject() {
                     </div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
                       <p className="text-sm font-medium text-gray-900">
-                        Project created successfully !
+                        Project saved successfully !
                       </p>
                     </div>
                     <div className="ml-4 flex flex-shrink-0">

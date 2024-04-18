@@ -90,8 +90,33 @@ export default function AdminProjectsList() {
     });
 };
 
+// Handler for editing project
+const handleEditProject = (projectId) => {
+  const selectedProject = projects.find((project) => project.projectId === projectId);
+  if (selectedProject) {
+    history.push({
+      pathname: '/admin/NewProject',
+      state: { project: selectedProject }
+    });
+  }
+};
 
-
+// Handler for removing project
+const handleRemoveProject = async (projectId) => {
+  try {
+    const response = await fetch(`http://localhost:8080/admin/deleteProject/${projectId}`, {
+      method: 'DELETE'
+    });
+    if (response.ok) {
+      setProjects(projects.filter(project => project.projectId !== projectId));
+      console.log("Project deleted !!")
+    } else {
+      throw new Error('Failed to delete project');
+    }
+  } catch (error) {
+    console.error('Error removing project:', error);
+  }
+};
 
 
   return (
@@ -248,9 +273,9 @@ export default function AdminProjectsList() {
                           {project.serverName}
                         </td>
                         <td className="text-left p-4 border-b border-blue-gray-50">
-                          {/* Badges for delete, update, and view details */}
-                          {/* You can replace the buttons with badges */}
+                          {/* Edit and Remove icons */}
                           <svg
+                          onClick={() => handleRemoveProject(project.projectId)}
                             className="w-6 h-6 text-gray-800 dark:text-white mr-2 inline-block align-text-bottom"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
@@ -266,6 +291,7 @@ export default function AdminProjectsList() {
                             />
                           </svg>
                           <svg
+                          onClick={() => handleEditProject(project.projectId)}
                             className="w-6 h-6 text-gray-800 dark:text-white mr-2 inline-block align-text-bottom"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
