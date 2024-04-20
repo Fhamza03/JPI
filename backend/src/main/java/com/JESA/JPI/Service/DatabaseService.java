@@ -2,7 +2,9 @@ package com.JESA.JPI.Service;
 
 import com.JESA.JPI.Model.DatabaseModel;
 import com.JESA.JPI.Model.DepartementModel;
+import com.JESA.JPI.Model.ProjectModel;
 import com.JESA.JPI.Repository.DatabaseRepo;
+import com.JESA.JPI.Repository.ProjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.Optional;
 public class DatabaseService implements DatabaseServiceImpl {
     @Autowired
     DatabaseRepo databaseRepo;
+    @Autowired
+    ProjectRepo projectRepo;
     @Override
     public DatabaseModel createDatabase(DatabaseModel database) {
         try {

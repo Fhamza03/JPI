@@ -62,4 +62,16 @@ public class DatabaseController {
             throw new RuntimeException("FAILED TO GET DATABASES");
         }
     }
+
+    @GetMapping("/getDatabasesByProject/{projectId}")
+    public List<DatabaseModel> getProjectDatabases(@PathVariable Integer projectId) {
+        try {
+            ProjectModel project = projectService.getProjectById(projectId);
+            return project.getDatabases();
+        } catch (Exception e) {
+            throw new RuntimeException("FAILED TO GET DATABASES FOR PROJECT");
+        }
+    }
+
+
 }
