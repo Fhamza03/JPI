@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 export default function FormNewDatabase() {
   const location = useLocation();
   const { project } = location.state || {}; // Access project from location state
+  const history = useHistory();
 
   const [showDatabaseInput, setShowDatabaseInput] = useState(false);
   const [databaseInfo, setDatabaseInfo] = useState("");
@@ -111,11 +112,17 @@ export default function FormNewDatabase() {
       console.error("Error deleting database:", error);
     }
   };
+  useEffect(() => {
+    const { databaseInfo } = location.state || {};
+    if (databaseInfo) {
+      setDatabaseInfo(databaseInfo);
+    }
+  }, [location.state]);
 
-  const handleAddArea = () => {
-    // Redirect to /admin/NewArea
-    window.location.href = "/admin/NewArea";
+  const handleAddArea = (databaseInfo) => {
+    history.push('/admin/NewArea', { databaseInfo: databaseInfo });
   };
+  
 
   if (!project) {
     return <div>No project selected</div>;
@@ -273,7 +280,7 @@ export default function FormNewDatabase() {
                     </td>
                     <td className="text-center">
                       <button
-                        onClick={handleAddArea}
+                        onClick={() => handleAddArea(database.databaseType)}
                         className="middle none center mr-4 rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                         data-ripple-light="true"
                       >
