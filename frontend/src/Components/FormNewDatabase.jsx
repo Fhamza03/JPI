@@ -74,10 +74,11 @@ export default function FormNewDatabase() {
         }
       );
 
-      if (response.ok) {
+      if (response && response.ok) {
         console.log("Database info saved successfully");
         setDatabaseInfo("");
         setShowDatabaseInput(false);
+        fetchProjectDatabases(project.projectId);
       } else {
         console.error("Failed to save database info");
       }
@@ -89,15 +90,6 @@ export default function FormNewDatabase() {
   const handleOpenDatabase = (databaseType) => {
     // Handle opening the database based on the database type
     console.log(`Opening database: ${databaseType}`);
-  };
-
-  const handleEditDatabase = async (databaseId) => {
-    try {
-      // Implement your edit functionality here
-      console.log("Editing database with ID:", databaseId);
-    } catch (error) {
-      console.error("Error editing database:", error);
-    }
   };
 
   const handleDeleteDatabase = async (databaseId) => {
@@ -137,6 +129,64 @@ export default function FormNewDatabase() {
           <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
             Project Databases
           </h2>
+          {/* Render database details here if needed */}
+          {showDatabaseInput ? (
+            <div className="flex flex-col">
+              {" "}
+              {/* Flex container with column layout */}
+              <div className="flex items-center">
+                {" "}
+                {/* Input and buttons container */}
+                <input
+                  type="text"
+                  value={databaseInfo}
+                  onChange={(e) => setDatabaseInfo(e.target.value)}
+                  className="input-field mr-3 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                  placeholder="Enter database type"
+                />
+                <button
+                  onClick={() => {
+                    if (databaseInfo.trim() !== "") {
+                      // Validate if input is not empty
+                      handleSaveDatabaseInfo(); // Save data if input is not empty
+                      handleToggleDatabaseInput(); // Close input field
+                    } else {
+                      setShowErrorMessage(true); // Show error message if input is empty
+                    }
+                  }}
+                  className="middle none center mr-1 rounded-lg bg-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => {
+                    setShowErrorMessage(false); // Hide error message when toggling input field
+                    handleToggleDatabaseInput();
+                  }}
+                  className="middle none center mr-4 rounded-lg bg-red-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                >
+                  Close
+                </button>
+              </div>
+              {showErrorMessage &&
+                databaseInfo.trim() === "" && ( // Check if input is empty and error message is set to be shown
+                  <p className="text-red-500 text-sm ml-2">
+                    Please enter database information.
+                  </p> // Display error message if input is empty
+                )}
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setShowErrorMessage(false); // Hide error message when toggling input field
+                handleToggleDatabaseInput();
+              }}
+              className="middle none center mr-4 rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            >
+              Open to add Database
+            </button>
+          )}
+
           {/* Your existing table */}
           <div className="mt-4">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -193,28 +243,6 @@ export default function FormNewDatabase() {
                             stroke="currentColor"
                             strokeWidth="2"
                             d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                          />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => handleEditDatabase(database.databaseId)}
-                        className="focus:outline-none"
-                      >
-                        <svg
-                          className="w-6 h-6 ml-2"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
                           />
                         </svg>
                       </button>

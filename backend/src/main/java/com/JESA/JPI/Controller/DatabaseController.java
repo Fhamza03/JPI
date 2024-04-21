@@ -27,9 +27,10 @@ public class DatabaseController {
         }
     }
 
-    @PostMapping("/admin/updateDatabase")
-    public DatabaseModel updateDatabase(@RequestBody DatabaseModel database){
+    @PostMapping("/admin/updateDatabase/{databaseId}")
+    public DatabaseModel updateDatabase(@PathVariable Integer databaseId, @RequestBody DatabaseModel database){
         try{
+            database.setDatabaseId(databaseId);
             return databaseService.updateDatabase(database);
         }catch (Exception e){
             throw new RuntimeException("FAILED TO UPDATE DATABASE");
