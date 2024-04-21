@@ -13,6 +13,7 @@ public class DatabaseModel {
     private Integer DatabaseId;
     private String DatabaseType;
     @OneToMany(mappedBy = "database")
+    @JsonIgnore
     private List<AreaModel> areas;
     @ManyToOne
     @JoinColumn(name = "project_id")

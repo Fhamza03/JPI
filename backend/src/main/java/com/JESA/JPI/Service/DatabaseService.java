@@ -49,7 +49,7 @@ public class DatabaseService implements DatabaseServiceImpl {
     public List<DatabaseModel> getAllDatabases() {
         List<DatabaseModel> databases = databaseRepo.findAll();
         if (databases.isEmpty()) {
-            throw new RuntimeException("No departments found");
+            throw new RuntimeException("No department found");
         }
         return databases;
     }

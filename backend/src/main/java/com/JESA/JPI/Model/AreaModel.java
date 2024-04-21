@@ -1,5 +1,6 @@
 package com.JESA.JPI.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class AreaModel {
     private String AreaCode;
     @ManyToOne
     @JoinColumn(name = "database_id")
+    @JsonIgnoreProperties({"areas"})
     private DatabaseModel database;
     @OneToMany(mappedBy = "area")
     private List<SubAreaModel> subAreas;
