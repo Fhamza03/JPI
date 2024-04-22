@@ -65,7 +65,7 @@ public class DatabaseController {
     }
 
     @GetMapping("/getDatabasesByProject/{projectId}")
-    public List<DatabaseModel> getProjectDatabases(@PathVariable Integer projectId) {
+    public List<DatabaseModel> getDatabasesByProject(@PathVariable Integer projectId) {
         try {
             ProjectModel project = projectService.getProjectById(projectId);
             return project.getDatabases();

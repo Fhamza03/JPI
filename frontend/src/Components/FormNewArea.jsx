@@ -15,7 +15,7 @@ export default function FormNewArea(props) {
 
   const fetchAreas = async () => {
     try {
-      const response = await fetch("http://localhost:8080/getAllAreas");
+      const response = await fetch(`http://localhost:8080/getAriasByDatabase/${databaseId}`);
       const data = await response.json();
       setAreas(data);
     } catch (error) {

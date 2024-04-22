@@ -62,4 +62,14 @@ public class AreaController {
             throw new RuntimeException("FAILED TO DELETE AREA");
         }
     }
+
+    @GetMapping("/getAriasByDatabase/{databaseId}")
+    public List<AreaModel> getAreasByDatabaseId(@PathVariable Integer databaseId) {
+        try {
+            DatabaseModel database = databaseService.getDatabase(databaseId);
+            return database.getAreas();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get Area of database number " + databaseId);
+        }
+    }
 }

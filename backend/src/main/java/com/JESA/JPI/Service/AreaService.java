@@ -55,4 +55,9 @@ public class AreaService implements  AreaServiceImpl{
             throw new RuntimeException("Failed to delete area: " + ex.getMessage());
         }
     }
+
+//    @Override
+//    public List<AreaModel> getAreaOfDatabase(Integer DatabaseDatabaseId) {
+//        return areaRepo.findByDatabaseId(DatabaseDatabaseId);
+//    }
 }
