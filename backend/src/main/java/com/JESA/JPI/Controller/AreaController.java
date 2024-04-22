@@ -3,6 +3,7 @@ package com.JESA.JPI.Controller;
 import com.JESA.JPI.Model.AreaModel;
 import com.JESA.JPI.Model.DatabaseModel;
 import com.JESA.JPI.Service.AreaService;
+import com.JESA.JPI.Service.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,8 @@ import java.util.List;
 public class AreaController {
     @Autowired
     AreaService areaService;
+    @Autowired
+    DatabaseService databaseService;
     @GetMapping("/getArea/{areaId}")
     public AreaModel getArea(@PathVariable Integer areaId){
         try{
@@ -29,9 +32,14 @@ public class AreaController {
             throw new RuntimeException("FAILED TO GET ALL AREAS");
         }
     }
-    @PostMapping("/admin/createArea")
-    public AreaModel createArea(@RequestBody AreaModel area){
+    @PostMapping("/admin/createArea/{databaseId}")
+    public AreaModel createArea(@RequestBody AreaModel area,@PathVariable Integer databaseId){
         try{
+            DatabaseModel database = databaseService.getDatabase(databaseId);
+            if (database == null) {
+                return null;
+            }
+            area.setDatabase(database);
             return areaService.createArea(area);
         }catch (Exception e){
             throw new RuntimeException("FAILED TO CREATE AREA");

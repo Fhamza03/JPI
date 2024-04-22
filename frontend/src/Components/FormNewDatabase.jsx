@@ -7,7 +7,7 @@ export default function FormNewDatabase() {
   const history = useHistory();
 
   const [showDatabaseInput, setShowDatabaseInput] = useState(false);
-  const [databaseInfo, setDatabaseInfo] = useState("");
+  const [databaseType, setDatabaseType] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [databaseTypes, setDatabaseTypes] = useState([]);
   const [projectDatabases, setProjectDatabases] = useState([]);
@@ -40,6 +40,7 @@ export default function FormNewDatabase() {
       );
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         setProjectDatabases(data);
       } else {
         console.error("Failed to fetch project databases");
@@ -54,7 +55,7 @@ export default function FormNewDatabase() {
     setShowErrorMessage(false); // Hide error message when toggling input field
   };
 
-  const handleSaveDatabaseInfo = async () => {
+  const handleSaveDatabaseType = async () => {
     try {
       if (!project || !project.projectId) {
         console.error("Project or projectId not found");
@@ -70,14 +71,14 @@ export default function FormNewDatabase() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            databaseType: databaseInfo,
+            databaseType: databaseType,
           }),
         }
       );
 
       if (response && response.ok) {
         console.log("Database info saved successfully");
-        setDatabaseInfo("");
+        setDatabaseType("");
         setShowDatabaseInput(false);
         fetchProjectDatabases(project.projectId);
       } else {
@@ -113,21 +114,25 @@ export default function FormNewDatabase() {
     }
   };
   useEffect(() => {
-    const { databaseInfo } = location.state || {};
-    if (databaseInfo) {
-      setDatabaseInfo(databaseInfo);
+    const { databaseType } = location.state || {};
+    if (!databaseType) {
+      console.error("Database information is missing or invalid.");
+      return;
     }
+    // You can log the databaseInfo here to ensure it's received correctly
+    console.log("Received databaseInfo:", databaseType);
   }, [location.state]);
 
-  const handleAddArea = (databaseInfo) => {
-    history.push('/admin/NewArea', { databaseInfo: databaseInfo });
+  const handleAddArea = (databaseId, databaseType) => {
+    history.push("/admin/NewArea", {
+      databaseId: databaseId,
+      databaseType: databaseType,
+    });
   };
-  
 
   if (!project) {
     return <div>No project selected</div>;
   }
-
   return (
     <div>
       <div className="flex mt-11 mr-4 ml-4">
@@ -146,16 +151,16 @@ export default function FormNewDatabase() {
                 {/* Input and buttons container */}
                 <input
                   type="text"
-                  value={databaseInfo}
-                  onChange={(e) => setDatabaseInfo(e.target.value)}
+                  value={databaseType}
+                  onChange={(e) => setDatabaseType(e.target.value)}
                   className="input-field mr-3 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                   placeholder="Enter database type"
                 />
                 <button
                   onClick={() => {
-                    if (databaseInfo.trim() !== "") {
+                    if (databaseType.trim() !== "") {
                       // Validate if input is not empty
-                      handleSaveDatabaseInfo(); // Save data if input is not empty
+                      handleSaveDatabaseType(); // Save data if input is not empty
                       handleToggleDatabaseInput(); // Close input field
                     } else {
                       setShowErrorMessage(true); // Show error message if input is empty
@@ -176,7 +181,7 @@ export default function FormNewDatabase() {
                 </button>
               </div>
               {showErrorMessage &&
-                databaseInfo.trim() === "" && ( // Check if input is empty and error message is set to be shown
+                databaseType.trim() === "" && ( // Check if input is empty and error message is set to be shown
                   <p className="text-red-500 text-sm ml-2">
                     Please enter database information.
                   </p> // Display error message if input is empty
@@ -226,32 +231,14 @@ export default function FormNewDatabase() {
                       {database.databaseType}
                     </td>
                     <td className="text-center p-4 border-b border-blue-gray-50">
+                      {/* Add onClick handler with databaseId and databaseType */}
                       <button
                         onClick={() =>
                           handleOpenDatabase(database.databaseType)
                         }
                         className="focus:outline-none"
                       >
-                        <svg
-                          className="w-6 h-6"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"
-                          />
-                          <path
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                          />
-                        </svg>
+                        {/* SVG icon */}
                       </button>
                       <button
                         onClick={() =>
@@ -259,28 +246,18 @@ export default function FormNewDatabase() {
                         }
                         className="focus:outline-none"
                       >
-                        <svg
-                          className="w-6 h-6 ml-2"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-                          />
-                        </svg>
+                        {/* SVG icon */}
                       </button>
                     </td>
                     <td className="text-center">
+                      {/* Pass both databaseId and databaseType */}
                       <button
-                        onClick={() => handleAddArea(database.databaseType)}
+                        onClick={() =>
+                          handleAddArea(
+                            database.databaseId,
+                            database.databaseType
+                          )
+                        }
                         className="middle none center mr-4 rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                         data-ripple-light="true"
                       >

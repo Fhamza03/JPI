@@ -1,21 +1,98 @@
-import React, { useState } from "react";
-
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useHistory } from "react-router-dom";
 
 export default function FormNewArea(props) {
   const location = useLocation();
-  const { databaseInfo } = location.state || {};
+  const history = useHistory();
+  const { databaseId, databaseType } = location.state || {};
 
   const [showAreaInput, setShowAreaInput] = useState(false);
   const [areaCode, setAreaCode] = useState("");
   const [areaName, setAreaName] = useState("");
   const [showAreaErrorMessage, setShowAreaErrorMessage] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // Define searchQuery state
-  const handleSearchChange = (e) => setSearchQuery(e.target.value); // Define handleSearchChange function
+  const [searchQuery, setSearchQuery] = useState("");
+  const [areas, setAreas] = useState([]);
+
+  const fetchAreas = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/getAllAreas");
+      const data = await response.json();
+      setAreas(data);
+    } catch (error) {
+      console.error("Error fetching areas:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAreas();
+  }, []);
+
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
   const handleToggleAreaInput = () => {
     setShowAreaInput(!showAreaInput);
     setShowAreaErrorMessage(false);
+  };
+
+  const handleSaveArea = async () => {
+    try {
+      if (!databaseId) {
+        console.error("Database information is missing or invalid.");
+        console.warn(databaseId);
+        return;
+      }      
+  
+      // Prepare the area data to be sent in the request body
+      const areaData = {
+        areaCode: areaCode,
+        areaName: areaName
+      };
+  
+      // Make a POST request to the endpoint with the area data and databaseId
+      const response = await fetch(`http://localhost:8080/admin/createArea/${databaseId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(areaData),
+      });
+  
+      // Check if the request was successful
+      if (response.ok) {
+        console.log("Area saved successfully");
+        // Reset input fields and fetch areas again to update the list
+        setAreaCode("");
+        setAreaName("");
+        setShowAreaInput(false);
+        fetchAreas(); // Fetch areas again to update the list
+      } else {
+        console.error("Failed to save area:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error saving area:", error);
+    }
+  };
+  
+  
+
+  const handleModify = async (areaId) => {
+    // Implement modify functionality here
+    console.log("Modify area with ID:", areaId);
+  };
+
+  const handleDelete = async (areaId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/admin/deleteArea/${areaId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        fetchAreas();
+      } else {
+        console.error("Failed to delete area:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting area:", error);
+    }
   };
 
   return (
@@ -45,7 +122,7 @@ export default function FormNewArea(props) {
                 <button
                   onClick={() => {
                     if (areaCode.trim() !== "" && areaName.trim() !== "") {
-                      handleToggleAreaInput();
+                      handleSaveArea();
                     } else {
                       setShowAreaErrorMessage(true);
                     }
@@ -90,7 +167,7 @@ export default function FormNewArea(props) {
           </h2>
           <div>
             <p>
-              <strong>Database Type:</strong> {databaseInfo}
+              <strong>Database Type:</strong> {databaseType}
             </p>
           </div>
         </div>
@@ -99,9 +176,8 @@ export default function FormNewArea(props) {
       <div className="w-full p-4 bg-gray-100 rounded-xl shadow-xl mt-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl text-sky-700 font-bold font-serif">
-            {databaseInfo} list of area
+            {databaseType} list of area
           </h2>
-          {/* Search Bar */}
           <div className="relative flex items-center">
             <span className="absolute">
               <svg
@@ -128,9 +204,7 @@ export default function FormNewArea(props) {
             />
           </div>
         </div>
-        {/* Table JSX */}
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          {/* Table Header */}
           <thead className="bg-gray-50 dark:bg-gray-800">
             <tr>
               <th
@@ -153,19 +227,37 @@ export default function FormNewArea(props) {
               </th>
             </tr>
           </thead>
-          {/* Table Body */}
           <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-            <tr>
-              <td className="text-center p-4 border-b border-blue-gray-50">
-                Data 1
-              </td>
-              <td className="text-center p-4 border-b border-blue-gray-50">
-                Data 2
-              </td>
-              <td className="text-center p-4 border-b border-blue-gray-50">
-                Data 2
-              </td>
-            </tr>
+            {areas
+              .filter((area) =>
+                `${area.areaCode} ${area.areaName}`
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase())
+              )
+              .map((area) => (
+                <tr key={area.areaId}>
+                  <td className="text-center p-4 border-b border-blue-gray-50">
+                    {area.areaCode}
+                  </td>
+                  <td className="text-center p-4 border-b border-blue-gray-50">
+                    {area.areaName}
+                  </td>
+                  <td className="text-center p-4 border-b border-blue-gray-50">
+                    <span
+                      className="cursor-pointer text-blue-500 hover:text-blue-700 mr-2"
+                      onClick={() => handleModify(area.areaId)}
+                    >
+                      Modify
+                    </span>
+                    <span
+                      className="cursor-pointer text-red-500 hover:text-red-700"
+                      onClick={() => handleDelete(area.areaId)}
+                    >
+                      Delete
+                    </span>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

@@ -18,9 +18,7 @@ export default function AdminProjectsList() {
   // Fetch projects and database locations from API
   const fetchProjects = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:8080/getAllProjects"
-      );
+      const response = await fetch("http://localhost:8080/getAllProjects");
       if (response.ok) {
         const data = await response.json();
         setProjects(data);
@@ -79,45 +77,53 @@ export default function AdminProjectsList() {
   };
 
   const handleDoubleClick = (projectId) => {
-    console.log('Double-clicked project ID:', projectId);
-    const selected = projects.find((project) => project.projectId === projectId);
-    console.log('Selected project:', selected); // Log the selected project
+    console.log("Double-clicked project ID:", projectId);
+    const selected = projects.find(
+      (project) => project.projectId === projectId
+    );
+    console.log("Selected project:", selected); // Log the selected project
     setSelectedProject(selected); // Set the selected project state
-    console.log('Selected project state:', selectedProject); // Log the selected project state
+    console.log("Selected project state:", selectedProject); // Log the selected project state
     history.push({
-      pathname: '/admin/NewDatabase',
-      state: { project: selected } // Pass the selected project as state
+      pathname: "/admin/NewDatabase",
+      state: { project: selected }, // Pass the selected project as state
     });
-};
+  };
 
-// Handler for editing project
-const handleEditProject = (projectId) => {
-  const selectedProject = projects.find((project) => project.projectId === projectId);
-  if (selectedProject) {
-    history.push({
-      pathname: '/admin/NewProject',
-      state: { project: selectedProject }
-    });
-  }
-};
-
-// Handler for removing project
-const handleRemoveProject = async (projectId) => {
-  try {
-    const response = await fetch(`http://localhost:8080/admin/deleteProject/${projectId}`, {
-      method: 'DELETE'
-    });
-    if (response.ok) {
-      setProjects(projects.filter(project => project.projectId !== projectId));
-      console.log("Project deleted !!")
-    } else {
-      throw new Error('Failed to delete project');
+  // Handler for editing project
+  const handleEditProject = (projectId) => {
+    const selectedProject = projects.find(
+      (project) => project.projectId === projectId
+    );
+    if (selectedProject) {
+      history.push({
+        pathname: "/admin/NewProject",
+        state: { project: selectedProject },
+      });
     }
-  } catch (error) {
-    console.error('Error removing project:', error);
-  }
-};
+  };
 
+  // Handler for removing project
+  const handleRemoveProject = async (projectId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/admin/deleteProject/${projectId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.ok) {
+        setProjects(
+          projects.filter((project) => project.projectId !== projectId)
+        );
+        console.log("Project deleted !!");
+      } else {
+        throw new Error("Failed to delete project");
+      }
+    } catch (error) {
+      console.error("Error removing project:", error);
+    }
+  };
 
   return (
     <div>
@@ -275,7 +281,9 @@ const handleRemoveProject = async (projectId) => {
                         <td className="text-left p-4 border-b border-blue-gray-50">
                           {/* Edit and Remove icons */}
                           <svg
-                          onClick={() => handleRemoveProject(project.projectId)}
+                            onClick={() =>
+                              handleRemoveProject(project.projectId)
+                            }
                             className="w-6 h-6 text-gray-800 dark:text-white mr-2 inline-block align-text-bottom"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
@@ -291,7 +299,7 @@ const handleRemoveProject = async (projectId) => {
                             />
                           </svg>
                           <svg
-                          onClick={() => handleEditProject(project.projectId)}
+                            onClick={() => handleEditProject(project.projectId)}
                             className="w-6 h-6 text-gray-800 dark:text-white mr-2 inline-block align-text-bottom"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
