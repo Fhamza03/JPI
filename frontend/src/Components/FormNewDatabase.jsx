@@ -113,15 +113,15 @@ export default function FormNewDatabase() {
       console.error("Error deleting database:", error);
     }
   };
-  useEffect(() => {
-    const { databaseType } = location.state || {};
-    if (!databaseType) {
-      console.error("Database information is missing or invalid.");
-      return;
-    }
-    // You can log the databaseInfo here to ensure it's received correctly
-    console.log("Received databaseInfo:", databaseType);
-  }, [location.state]);
+  // useEffect(() => {
+  //   const { databaseType } = location.state || {};
+  //   if (!databaseType) {
+  //     console.error("Database information is missing or invalid.");
+  //     return;
+  //   }
+  // You can log the databaseInfo here to ensure it's received correctly
+  //   console.log("Received databaseInfo:", databaseType);
+  // }, [location.state]);
 
   const handleAddArea = (databaseId, databaseType) => {
     history.push("/admin/NewArea", {
