@@ -47,18 +47,18 @@ export default function FormNewArea(props) {
       const areaData = {
         areaCode: areaCode,
         areaName: areaName,
-        databaseId: databaseId, 
+        databaseId: databaseId,
       };
-        let response = await fetch(
-          `http://localhost:8080/admin/createArea/${databaseId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(areaData),
-          }
-        );
+      let response = await fetch(
+        `http://localhost:8080/admin/createArea/${databaseId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(areaData),
+        }
+      );
       if (response.ok) {
         console.log("Area saved successfully");
         setAreaCode("");
@@ -100,37 +100,36 @@ export default function FormNewArea(props) {
   };
 
   // Modify the `confirmModification` function to handle area updates
-const confirmModification = async () => {
-  setShowPrompt(false); // Close the prompt modal
-  const areaData = {
-    areaCode: areaCode,
-    areaName: areaName,
-    databaseId: databaseId,
-  };
-  try {
-    let response = await fetch(
-      `http://localhost:8080/admin/updateArea/${areaId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(areaData),
+  const confirmModification = async () => {
+    setShowPrompt(false); // Close the prompt modal
+    const areaData = {
+      areaCode: areaCode,
+      areaName: areaName,
+      databaseId: databaseId,
+    };
+    try {
+      let response = await fetch(
+        `http://localhost:8080/admin/updateArea/${areaId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(areaData),
+        }
+      );
+      if (response.ok) {
+        console.log("Area updated successfully");
+        setAreaCode("");
+        setAreaName("");
+        fetchAreas();
+      } else {
+        console.error("Failed to update area:", response.statusText);
       }
-    );
-    if (response.ok) {
-      console.log("Area updated successfully");
-      setAreaCode("");
-      setAreaName("");
-      fetchAreas();
-    } else {
-      console.error("Failed to update area:", response.statusText);
+    } catch (error) {
+      console.error("Error updating area:", error);
     }
-  } catch (error) {
-    console.error("Error updating area:", error);
-  }
-};
-
+  };
 
   // Cancel modification
   const cancelModification = () => {
@@ -292,13 +291,8 @@ const confirmModification = async () => {
                   <td className="text-center p-4 border-b border-blue-gray-50">
                     <button
                       className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                      onClick={
-                        () =>
-                          handleModify(
-                            area.areaId,
-                            area.areaCode,
-                            area.areaName
-                          ) // Correct invocation of handleModify
+                      onClick={() =>
+                        handleModify(area.areaId, area.areaCode, area.areaName)
                       }
                     >
                       Modify
@@ -310,41 +304,65 @@ const confirmModification = async () => {
                       Delete
                     </button>
                   </td>
-                  {showPrompt && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
-                      <div className="bg-white rounded-lg p-8">
-                        <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
-                          Update Area
-                        </h2>{" "}
-                        <input
-                          type="text"
-                          value={areaCode}
-                          onChange={(e) => setAreaCode(e.target.value)}
-                          className="input-field mr-3 mb-3 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
-                          placeholder="Enter new area code"
-                        />
-                        <input
-                          type="text"
-                          value={areaName}
-                          onChange={(e) => setAreaName(e.target.value)}
-                          className="input-field mr-3 mb-3 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
-                          placeholder="Enter new area name"
-                        />
-                        <button
-                          onClick={confirmModification}
-                          className="rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                        >
-                          Update
-                        </button>
-                        <button
-                          onClick={cancelModification}
-                          className="rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-3"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  {/* Prompt for modifying the area */}
+{showPrompt && (
+  <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
+    <div className="bg-white rounded-lg p-8 w-96">
+      <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        Update Area
+      </h2>
+      {/* Area code input with label */}
+      <div className="mb-3">
+        <label
+          htmlFor="areaCodeInput"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Area Code
+        </label>
+        <input
+          id="areaCodeInput"
+          type="text"
+          value={areaCode}
+          onChange={(e) => setAreaCode(e.target.value)}
+          className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+          placeholder="Enter new area code"
+        />
+      </div>
+      {/* Area name input with label */}
+      <div className="mb-3">
+        <label
+          htmlFor="areaNameInput"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Area Name
+        </label>
+        <input
+          id="areaNameInput"
+          type="text"
+          value={areaName}
+          onChange={(e) => setAreaName(e.target.value)}
+          className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+          placeholder="Enter new area name"
+        />
+      </div>
+      <div className="flex justify-end mt-5">
+        <button
+          onClick={confirmModification}
+          className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
+        >
+          Update
+        </button>
+        <button
+          onClick={cancelModification}
+          className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
                 </tr>
               ))}
           </tbody>
