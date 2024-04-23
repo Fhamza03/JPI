@@ -139,6 +139,12 @@ export default function FormNewArea(props) {
     setShowAreaInput(!showAreaInput);
     setShowAreaErrorMessage(false);
   };
+  const handleAddSubArea = (areaCode, areaName) => {
+    history.push("/admin/NewSubArea", {
+      areaCode: areaCode,
+      areaName: areaName,
+    });
+  };
 
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
@@ -298,71 +304,78 @@ export default function FormNewArea(props) {
                       Modify
                     </button>
                     <button
-                      className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                      className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
                       onClick={() => handleDelete(area.areaId)}
                     >
                       Delete
                     </button>
+                    <button
+                      onClick={() =>
+                        handleAddSubArea(area.areaCode, area.areaName)
+                      }
+                      className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    >
+                      Add Sub Area
+                    </button>
                   </td>
                   {/* Prompt for modifying the area */}
-{showPrompt && (
-  <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
-    <div className="bg-white rounded-lg p-8 w-96">
-      <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
-        Update Area
-      </h2>
-      {/* Area code input with label */}
-      <div className="mb-3">
-        <label
-          htmlFor="areaCodeInput"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Area Code
-        </label>
-        <input
-          id="areaCodeInput"
-          type="text"
-          value={areaCode}
-          onChange={(e) => setAreaCode(e.target.value)}
-          className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
-          placeholder="Enter new area code"
-        />
-      </div>
-      {/* Area name input with label */}
-      <div className="mb-3">
-        <label
-          htmlFor="areaNameInput"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Area Name
-        </label>
-        <input
-          id="areaNameInput"
-          type="text"
-          value={areaName}
-          onChange={(e) => setAreaName(e.target.value)}
-          className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
-          placeholder="Enter new area name"
-        />
-      </div>
-      <div className="flex justify-end mt-5">
-        <button
-          onClick={confirmModification}
-          className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
-        >
-          Update
-        </button>
-        <button
-          onClick={cancelModification}
-          className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+                  {showPrompt && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
+                      <div className="bg-white rounded-lg p-8 w-96">
+                        <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+                          Update Area
+                        </h2>
+                        {/* Area code input with label */}
+                        <div className="mb-3">
+                          <label
+                            htmlFor="areaCodeInput"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                          >
+                            Area Code
+                          </label>
+                          <input
+                            id="areaCodeInput"
+                            type="text"
+                            value={areaCode}
+                            onChange={(e) => setAreaCode(e.target.value)}
+                            className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                            placeholder="Enter new area code"
+                          />
+                        </div>
+                        {/* Area name input with label */}
+                        <div className="mb-3">
+                          <label
+                            htmlFor="areaNameInput"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                          >
+                            Area Name
+                          </label>
+                          <input
+                            id="areaNameInput"
+                            type="text"
+                            value={areaName}
+                            onChange={(e) => setAreaName(e.target.value)}
+                            className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                            placeholder="Enter new area name"
+                          />
+                        </div>
+                        <div className="flex justify-end mt-5">
+                          <button
+                            onClick={confirmModification}
+                            className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
+                          >
+                            Update
+                          </button>
+                          <button
+                            onClick={cancelModification}
+                            className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </tr>
               ))}
           </tbody>
