@@ -46,12 +46,14 @@ public class AreaController {
         }
     }
     @PostMapping("/admin/updateArea/{areaId}")
-    public AreaModel updateDatabase(@PathVariable Integer areaId, @RequestBody AreaModel area){
+    public AreaModel updateArea(@PathVariable Integer areaId, @RequestBody AreaModel area){
         try{
+            DatabaseModel database = areaService.getArea(areaId).getDatabase();
             area.setAreaId(areaId);
+            area.setDatabase(database);
             return areaService.updateArea(area);
         }catch (Exception e){
-            throw new RuntimeException("FAILED TO UPDATE AREA");
+            throw new RuntimeException("FAILED TO UPDATE AREA"+ e.getMessage());
         }
     }
     @DeleteMapping("/admin/deleteArea/{areaId}")

@@ -6,16 +6,21 @@ export default function FormNewArea(props) {
   const history = useHistory();
   const { databaseId, databaseType } = location.state || {};
 
-  const [showAreaInput, setShowAreaInput] = useState(false);
   const [areaCode, setAreaCode] = useState("");
   const [areaName, setAreaName] = useState("");
   const [showAreaErrorMessage, setShowAreaErrorMessage] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [areas, setAreas] = useState([]);
+  const [areaId, setAreaId] = useState("");
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [showAreaInput, setShowAreaInput] = useState(false);
 
+  // Fetch areas
   const fetchAreas = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/getAriasByDatabase/${databaseId}`);
+      const response = await fetch(
+        `http://localhost:8080/getAriasByDatabase/${databaseId}`
+      );
       const data = await response.json();
       setAreas(data);
     } catch (error) {
@@ -25,46 +30,40 @@ export default function FormNewArea(props) {
 
   useEffect(() => {
     fetchAreas();
-  }, []);
+  }, [databaseId]);
 
-  const handleSearchChange = (e) => setSearchQuery(e.target.value);
-
-  const handleToggleAreaInput = () => {
-    setShowAreaInput(!showAreaInput);
-    setShowAreaErrorMessage(false);
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
+  // Save area
   const handleSaveArea = async () => {
     try {
       if (!databaseId) {
         console.error("Database information is missing or invalid.");
-        console.warn(databaseId);
         return;
-      }      
-  
-      // Prepare the area data to be sent in the request body
+      }
       const areaData = {
         areaCode: areaCode,
-        areaName: areaName
+        areaName: areaName,
+        databaseId: databaseId, 
       };
-  
-      // Make a POST request to the endpoint with the area data and databaseId
-      const response = await fetch(`http://localhost:8080/admin/createArea/${databaseId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(areaData),
-      });
-  
-      // Check if the request was successful
+        let response = await fetch(
+          `http://localhost:8080/admin/createArea/${databaseId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(areaData),
+          }
+        );
       if (response.ok) {
         console.log("Area saved successfully");
-        // Reset input fields and fetch areas again to update the list
         setAreaCode("");
         setAreaName("");
-        setShowAreaInput(false);
-        fetchAreas(); // Fetch areas again to update the list
+        fetchAreas();
       } else {
         console.error("Failed to save area:", response.statusText);
       }
@@ -72,19 +71,16 @@ export default function FormNewArea(props) {
       console.error("Error saving area:", error);
     }
   };
-  
-  
 
-  const handleModify = async (areaId) => {
-    // Implement modify functionality here
-    console.log("Modify area with ID:", areaId);
-  };
-
+  // Delete area
   const handleDelete = async (areaId) => {
     try {
-      const response = await fetch(`http://localhost:8080/admin/deleteArea/${areaId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8080/admin/deleteArea/${areaId}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (response.ok) {
         fetchAreas();
       } else {
@@ -93,6 +89,56 @@ export default function FormNewArea(props) {
     } catch (error) {
       console.error("Error deleting area:", error);
     }
+  };
+
+  // Modify area
+  const handleModify = async (areaId, areaCode, areaName) => {
+    setAreaId(areaId);
+    setAreaCode(areaCode);
+    setAreaName(areaName);
+    setShowPrompt(true); // Show the prompt modal
+  };
+
+  // Modify the `confirmModification` function to handle area updates
+const confirmModification = async () => {
+  setShowPrompt(false); // Close the prompt modal
+  const areaData = {
+    areaCode: areaCode,
+    areaName: areaName,
+    databaseId: databaseId,
+  };
+  try {
+    let response = await fetch(
+      `http://localhost:8080/admin/updateArea/${areaId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(areaData),
+      }
+    );
+    if (response.ok) {
+      console.log("Area updated successfully");
+      setAreaCode("");
+      setAreaName("");
+      fetchAreas();
+    } else {
+      console.error("Failed to update area:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error updating area:", error);
+  }
+};
+
+
+  // Cancel modification
+  const cancelModification = () => {
+    setShowPrompt(false); // Close the prompt modal
+  };
+  const handleToggleAreaInput = () => {
+    setShowAreaInput(!showAreaInput);
+    setShowAreaErrorMessage(false);
   };
 
   return (
@@ -122,7 +168,7 @@ export default function FormNewArea(props) {
                 <button
                   onClick={() => {
                     if (areaCode.trim() !== "" && areaName.trim() !== "") {
-                      handleSaveArea();
+                      handleSaveArea(); // Call handleSaveArea without passing areaId
                     } else {
                       setShowAreaErrorMessage(true);
                     }
@@ -131,6 +177,7 @@ export default function FormNewArea(props) {
                 >
                   Save
                 </button>
+
                 <button
                   onClick={() => {
                     setShowAreaErrorMessage(false);
@@ -243,19 +290,61 @@ export default function FormNewArea(props) {
                     {area.areaName}
                   </td>
                   <td className="text-center p-4 border-b border-blue-gray-50">
-                    <span
-                      className="cursor-pointer text-blue-500 hover:text-blue-700 mr-2"
-                      onClick={() => handleModify(area.areaId)}
+                    <button
+                      className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                      onClick={
+                        () =>
+                          handleModify(
+                            area.areaId,
+                            area.areaCode,
+                            area.areaName
+                          ) // Correct invocation of handleModify
+                      }
                     >
                       Modify
-                    </span>
-                    <span
-                      className="cursor-pointer text-red-500 hover:text-red-700"
+                    </button>
+                    <button
+                      className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                       onClick={() => handleDelete(area.areaId)}
                     >
                       Delete
-                    </span>
+                    </button>
                   </td>
+                  {showPrompt && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
+                      <div className="bg-white rounded-lg p-8">
+                        <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+                          Update Area
+                        </h2>{" "}
+                        <input
+                          type="text"
+                          value={areaCode}
+                          onChange={(e) => setAreaCode(e.target.value)}
+                          className="input-field mr-3 mb-3 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                          placeholder="Enter new area code"
+                        />
+                        <input
+                          type="text"
+                          value={areaName}
+                          onChange={(e) => setAreaName(e.target.value)}
+                          className="input-field mr-3 mb-3 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                          placeholder="Enter new area name"
+                        />
+                        <button
+                          onClick={confirmModification}
+                          className="rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={cancelModification}
+                          className="rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </tr>
               ))}
           </tbody>

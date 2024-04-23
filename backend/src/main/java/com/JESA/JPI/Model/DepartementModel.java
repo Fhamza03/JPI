@@ -14,7 +14,7 @@ public class DepartementModel {
     @ManyToOne
     @JoinColumn(name = "subArea_id")
     private SubAreaModel subArea;
-    @OneToMany(mappedBy = "departement")
+    @OneToMany(mappedBy = "departement", cascade = CascadeType.ALL)
     private List<TaskModel> tasks;
 
     public Integer getDepartementId() {

@@ -35,7 +35,7 @@ public class ProjectController {
         try {
             projectService.deleteProjectById(projectId);
         }catch (Exception e){
-            throw new RuntimeException("FAILED TO DELETE PROJECT");
+            throw new RuntimeException("FAILED TO DELETE PROJECT" + " " + e.getMessage());
         }
     }
     @GetMapping("/getAllProjects")

@@ -14,7 +14,7 @@ public class TaskModel {
     @ManyToOne
     @JoinColumn(name = "departement_id")
     private DepartementModel departement;
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<FileModel> files;
 
     public Integer getTaskId() {

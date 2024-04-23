@@ -19,7 +19,7 @@ public class ProjectModel {
     private String DatabaseLocation;
     private String LineOfBusiness;
     private String ServerName;
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<DatabaseModel> databases;
 

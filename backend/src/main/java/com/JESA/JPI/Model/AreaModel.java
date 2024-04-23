@@ -17,7 +17,7 @@ public class AreaModel {
     @JoinColumn(name = "database_id")
     @JsonIgnoreProperties({"areas"})
     private DatabaseModel database;
-    @OneToMany(mappedBy = "area")
+    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<SubAreaModel> subAreas;
 

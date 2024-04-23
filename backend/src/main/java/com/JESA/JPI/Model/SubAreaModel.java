@@ -16,7 +16,7 @@ public class SubAreaModel {
     @JoinColumn(name = "area_id")
     @JsonIgnoreProperties({"subAreas"})
     private AreaModel area;
-    @OneToMany(mappedBy = "subArea")
+    @OneToMany(mappedBy = "subArea", cascade = CascadeType.ALL)
     private List<DepartementModel> departements;
 
     public Integer getSubAreaId() {

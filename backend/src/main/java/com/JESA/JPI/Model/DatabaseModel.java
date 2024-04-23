@@ -12,7 +12,7 @@ public class DatabaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer DatabaseId;
     private String DatabaseType;
-    @OneToMany(mappedBy = "database")
+    @OneToMany(mappedBy = "database", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<AreaModel> areas;
     @ManyToOne
