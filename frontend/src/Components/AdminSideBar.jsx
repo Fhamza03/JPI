@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function AdminSideBar() {
   return (
@@ -10,9 +11,9 @@ export default function AdminSideBar() {
               <label className="px-3 text-xs text-gray-500 uppercase dark:text-gray-400">
                 Creation
               </label>
-              <a
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="/admin/NewProject"
+                to="/admin/NewProject"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -30,10 +31,10 @@ export default function AdminSideBar() {
                   />
                 </svg>
                 <span className="mx-2 text-sm font-medium">New Project</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="/admin/NewDatabase"
+                to="/admin/NewDatabase"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -48,10 +49,10 @@ export default function AdminSideBar() {
                 </svg>
 
                 <span className="mx-2 text-sm font-medium">New Database</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="/admin/NewArea"
+                to="/admin/NewArea"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -70,10 +71,10 @@ export default function AdminSideBar() {
                 </svg>
 
                 <span className="mx-2 text-sm font-medium">New Area</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="/admin/NewSubArea"
+                to="/admin/NewSubArea"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -97,10 +98,10 @@ export default function AdminSideBar() {
                 </svg>
 
                 <span className="mx-2 text-sm font-medium">New Sub-Area</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="/admin/NewDepartement"
+                to="/admin/NewDepartement"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -121,10 +122,10 @@ export default function AdminSideBar() {
                 <span className="mx-2 text-sm font-medium">
                   New Departement
                 </span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="/admin/NewTask"
+                to="/admin/NewTask"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -143,15 +144,15 @@ export default function AdminSideBar() {
                 </svg>
 
                 <span className="mx-2 text-sm font-medium">New Task</span>
-              </a>
+              </Link>
             </div>
             <div className="space-y-3 ">
               <label className="px-3 text-xs text-gray-500 uppercase dark:text-gray-400">
                 View
               </label>
-              <a
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="/admin/adminDashboard"
+                to="/admin/adminDashboard"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -170,7 +171,7 @@ export default function AdminSideBar() {
                 </svg>
 
                 <span className="mx-2 text-sm font-medium">Projects</span>
-              </a>
+              </Link>
               {/* <a
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
                 href="#"
@@ -192,9 +193,9 @@ export default function AdminSideBar() {
                 </svg>
                 <span className="mx-2 text-sm font-medium">Database</span>
               </a> */}
-              <a
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="#"
+                to="#"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -212,10 +213,10 @@ export default function AdminSideBar() {
                   />
                 </svg>
                 <span className="mx-2 text-sm font-medium">Area</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="#"
+                to="#"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -233,10 +234,10 @@ export default function AdminSideBar() {
                   />
                 </svg>
                 <span className="mx-2 text-sm font-medium">Sub-Area</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="#"
+                to="#"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -254,10 +255,10 @@ export default function AdminSideBar() {
                   />
                 </svg>
                 <span className="mx-2 text-sm font-medium">Departements</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                href="#"
+                to="#"
               >
                 <svg
                   className="w-6 h-6 text-gray-800 dark:text-white"
@@ -275,7 +276,7 @@ export default function AdminSideBar() {
                   />
                 </svg>
                 <span className="mx-2 text-sm font-medium">Tasks</span>
-              </a>
+              </Link>
             </div>
           </nav>
         </div>

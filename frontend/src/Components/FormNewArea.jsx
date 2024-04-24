@@ -15,6 +15,7 @@ export default function FormNewArea(props) {
   const [showPrompt, setShowPrompt] = useState(false);
   const [showAreaInput, setShowAreaInput] = useState(false);
 
+
   // Fetch areas
   const fetchAreas = async () => {
     try {
@@ -130,6 +131,7 @@ export default function FormNewArea(props) {
       console.error("Error updating area:", error);
     }
   };
+  
 
   // Cancel modification
   const cancelModification = () => {
@@ -139,8 +141,9 @@ export default function FormNewArea(props) {
     setShowAreaInput(!showAreaInput);
     setShowAreaErrorMessage(false);
   };
-  const handleAddSubArea = (areaCode, areaName) => {
+  const handleAddSubArea = (areaId, areaCode, areaName) => {
     history.push("/admin/NewSubArea", {
+      areaId: areaId,
       areaCode: areaCode,
       areaName: areaName,
     });
@@ -297,9 +300,7 @@ export default function FormNewArea(props) {
                   <td className="text-center p-4 border-b border-blue-gray-50">
                     <button
                       className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                      onClick={() =>
-                        handleModify(area.areaId, area.areaCode, area.areaName)
-                      }
+                      onClick={() => handleModify(area.areaCode, area.areaName)}
                     >
                       Modify
                     </button>
@@ -311,7 +312,11 @@ export default function FormNewArea(props) {
                     </button>
                     <button
                       onClick={() =>
-                        handleAddSubArea(area.areaCode, area.areaName)
+                        handleAddSubArea(
+                          area.areaId,
+                          area.areaCode,
+                          area.areaName
+                        )
                       }
                       className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                     >

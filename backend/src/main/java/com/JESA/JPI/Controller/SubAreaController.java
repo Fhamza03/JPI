@@ -1,6 +1,9 @@
 package com.JESA.JPI.Controller;
 
+import com.JESA.JPI.Model.AreaModel;
+import com.JESA.JPI.Model.DatabaseModel;
 import com.JESA.JPI.Model.SubAreaModel;
+import com.JESA.JPI.Service.AreaService;
 import com.JESA.JPI.Service.SubAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +15,8 @@ import java.util.List;
 public class SubAreaController {
     @Autowired
     SubAreaService subAreaService;
+    @Autowired
+    AreaService areaService;
     @GetMapping("/getSubArea/{subAreaId}")
     public SubAreaModel getSubArea(@PathVariable Integer subAreaId){
         try{
@@ -28,9 +33,14 @@ public class SubAreaController {
             throw new RuntimeException("Failed to get all SubAreas");
         }
     }
-    @PostMapping("/admin/createSubArea")
-    public SubAreaModel createSubArea(@RequestBody SubAreaModel subAreaModel){
+    @PostMapping("/admin/createSubArea/{areaId}")
+    public SubAreaModel createSubArea(@PathVariable Integer areaId, @RequestBody SubAreaModel subAreaModel){
         try{
+            AreaModel area = areaService.getArea(areaId);
+            if (area == null) {
+                return null;
+            }
+            subAreaModel.setArea(area);
             return subAreaService.createSubArea(subAreaModel);
         }catch (Exception e){
             throw new RuntimeException("Failed to create SubArea");
@@ -39,10 +49,12 @@ public class SubAreaController {
     @PostMapping("/admin/updateSubArea/{subAreaId}")
     public SubAreaModel updateSubArea(@PathVariable Integer subAreaId,@RequestBody SubAreaModel subAreaModel){
         try{
+            AreaModel area = subAreaService.getSubArea(subAreaId).getArea();
             subAreaModel.setSubAreaId(subAreaId);
+            subAreaModel.setArea(area);
             return subAreaService.updateSubArea(subAreaModel);
         }catch (Exception e){
-            throw new RuntimeException("Failed to update SubArea");
+            throw new RuntimeException("Failed to update SubArea"+ e.getMessage());
         }
     }
     @DeleteMapping("/admin/deleteSubArea/{subAreaId}")
@@ -51,6 +63,15 @@ public class SubAreaController {
             subAreaService.deleteSubArea(subAreaId);
         }catch (Exception e){
             throw new RuntimeException("Failed to delete SubArea");
+        }
+    }
+    @GetMapping("/getSubAreasByArea/{areaId}")
+    public List<SubAreaModel> getSubAreasByArea(@PathVariable Integer areaId) {
+        try {
+            AreaModel area = areaService.getArea(areaId);
+            return area.getSubAreas();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get SubAreas of Area number " + areaId);
         }
     }
 }
