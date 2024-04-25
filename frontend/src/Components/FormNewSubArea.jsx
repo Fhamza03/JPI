@@ -40,7 +40,7 @@ export default function FormNewSubArea() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
           },
           body: JSON.stringify(subAreaData),
         }

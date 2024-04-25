@@ -1,5 +1,6 @@
 package com.JESA.JPI.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -17,6 +18,7 @@ public class SubAreaModel {
     @JsonIgnoreProperties({"subAreas"})
     private AreaModel area;
     @OneToMany(mappedBy = "subArea", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<DepartementModel> departements;
 
     public Integer getSubAreaId() {
