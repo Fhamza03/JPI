@@ -57,7 +57,6 @@ export default function FormNewSubArea() {
       console.error("Error saving sub-area:", error);
     }
   };
-  
 
   const handleDeleteSubArea = async (subAreaId) => {
     try {
@@ -82,7 +81,7 @@ export default function FormNewSubArea() {
       console.error("Error deleting sub-area:", error);
     }
   };
-  
+
   const handleModifySubArea = async (subAreaId, subAreaCode, subAreaName) => {
     setSubAreaId(subAreaId);
     setModifiedSubAreaCode(subAreaCode); // Set modifiedSubAreaCode with the old value
@@ -123,7 +122,6 @@ export default function FormNewSubArea() {
       console.error("Error updating SubArea:", error);
     }
   };
-  
 
   const cancelModification = () => {
     setModifiedSubAreaCode("");
@@ -135,12 +133,12 @@ export default function FormNewSubArea() {
     try {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       if (!username || !password) {
         console.error("Username or password not found in session.");
         return;
       }
-  
+
       const credentials = btoa(`${username}:${password}`);
       const response = await fetch(
         `http://localhost:8080/getSubAreasByArea/${areaId}`,
@@ -160,8 +158,6 @@ export default function FormNewSubArea() {
       console.error("Error fetching sub-areas:", error.message);
     }
   };
-  
-  
 
   useEffect(() => {
     if (searchQuery.trim() !== "") {
@@ -174,12 +170,12 @@ export default function FormNewSubArea() {
     try {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       if (!username || !password) {
         console.error("Username or password not found in session.");
         return;
       }
-  
+
       const credentials = btoa(`${username}:${password}`);
       const response = await fetch(
         `http://localhost:8080/getSubAreasBySearch/${searchQuery}`,
@@ -199,7 +195,7 @@ export default function FormNewSubArea() {
       console.error("Error fetching sub-areas by search query:", error.message);
     }
   };
-  
+
   const handleAddDepartement = (subAreaId, subAreaCode, subAreaName) => {
     history.push("/admin/NewDepartement", {
       subAreaId: subAreaId,
