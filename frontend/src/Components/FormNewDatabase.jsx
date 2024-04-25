@@ -21,7 +21,18 @@ export default function FormNewDatabase() {
 
   const fetchDatabaseTypes = async () => {
     try {
-      const response = await fetch("http://localhost:8080/getAllDatabases");
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
+      // Encode credentials as base64
+      const base64Credentials = btoa(`${username}:${password}`);
+  
+      const response = await fetch("http://localhost:8080/getAllDatabases", {
+        headers: {
+          Authorization: `Basic ${base64Credentials}`, // Add authorization header
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setDatabaseTypes(data);
@@ -32,11 +43,24 @@ export default function FormNewDatabase() {
       console.error("Error fetching database types:", error);
     }
   };
+  
 
   const fetchProjectDatabases = async (projectId) => {
     try {
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
+      // Encode credentials as base64
+      const base64Credentials = btoa(`${username}:${password}`);
+  
       const response = await fetch(
-        `http://localhost:8080/getDatabasesByProject/${projectId}`
+        `http://localhost:8080/getDatabasesByProject/${projectId}`,
+        {
+          headers: {
+            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+          },
+        }
       );
       if (response.ok) {
         const data = await response.json();
@@ -49,6 +73,7 @@ export default function FormNewDatabase() {
       console.error("Error fetching project databases:", error);
     }
   };
+  
 
   const handleToggleDatabaseInput = () => {
     setShowDatabaseInput(!showDatabaseInput);
@@ -57,11 +82,15 @@ export default function FormNewDatabase() {
 
   const handleSaveDatabaseType = async () => {
     try {
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
       if (!project || !project.projectId) {
         console.error("Project or projectId not found");
         return;
       }
-
+  
       const projectId = project.projectId;
       const response = await fetch(
         `http://localhost:8080/admin/createDatabase/${projectId}`,
@@ -69,13 +98,14 @@ export default function FormNewDatabase() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
           },
           body: JSON.stringify({
             databaseType: databaseType,
           }),
         }
       );
-
+  
       if (response && response.ok) {
         console.log("Database info saved successfully");
         setDatabaseType("");
@@ -88,6 +118,7 @@ export default function FormNewDatabase() {
       console.error("Error saving database info:", error);
     }
   };
+  
 
   const handleOpenDatabase = (databaseType) => {
     // Handle opening the database based on the database type
@@ -96,10 +127,17 @@ export default function FormNewDatabase() {
 
   const handleDeleteDatabase = async (databaseId) => {
     try {
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
       const response = await fetch(
         `http://localhost:8080/admin/deleteDatabase/${databaseId}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+          },
         }
       );
       if (response.ok) {
@@ -113,6 +151,7 @@ export default function FormNewDatabase() {
       console.error("Error deleting database:", error);
     }
   };
+  
   // useEffect(() => {
   //   const { databaseType } = location.state || {};
   //   if (!databaseType) {

@@ -8,6 +8,7 @@ export default function FormNewArea(props) {
 
   const [areaCode, setAreaCode] = useState("");
   const [areaName, setAreaName] = useState("");
+
   const [showAreaErrorMessage, setShowAreaErrorMessage] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [areas, setAreas] = useState([]);
@@ -15,12 +16,23 @@ export default function FormNewArea(props) {
   const [showPrompt, setShowPrompt] = useState(false);
   const [showAreaInput, setShowAreaInput] = useState(false);
 
-
   // Fetch areas
   const fetchAreas = async () => {
     try {
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+
+      // Encode credentials as base64
+      const base64Credentials = btoa(`${username}:${password}`);
+
       const response = await fetch(
-        `http://localhost:8080/getAriasByDatabase/${databaseId}`
+        `http://localhost:8080/getAriasByDatabase/${databaseId}`,
+        {
+          headers: {
+            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+          },
+        }
       );
       const data = await response.json();
       setAreas(data);
@@ -50,12 +62,21 @@ export default function FormNewArea(props) {
         areaName: areaName,
         databaseId: databaseId,
       };
+
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+
+      // Encode credentials as base64
+      const base64Credentials = btoa(`${username}:${password}`);
+
       let response = await fetch(
         `http://localhost:8080/admin/createArea/${databaseId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Basic ${base64Credentials}`, // Add authorization header
           },
           body: JSON.stringify(areaData),
         }
@@ -76,10 +97,20 @@ export default function FormNewArea(props) {
   // Delete area
   const handleDelete = async (areaId) => {
     try {
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+
+      // Encode credentials as base64
+      const base64Credentials = btoa(`${username}:${password}`);
+
       const response = await fetch(
         `http://localhost:8080/admin/deleteArea/${areaId}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+          },
         }
       );
       if (response.ok) {
@@ -92,14 +123,6 @@ export default function FormNewArea(props) {
     }
   };
 
-  // Modify area
-  const handleModify = async (areaId, areaCode, areaName) => {
-    setAreaId(areaId);
-    setAreaCode(areaCode);
-    setAreaName(areaName);
-    setShowPrompt(true); // Show the prompt modal
-  };
-
   // Modify the `confirmModification` function to handle area updates
   const confirmModification = async () => {
     setShowPrompt(false); // Close the prompt modal
@@ -109,21 +132,27 @@ export default function FormNewArea(props) {
       databaseId: databaseId,
     };
     try {
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
+      // Encode credentials as base64
+      const base64Credentials = btoa(`${username}:${password}`);
+  
       let response = await fetch(
         `http://localhost:8080/admin/updateArea/${areaId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Basic ${base64Credentials}`, // Add authorization header
           },
           body: JSON.stringify(areaData),
         }
       );
       if (response.ok) {
         console.log("Area updated successfully");
-        setAreaCode("");
-        setAreaName("");
-        fetchAreas();
+        fetchAreas(); // Fetch areas again to update the list
       } else {
         console.error("Failed to update area:", response.statusText);
       }
@@ -132,6 +161,13 @@ export default function FormNewArea(props) {
     }
   };
   
+
+  const handleModify = async (areaId, areaCode, areaName) => {
+    setAreaId(areaId);
+    setAreaCode(areaCode);
+    setAreaName(areaName);
+    setShowPrompt(true); // Show the prompt modal
+  };
 
   // Cancel modification
   const cancelModification = () => {
@@ -300,7 +336,7 @@ export default function FormNewArea(props) {
                   <td className="text-center p-4 border-b border-blue-gray-50">
                     <button
                       className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                      onClick={() => handleModify(area.areaCode, area.areaName)}
+                      onClick={() => handleModify(area.areaId,area.areaCode, area.areaName)}
                     >
                       Modify
                     </button>
@@ -323,68 +359,67 @@ export default function FormNewArea(props) {
                       Add Sub Area
                     </button>
                   </td>
-                  {/* Prompt for modifying the area */}
-                  {showPrompt && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
-                      <div className="bg-white rounded-lg p-8 w-96">
-                        <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
-                          Update Area
-                        </h2>
-                        {/* Area code input with label */}
-                        <div className="mb-3">
-                          <label
-                            htmlFor="areaCodeInput"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Area Code
-                          </label>
-                          <input
-                            id="areaCodeInput"
-                            type="text"
-                            value={areaCode}
-                            onChange={(e) => setAreaCode(e.target.value)}
-                            className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
-                            placeholder="Enter new area code"
-                          />
-                        </div>
-                        {/* Area name input with label */}
-                        <div className="mb-3">
-                          <label
-                            htmlFor="areaNameInput"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Area Name
-                          </label>
-                          <input
-                            id="areaNameInput"
-                            type="text"
-                            value={areaName}
-                            onChange={(e) => setAreaName(e.target.value)}
-                            className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
-                            placeholder="Enter new area name"
-                          />
-                        </div>
-                        <div className="flex justify-end mt-5">
-                          <button
-                            onClick={confirmModification}
-                            className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
-                          >
-                            Update
-                          </button>
-                          <button
-                            onClick={cancelModification}
-                            className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </tr>
               ))}
           </tbody>
         </table>
+        {showPrompt && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
+            <div className="bg-white rounded-lg p-8 w-96">
+              <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+                Update Area
+              </h2>
+              {/* Area code input with label */}
+              <div className="mb-3">
+                <label
+                  htmlFor="areaCodeInput"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Area Code
+                </label>
+                <input
+                  id="areaCodeInput"
+                  type="text"
+                  value={areaCode}
+                  onChange={(e) => setAreaCode(e.target.value)}
+                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                  placeholder="Enter new area code"
+                />
+              </div>
+              {/* Area name input with label */}
+              <div className="mb-3">
+                <label
+                  htmlFor="areaNameInput"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Area Name
+                </label>
+                <input
+                  id="areaNameInput"
+                  type="text"
+                  value={areaName}
+                  onChange={(e) => setAreaName(e.target.value)}
+                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                  placeholder="Enter new area name"
+                />
+              </div>
+              <div className="flex justify-end mt-5">
+                <button
+                  onClick={confirmModification}
+                  className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={cancelModification}
+                  className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

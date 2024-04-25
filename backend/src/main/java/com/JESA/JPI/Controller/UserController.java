@@ -96,14 +96,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred during logout");
         }
     }
-
-    @GetMapping("/user/hello")
-    public String getTextUser(){
-        return "hello user";
-    }
-    @GetMapping("/admin/hello")
-    public String getTextAdmin(){
-        return "hello admin";
-    }
-
 }

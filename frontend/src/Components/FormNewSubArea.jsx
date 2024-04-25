@@ -32,12 +32,15 @@ export default function FormNewSubArea() {
         subAreaName: subAreaName,
         areaId: areaId,
       };
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
       let response = await fetch(
         `http://localhost:8080/admin/createSubArea/${areaId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
           },
           body: JSON.stringify(subAreaData),
         }
@@ -54,13 +57,19 @@ export default function FormNewSubArea() {
       console.error("Error saving sub-area:", error);
     }
   };
+  
 
   const handleDeleteSubArea = async (subAreaId) => {
     try {
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
       let response = await fetch(
         `http://localhost:8080/admin/deleteSubArea/${subAreaId}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+          },
         }
       );
       if (response.ok) {
@@ -73,6 +82,7 @@ export default function FormNewSubArea() {
       console.error("Error deleting sub-area:", error);
     }
   };
+  
   const handleModifySubArea = async (subAreaId, subAreaCode, subAreaName) => {
     setSubAreaId(subAreaId);
     setModifiedSubAreaCode(subAreaCode); // Set modifiedSubAreaCode with the old value
@@ -82,9 +92,11 @@ export default function FormNewSubArea() {
 
   const confirmModification = async () => {
     setShowPrompt(false);
+    const username = sessionStorage.getItem("username");
+    const password = sessionStorage.getItem("password");
     const subAreaData = {
-      subAreaCode: modifiedSubAreaCode, // Use modifiedSubAreaCode instead of subAreaCode
-      subAreaName: modifiedSubAreaName, // Use modifiedSubAreaName instead of subAreaName
+      subAreaCode: modifiedSubAreaCode,
+      subAreaName: modifiedSubAreaName,
       areaId: areaId,
     };
     try {
@@ -94,6 +106,7 @@ export default function FormNewSubArea() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
           },
           body: JSON.stringify(subAreaData),
         }
@@ -110,6 +123,7 @@ export default function FormNewSubArea() {
       console.error("Error updating SubArea:", error);
     }
   };
+  
 
   const cancelModification = () => {
     setModifiedSubAreaCode("");
@@ -119,19 +133,35 @@ export default function FormNewSubArea() {
 
   const fetchSubAreas = async () => {
     try {
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
+      if (!username || !password) {
+        console.error("Username or password not found in session.");
+        return;
+      }
+  
+      const credentials = btoa(`${username}:${password}`);
       const response = await fetch(
-        `http://localhost:8080/getSubAreasByArea/${areaId}`
+        `http://localhost:8080/getSubAreasByArea/${areaId}`,
+        {
+          headers: {
+            Authorization: `Basic ${credentials}`, // Add basic authentication
+          },
+        }
       );
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("Failed to fetch sub-areas");
       }
       const data = await response.json();
-      console.log("SubAreas fetched successfully:", data);
+      console.log("Sub-areas fetched successfully:", data);
       setSubAreas(data);
     } catch (error) {
-      console.error("Error fetching SubAreas:", error.message);
+      console.error("Error fetching sub-areas:", error.message);
     }
   };
+  
+  
 
   useEffect(() => {
     if (searchQuery.trim() !== "") {
@@ -142,19 +172,34 @@ export default function FormNewSubArea() {
   }, [searchQuery]);
   const fetchSubAreasBySearchQuery = async () => {
     try {
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
+      if (!username || !password) {
+        console.error("Username or password not found in session.");
+        return;
+      }
+  
+      const credentials = btoa(`${username}:${password}`);
       const response = await fetch(
-        `http://localhost:8080/getSubAreasBySearch/${searchQuery}`
+        `http://localhost:8080/getSubAreasBySearch/${searchQuery}`,
+        {
+          headers: {
+            Authorization: `Basic ${credentials}`, // Add basic authentication
+          },
+        }
       );
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("Failed to fetch sub-areas by search query");
       }
       const data = await response.json();
-      console.log("SubAreas fetched successfully:", data);
+      console.log("Sub-areas fetched successfully:", data);
       setSubAreas(data);
     } catch (error) {
-      console.error("Error fetching SubAreas:", error.message);
+      console.error("Error fetching sub-areas by search query:", error.message);
     }
   };
+  
   const handleAddDepartement = (subAreaId, subAreaCode, subAreaName) => {
     history.push("/admin/NewDepartement", {
       subAreaId: subAreaId,

@@ -4,6 +4,7 @@ import JpiLogo from "../images/JpiLogo.png";
 import LogoSignUp from "../images/LogoSignUp.jpg";
 
 export default function Login() {
+  
   const [credentials, setCredentials] = useState({
     username: "",
     userPassword: "",
@@ -26,11 +27,13 @@ export default function Login() {
         },
         body: JSON.stringify(credentials),
       });
-
+  
       if (response.ok) {
         console.log("Login successful");
         const role = await response.text();
-        sessionStorage.setItem("role", role);
+        sessionStorage.setItem("role", role); // Store role in session storage
+        sessionStorage.setItem("username", credentials.username); // Store username in session storage
+        sessionStorage.setItem("password", credentials.userPassword); // Store password in session storage
         console.log(role);
         if (role === "ROLE_ADMIN") {
           history.push("/admin/adminDashboard");
@@ -46,6 +49,7 @@ export default function Login() {
       console.error("Login error:", error);
     }
   };
+  
 
   return (
     <div className="flex h-screen">

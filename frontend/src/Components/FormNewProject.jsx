@@ -29,7 +29,7 @@ export default function FormNewProject() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     // Validate if all fields are filled
     const allFieldsFilled = Object.values(project).every(
       (value) => value !== ""
@@ -38,19 +38,24 @@ export default function FormNewProject() {
       setShowErrorAlert(true);
       return;
     }
-
+  
     try {
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
       const response = await fetch(
         "http://localhost:8080/admin/createProject",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
           },
           body: JSON.stringify(project),
         }
       );
-
+  
       if (response.ok) {
         console.log("Project created successfully");
         setShowSuccessAlert(true);
@@ -73,6 +78,7 @@ export default function FormNewProject() {
       console.error("Error creating project:", error);
     }
   };
+  
 
   const handleChange = (event) => {
     const { name, value } = event.target;

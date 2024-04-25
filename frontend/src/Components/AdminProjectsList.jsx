@@ -18,13 +18,21 @@ export default function AdminProjectsList() {
   // Fetch projects and database locations from API
   const fetchProjects = async () => {
     try {
-      const response = await fetch("http://localhost:8080/getAllProjects");
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
+      const base64Credentials = btoa(`${username}:${password}`);
+  
+      const response = await fetch("http://localhost:8080/getAllProjects", {
+        headers: {
+          Authorization: `Basic ${base64Credentials}`, // Add authorization header
+        },
+      });
+  
       if (response.ok) {
         const data = await response.json();
         setProjects(data);
-        // Extract databaseLocations from projects data
         const locations = data.map((project) => project.databaseLocation);
-        // Filter out duplicate locations
         const uniqueLocations = [...new Set(locations)];
         setDatabaseLocations(uniqueLocations);
       } else {
@@ -34,20 +42,18 @@ export default function AdminProjectsList() {
       console.error("Error fetching projects:", error);
     }
   };
+  
 
-  // Event handler for location change
   const handleLocationChange = (event) => {
     setSelectedLocation(event.target.value);
   };
 
-  // Filter projects based on selected location
   const filteredProjects = selectedLocation
     ? projects.filter(
         (project) => project.databaseLocation === selectedLocation
       )
     : projects;
 
-  // Filter projects based on search query
   const searchedProjects = searchQuery
     ? filteredProjects.filter((project) =>
         Object.values(project).some(
@@ -58,7 +64,6 @@ export default function AdminProjectsList() {
       )
     : filteredProjects;
 
-  // Event handler for search input change
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -106,10 +111,20 @@ export default function AdminProjectsList() {
   // Handler for removing project
   const handleRemoveProject = async (projectId) => {
     try {
+      // Retrieve username and password from session storage
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+  
+      // Encode credentials as base64
+      const base64Credentials = btoa(`${username}:${password}`);
+  
       const response = await fetch(
         `http://localhost:8080/admin/deleteProject/${projectId}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+          },
         }
       );
       if (response.ok) {
@@ -124,6 +139,7 @@ export default function AdminProjectsList() {
       console.error("Error removing project:", error);
     }
   };
+  
 
   return (
     <div>
