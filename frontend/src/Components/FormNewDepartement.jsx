@@ -15,6 +15,13 @@ export default function FormNewDepartement() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [modifiedDepartementCode, setModifiedDepartementCode] = useState("");
   const [modifiedDepartementName, setModifiedDepartementName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredDepartements = departements.filter(
+    (dept) =>
+      dept.departementCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      dept.departementName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleModifyDepartement = async (
     departementId,
@@ -114,7 +121,6 @@ export default function FormNewDepartement() {
   };
   useEffect(() => {
     if (subAreaId) {
-      // Fetch departements data
       fetchDepartements(subAreaId);
     }
   }, [subAreaId]);
@@ -292,8 +298,8 @@ export default function FormNewDepartement() {
             </span>
             <input
               type="text"
-              // value={searchQuery}
-              // onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search"
               className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
@@ -323,7 +329,7 @@ export default function FormNewDepartement() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-            {departements.map((dept, index) => (
+            {filteredDepartements.map((dept, index) => (
               <tr key={index}>
                 <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
                   {dept.departementCode}

@@ -140,14 +140,18 @@ export default function FormNewSubArea() {
       }
 
       const credentials = btoa(`${username}:${password}`);
-      const response = await fetch(
-        `http://localhost:8080/getSubAreasByArea/${areaId}`,
-        {
-          headers: {
-            Authorization: `Basic ${credentials}`, // Add basic authentication
-          },
-        }
-      );
+      let url = `http://localhost:8080/getSubAreasByArea/${areaId}`;
+
+      // Append searchQuery to the URL if it's not empty
+      if (searchQuery.trim() !== "") {
+        url += `?search=${encodeURIComponent(searchQuery.trim())}`;
+      }
+
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Basic ${credentials}`, // Add basic authentication
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch sub-areas");
       }
@@ -160,40 +164,11 @@ export default function FormNewSubArea() {
   };
 
   useEffect(() => {
-    if (searchQuery.trim() !== "") {
-      fetchSubAreasBySearchQuery();
-    } else {
-      fetchSubAreas();
-    }
+    fetchSubAreas();
   }, [searchQuery]);
-  const fetchSubAreasBySearchQuery = async () => {
-    try {
-      const username = sessionStorage.getItem("username");
-      const password = sessionStorage.getItem("password");
 
-      if (!username || !password) {
-        console.error("Username or password not found in session.");
-        return;
-      }
-
-      const credentials = btoa(`${username}:${password}`);
-      const response = await fetch(
-        `http://localhost:8080/getSubAreasBySearch/${searchQuery}`,
-        {
-          headers: {
-            Authorization: `Basic ${credentials}`, // Add basic authentication
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch sub-areas by search query");
-      }
-      const data = await response.json();
-      console.log("Sub-areas fetched successfully:", data);
-      setSubAreas(data);
-    } catch (error) {
-      console.error("Error fetching sub-areas by search query:", error.message);
-    }
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const handleAddDepartement = (subAreaId, subAreaCode, subAreaName) => {
@@ -342,50 +317,60 @@ export default function FormNewSubArea() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-            {subAreas.map((subArea, index) => (
-              <tr key={index}>
-                <td className="text-center py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
-                  {subArea.subAreaCode}{" "}
-                  {/* Access subAreaCode from subArea object */}
-                </td>
-                <td className="text-center py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
-                  {subArea.subAreaName}{" "}
-                  {/* Access subAreaName from subArea object */}
-                </td>
-                <td className="text-center p-4 border-b border-blue-gray-50">
-                  <button
-                    className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                    onClick={() =>
-                      handleModifySubArea(
-                        subArea.subAreaId,
-                        subArea.subAreaCode,
-                        subArea.subAreaName
-                      )
-                    }
-                  >
-                    Modify
-                  </button>
-                  <button
-                    className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                    onClick={() => handleDeleteSubArea(subArea.subAreaId)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleAddDepartement(
-                        subArea.subAreaId,
-                        subArea.subAreaCode,
-                        subArea.subAreaName
-                      )
-                    }
-                    className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  >
-                    Add Departement
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {subAreas
+              .filter(
+                (subArea) =>
+                  subArea.subAreaCode
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()) ||
+                  subArea.subAreaName
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase())
+              )
+              .map((subArea, index) => (
+                <tr key={index}>
+                  <td className="text-center py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                    {subArea.subAreaCode}{" "}
+                    {/* Access subAreaCode from subArea object */}
+                  </td>
+                  <td className="text-center py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                    {subArea.subAreaName}{" "}
+                    {/* Access subAreaName from subArea object */}
+                  </td>
+                  <td className="text-center p-4 border-b border-blue-gray-50">
+                    <button
+                      className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                      onClick={() =>
+                        handleModifySubArea(
+                          subArea.subAreaId,
+                          subArea.subAreaCode,
+                          subArea.subAreaName
+                        )
+                      }
+                    >
+                      Modify
+                    </button>
+                    <button
+                      className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                      onClick={() => handleDeleteSubArea(subArea.subAreaId)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleAddDepartement(
+                          subArea.subAreaId,
+                          subArea.subAreaCode,
+                          subArea.subAreaName
+                        )
+                      }
+                      className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    >
+                      Add Departement
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
         {showPrompt && (
@@ -406,7 +391,7 @@ export default function FormNewSubArea() {
                   id="subAreaCodeInput"
                   type="text"
                   value={modifiedSubAreaCode}
-                  onChange={(e) => setModifiedSubAreaCode(e.target.value)}
+                  onChange={handleSearchChange}
                   className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                   placeholder="Enter new sub-area code"
                 />
