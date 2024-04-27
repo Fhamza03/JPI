@@ -1,6 +1,8 @@
 package com.JESA.JPI.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -10,15 +12,18 @@ public class FileModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer FileId;
     private String FileName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date Created_On;
     private String FileCode;
     private String Rev;
     private String SubjectOfRev;
     private String pdf_path;
     @ManyToOne
+    @JsonIgnoreProperties({"files"})
     @JoinColumn(name = "task_id")
     private TaskModel task;
     @ManyToOne
+    @JsonIgnoreProperties({"files"})
     @JoinColumn(name = "user_id")
     private UserModel user;
 

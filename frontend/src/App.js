@@ -11,6 +11,7 @@ import NewArea from "./Pages/NewArea";
 import NewSubArea from "./Pages/NewSubArea";
 import NewDepartement from "./Pages/NewDepartement";
 import NewTask from "./Pages/NewTask";
+import NewFile from "./Pages/NewFile";
 
 export default function App() {
   const role = sessionStorage.getItem("role");
@@ -27,6 +28,7 @@ export default function App() {
           <ProtectedRoute exact path="/admin/NewSubArea" component={NewSubArea} role={role} />
           <ProtectedRoute exact path="/admin/NewDepartement" component={NewDepartement} role={role} />
           <ProtectedRoute exact path="/admin/NewTask" component={NewTask} role={role} />
+          <ProtectedRoute exact path="/admin/NewFile" component={NewFile} role={role} />
           <ProtectedRoute exact path="/user/userDashboard" component={userDashboard} role={role} />
         </Switch>
       </div>

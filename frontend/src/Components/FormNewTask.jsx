@@ -180,6 +180,13 @@ export default function FormNewTask() {
     setShowTaskInput(true);
     setShowTaskErrorMessage(false);
   };
+  const handleAddFile = (taskId,taskCode,taskName) => {
+    history.push("/admin/NewFile", {
+      taskId: taskId,
+      taskCode: taskCode,
+      taskName: taskName,
+    });
+  };
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
@@ -346,11 +353,11 @@ export default function FormNewTask() {
                   {/* Button for Options */}
                   <button
                     onClick={() =>
-                      handleSaveTask(task.taskId, task.taskCode, task.taskName)
+                      handleAddFile(task.taskId, task.taskCode, task.taskName)
                     }
                     className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                   >
-                    Add Task
+                    Add File
                   </button>
                 </td>
               </tr>

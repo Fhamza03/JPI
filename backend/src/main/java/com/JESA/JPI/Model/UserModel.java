@@ -1,5 +1,6 @@
 package com.JESA.JPI.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class UserModel {
     private String userJobTitle;
     private String userRole;
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<FileModel> files;
 
     public Integer getUserId() {

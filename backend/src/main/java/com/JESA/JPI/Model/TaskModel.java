@@ -1,5 +1,6 @@
 package com.JESA.JPI.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -17,6 +18,7 @@ public class TaskModel {
     @JsonIgnoreProperties({"tasks"})
     private DepartementModel departement;
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<FileModel> files;
 
     public Integer getTaskId() {

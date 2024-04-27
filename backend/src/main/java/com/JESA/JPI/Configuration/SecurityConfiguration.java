@@ -59,7 +59,7 @@ SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                     authorize.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.GET, "/getArea/**","/getAllAreas","/getAriasByDatabase/**","/getDatabase/**","/getAllDatabases","/getDatabasesByProject/**").hasAnyRole("ADMIN", "USER");
                     authorize.requestMatchers(HttpMethod.GET,"/getAllProjects","/getSubArea/**","/getAllSubAreas","/getSubAreasByArea/**","/getDepartementsBySubArea/**","/getDepartement/**").hasAnyRole("ADMIN","USER");
-                    authorize.requestMatchers(HttpMethod.GET,"/getTasksByDepartement/**").hasAnyRole("ADMIN","USER");
+                    authorize.requestMatchers(HttpMethod.GET,"/getTasksByDepartement/**","/getFilesbyTask/**").hasAnyRole("ADMIN","USER");
                     authorize.anyRequest().authenticated();
             }).httpBasic(Customizer.withDefaults());
     http.logout((logout) -> logout
