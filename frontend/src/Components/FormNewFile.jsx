@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function FormNewFile() {
@@ -10,6 +10,7 @@ export default function FormNewFile() {
   const [fileCode, setFileCode] = useState("");
   const [rev, setRev] = useState("");
   const [subjectOfRev, setsubjectOfRev] = useState("");
+  const [files, setFiles] = useState([]);
 
   // Assuming you have the user ID stored in sessionStorage
   const userId = sessionStorage.getItem("userId");
@@ -64,6 +65,27 @@ export default function FormNewFile() {
       console.error("Error saving file:", error);
     }
   };
+
+  useEffect(() => {
+    // Fetch files for the task
+    const fetchFiles = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/getFilesbyTask/${taskId}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setFiles(data);
+        } else {
+          console.error("Failed to fetch files:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching files:", error);
+      }
+    };
+
+    fetchFiles();
+  }, [taskId]);
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
@@ -193,6 +215,57 @@ export default function FormNewFile() {
               <strong>Task code:</strong> {taskCode}
             </p>
           </div>
+          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif mt-3">
+            Files list
+          </h2>
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                <th
+                  scope="col"
+                  className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                >
+                  File code
+                </th>
+                <th
+                  scope="col"
+                  className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                >
+                  File name
+                </th>
+                <th
+                  scope="col"
+                  className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                >
+                  Created On
+                </th>
+                <th
+                  scope="col"
+                  className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                >
+                  Options
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
+              {files.map((file) => (
+                <tr key={file.FileId}>
+                  <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                    {file.FileCode}
+                  </td>
+                  <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                    {file.FileName}
+                  </td>
+                  <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                    {file.Created_On}
+                  </td>
+                  <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                    {/* Add options here */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
