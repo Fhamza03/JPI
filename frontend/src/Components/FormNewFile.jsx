@@ -58,6 +58,8 @@ export default function FormNewFile() {
 
       if (response.ok) {
         console.log("File saved successfully");
+        fetchFiles()
+        
       } else {
         console.error("Failed to save file:", response.statusText);
       }
@@ -65,25 +67,32 @@ export default function FormNewFile() {
       console.error("Error saving file:", error);
     }
   };
+  const fetchFiles = async () => {
+    try {
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+      const token = btoa(`${username}:${password}`);
+      const response = await fetch(
+        `http://localhost:8080/getFilesbyTask/${taskId}`,
+        {
+          headers: {
+            Authorization: `Basic ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setFiles(data);
+      } else {
+        console.error("Failed to fetch files:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching files:", error);
+    }
+  };
+
 
   useEffect(() => {
-    // Fetch files for the task
-    const fetchFiles = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/getFilesbyTask/${taskId}`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setFiles(data);
-        } else {
-          console.error("Failed to fetch files:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching files:", error);
-      }
-    };
-
     fetchFiles();
   }, [taskId]);
   return (
@@ -248,20 +257,18 @@ export default function FormNewFile() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-              {files.map((file) => (
-                <tr key={file.FileId}>
+              {files.map((file, index) => (
+                <tr key={index}>
                   <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                    {file.FileCode}
+                    {file.fileCode}
                   </td>
                   <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                    {file.FileName}
+                    {file.fileName}
                   </td>
                   <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                    {file.Created_On}
+                  {new Date(file.created_On).toLocaleDateString('fr-FR')}
                   </td>
-                  <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                    {/* Add options here */}
-                  </td>
+                  <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right"></td>
                 </tr>
               ))}
             </tbody>
