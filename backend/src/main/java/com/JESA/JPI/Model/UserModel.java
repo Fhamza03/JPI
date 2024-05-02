@@ -20,6 +20,14 @@ public class UserModel {
     @JsonIgnore
     private List<FileModel> files;
 
+    public UserModel(String username, String userPassword, String userRole) {
+        this.username = username;
+        this.userPassword = userPassword;
+        this.userRole = userRole;
+    }
+    public UserModel(){}
+
+
     public Integer getUserId() {
         return userId;
     }

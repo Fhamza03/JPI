@@ -1,6 +1,8 @@
 package com.JESA.JPI.Controller;
 
+import com.JESA.JPI.Configuration.CustomUser;
 import com.JESA.JPI.Model.UserModel;
+import com.JESA.JPI.Repository.UserRepo;
 import com.JESA.JPI.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +19,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +35,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepo userRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -51,15 +60,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserModel user, HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserModel user, HttpServletRequest request) {
         try {
-            // Load user details
+            // Load user details including user ID
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-
-            // Set session attributes
-            HttpSession session = request.getSession();
-            session.setAttribute("username", userDetails.getUsername());
-            session.setAttribute("role", userDetails.getAuthorities());
 
             // Authenticate user
             Authentication authentication = authenticationManager.authenticate(
@@ -68,21 +72,36 @@ public class UserController {
             // Set authentication in security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            // Set session attributes
+            HttpSession session = request.getSession();
+            session.setAttribute("username", userDetails.getUsername());
+            session.setAttribute("role", userDetails.getAuthorities());
+
             LOGGER.info("User logged in: " + userDetails.getUsername());
 
-            // Extract role without prefix and return successful response
+            // Extract role without prefix
             String role = userDetails.getAuthorities().iterator().next().getAuthority();
-            return ResponseEntity.ok(role);
+
+            // Create response body with user ID and role
+            Map<String, String> responseBody = new HashMap<>();
+            responseBody.put("userId", ((CustomUser) userDetails).getUserId()); // Include user ID
+            responseBody.put("role", role);
+
+            // Return successful response with user ID and role
+            return ResponseEntity.ok(responseBody);
         } catch (UsernameNotFoundException e) {
             LOGGER.warning("User not found: " + user.getUsername());
             // Return unauthorized response for invalid credentials
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", "Invalid username or password"));
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error occurred during login", e);
             // Return internal server error response for other exceptions
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred during login");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Error occurred during login" + e.getMessage()));
         }
     }
+
+
+
     @PostMapping("/logoutUser")
     public ResponseEntity<String> Logout(HttpServletRequest request, HttpServletResponse response) {
         try {
