@@ -19,45 +19,42 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch("http://localhost:8080/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials),
-        });
+      const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
 
-        if (response.ok) {
-            console.log("Login successful");
-            const responseData = await response.json();
+      if (response.ok) {
+        console.log("Login successful");
+        const responseData = await response.json();
 
-            // Extract role and userId from the response data
-            const role = responseData.role;
-            const userId = responseData.userId;
+        // Extract role and userId from the response data
+        const role = responseData.role;
+        const userId = responseData.userId;
 
-            // Store role and userId in session
-            sessionStorage.setItem("role", role);
-            sessionStorage.setItem("userId", userId);
-            sessionStorage.setItem("username", credentials.username);
-            sessionStorage.setItem("password", credentials.userPassword);
+        // Store role and userId in session
+        sessionStorage.setItem("role", role);
+        sessionStorage.setItem("userId", userId);
+        sessionStorage.setItem("username", credentials.username);
+        sessionStorage.setItem("password", credentials.userPassword);
 
-            if (role === "ROLE_ADMIN") {
-                history.push("/admin/adminDashboard");
-            } else if (role === "ROLE_USER") {
-                history.push("/user/userDashboard");
-            } else {
-                console.error("Invalid role:", role);
-            }
+        if (role === "ROLE_ADMIN") {
+          history.push("/admin/adminDashboard");
+        } else if (role === "ROLE_USER") {
+          history.push("/user/userDashboard");
         } else {
-            console.error("Login failed:", await response.text());
+          console.error("Invalid role:", role);
         }
+      } else {
+        console.error("Login failed:", await response.text());
+      }
     } catch (error) {
-        console.error("Login error:", error);
+      console.error("Login error:", error);
     }
-};
-
-
-
+  };
 
   return (
     <div className="flex h-screen">

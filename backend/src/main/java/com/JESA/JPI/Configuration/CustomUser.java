@@ -18,7 +18,6 @@ public class CustomUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Create a SimpleGrantedAuthority list containing user's role
         return Collections.singleton(new SimpleGrantedAuthority(userDetailsMap.get("role")));
     }
 
@@ -32,13 +31,10 @@ public class CustomUser implements UserDetails {
         return userDetailsMap.get("username");
     }
 
-    // Additional method to get user ID from userDetailsMap
     public String getUserId() {
         return userDetailsMap.get("userId");
     }
 
-    // Implement other UserDetails methods as needed
-    // ...
 
     @Override
     public boolean isEnabled() {

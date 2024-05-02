@@ -23,19 +23,23 @@ public class UserDetailService implements UserDetailsService {
         Optional<UserModel> user = userRepo.findByUsername(username);
         if (user.isPresent()) {
             var userObj = user.get();
-            // Construct user details map including user ID
             Map<String, String> userDetailsMap = new HashMap<>();
             userDetailsMap.put("userId", String.valueOf(userObj.getUserId()));
             userDetailsMap.put("username", userObj.getUsername());
             userDetailsMap.put("password", userObj.getUserPassword());
-            userDetailsMap.put("role", userObj.getUserRole());
 
-            // Return user details map
+            String userRole = userObj.getUserRole();
+            if (!userRole.startsWith("ROLE_")) {
+                userRole = "ROLE_" + userRole;
+            }
+            userDetailsMap.put("role", userRole);
+
             return new CustomUser(userDetailsMap);
         } else {
             throw new UsernameNotFoundException(username);
         }
     }
+
 
 
 }

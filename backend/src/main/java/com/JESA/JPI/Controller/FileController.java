@@ -2,9 +2,14 @@ package com.JESA.JPI.Controller;
 
 import com.JESA.JPI.Model.FileModel;
 import com.JESA.JPI.Model.TaskModel;
+import com.JESA.JPI.Model.UserModel;
 import com.JESA.JPI.Service.FileService;
 import com.JESA.JPI.Service.TaskService;
+import com.JESA.JPI.Service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +21,8 @@ public class FileController {
     TaskService taskService;
     @Autowired
     FileService fileService;
+    @Autowired
+    UserService userService;
 
     @GetMapping("/getFilesbyTask/{taskId}")
     public List<FileModel> getFilesByTask(@PathVariable Integer taskId){
@@ -27,16 +34,24 @@ public class FileController {
         }
     }
     @PostMapping("/admin/createFile/{taskId}")
-    public FileModel createFile(@PathVariable Integer taskId,@RequestBody FileModel file){
-        try{
+    public ResponseEntity<FileModel> createFile(@PathVariable Integer taskId, @RequestBody FileModel file,
+                                                HttpSession session) {
+        try {
             TaskModel task = taskService.getTask(taskId);
-            if(task == null){
-                return null;
+            if (task == null) {
+                return ResponseEntity.notFound().build();
             }
+//            Integer userId = (Integer) session.getAttribute("userId");
+//            if (userId == null) {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//            }
+//            UserModel user = userService.getUser(userId);
+//            file.setUser(user);
             file.setTask(task);
-            return fileService.createFile(file);
-        }catch (Exception e){
-            throw new RuntimeException("Failed to create a file");
+            FileModel savedFile = fileService.createFile(file);
+            return ResponseEntity.ok(savedFile);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     @PostMapping("/admin/updateFile/{fileId}")

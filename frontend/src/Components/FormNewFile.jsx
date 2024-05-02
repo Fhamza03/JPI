@@ -12,8 +12,7 @@ export default function FormNewFile() {
   const [subjectOfRev, setsubjectOfRev] = useState("");
   const [files, setFiles] = useState([]);
 
-  // Assuming you have the user ID stored in sessionStorage
-  const userId = sessionStorage.getItem("userId");
+  
 
   const formatDate = (date) => {
     const formattedDate = new Date(date).toISOString().split("T")[0];
@@ -26,11 +25,13 @@ export default function FormNewFile() {
     try {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
+      const userId = sessionStorage.getItem("userId");
+
       const base64Credentials = btoa(`${username}:${password}`);
 
       // Check for null values before sending data
-      if (!fileName || !fileCode || !rev || !subjectOfRev) {
-        console.error("Please fill in all fields");
+      if (!fileName || !fileCode || !rev || !subjectOfRev || !userId) {
+        console.error("Please fill in all fields and ensure you are logged in");
         return;
       }
 
@@ -41,7 +42,7 @@ export default function FormNewFile() {
         subjectOfRev,
         pdf_path,
         created_On: formatDate(date),
-        userId: userId,
+        userId,
       };
 
       const response = await fetch(
@@ -58,8 +59,9 @@ export default function FormNewFile() {
 
       if (response.ok) {
         console.log("File saved successfully");
-        fetchFiles()
-        
+        console.log("userId:", userId);
+
+        fetchFiles();
       } else {
         console.error("Failed to save file:", response.statusText);
       }
@@ -67,6 +69,7 @@ export default function FormNewFile() {
       console.error("Error saving file:", error);
     }
   };
+
   const fetchFiles = async () => {
     try {
       const username = sessionStorage.getItem("username");
@@ -90,7 +93,6 @@ export default function FormNewFile() {
       console.error("Error fetching files:", error);
     }
   };
-
 
   useEffect(() => {
     fetchFiles();
@@ -266,7 +268,7 @@ export default function FormNewFile() {
                     {file.fileName}
                   </td>
                   <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                  {new Date(file.created_On).toLocaleDateString('fr-FR')}
+                    {new Date(file.created_On).toLocaleDateString("fr-FR")}
                   </td>
                   <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right"></td>
                 </tr>

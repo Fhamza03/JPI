@@ -79,7 +79,7 @@ public class UserController {
 
             LOGGER.info("User logged in: " + userDetails.getUsername());
 
-            // Extract role without prefix
+            // Extract role
             String role = userDetails.getAuthorities().iterator().next().getAuthority();
 
             // Create response body with user ID and role
@@ -99,6 +99,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Error occurred during login" + e.getMessage()));
         }
     }
+
+
 
 
 
