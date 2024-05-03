@@ -11,6 +11,7 @@ export default function FormNewFile() {
   const [rev, setRev] = useState("");
   const [subjectOfRev, setsubjectOfRev] = useState("");
   const [files, setFiles] = useState([]);
+  const [error,setError] = useState("");
 
   
 
@@ -18,23 +19,24 @@ export default function FormNewFile() {
     const formattedDate = new Date(date).toISOString().split("T")[0];
     return formattedDate;
   };
-
+  
   const handleAddFile = async (e) => {
     e.preventDefault();
-
+  
     try {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
       const userId = sessionStorage.getItem("userId");
-
+      const taskId = location.state?.taskId; // Extract taskId from location state
+  
       const base64Credentials = btoa(`${username}:${password}`);
-
+  
       // Check for null values before sending data
-      if (!fileName || !fileCode || !rev || !subjectOfRev || !userId) {
-        console.error("Please fill in all fields and ensure you are logged in");
+      if (!fileName || !fileCode || !rev || !subjectOfRev || !userId || !taskId) {
+        console.error("Please fill in all fields, ensure you are logged in, and provide a valid taskId");
         return;
       }
-
+  
       const fileData = {
         fileName,
         fileCode,
@@ -42,11 +44,10 @@ export default function FormNewFile() {
         subjectOfRev,
         pdf_path,
         created_On: formatDate(date),
-        userId,
       };
-
+  
       const response = await fetch(
-        `http://localhost:8080/admin/createFile/${taskId}`,
+        `http://localhost:8080/admin/createFile/${taskId}/${userId}`,
         {
           method: "POST",
           headers: {
@@ -56,11 +57,11 @@ export default function FormNewFile() {
           body: JSON.stringify(fileData),
         }
       );
-
+  
       if (response.ok) {
         console.log("File saved successfully");
         console.log("userId:", userId);
-
+  
         fetchFiles();
       } else {
         console.error("Failed to save file:", response.statusText);
@@ -69,6 +70,7 @@ export default function FormNewFile() {
       console.error("Error saving file:", error);
     }
   };
+  
 
   const fetchFiles = async () => {
     try {
@@ -87,16 +89,12 @@ export default function FormNewFile() {
         const data = await response.json();
         setFiles(data);
       } else {
-        console.error("Failed to fetch files:", response.statusText);
+        setError(`Failed to fetch files: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Error fetching files:", error);
+      setError(`Error fetching files: ${error.message}`);
     }
   };
-
-  useEffect(() => {
-    fetchFiles();
-  }, [taskId]);
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
@@ -275,6 +273,7 @@ export default function FormNewFile() {
               ))}
             </tbody>
           </table>
+          {error && <div className="text-red-500">{error}</div>}
         </div>
       </div>
     </div>

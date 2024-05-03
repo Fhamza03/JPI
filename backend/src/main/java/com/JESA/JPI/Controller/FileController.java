@@ -33,20 +33,19 @@ public class FileController {
             throw new RuntimeException("Failed to get Files ot task " + taskId);
         }
     }
-    @PostMapping("/admin/createFile/{taskId}")
-    public ResponseEntity<FileModel> createFile(@PathVariable Integer taskId, @RequestBody FileModel file,
+    @PostMapping("/admin/createFile/{taskId}/{userId}")
+    public ResponseEntity<FileModel> createFile(@PathVariable Integer taskId, @PathVariable Integer userId,@RequestBody FileModel file,
                                                 HttpSession session) {
         try {
             TaskModel task = taskService.getTask(taskId);
             if (task == null) {
                 return ResponseEntity.notFound().build();
             }
-//            Integer userId = (Integer) session.getAttribute("userId");
-//            if (userId == null) {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//            }
-//            UserModel user = userService.getUser(userId);
-//            file.setUser(user);
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+            UserModel user = userService.getUser(userId);
+            file.setUser(user);
             file.setTask(task);
             FileModel savedFile = fileService.createFile(file);
             return ResponseEntity.ok(savedFile);
