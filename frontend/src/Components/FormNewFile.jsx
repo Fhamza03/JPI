@@ -11,32 +11,49 @@ export default function FormNewFile() {
   const [rev, setRev] = useState("");
   const [subjectOfRev, setsubjectOfRev] = useState("");
   const [files, setFiles] = useState([]);
-  const [error,setError] = useState("");
-
-  
+  const [error, setError] = useState("");
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [fileIdToUpdate, setFileIdToUpdate] = useState(null);
+  const [modifiedFileName, setModifiedFileName] = useState("");
+  const [modifiedFileCode, setModifiedFileCode] = useState("");
+  const [modifiedRev, setModifiedRev] = useState("");
+  const [modifiedSubjectOfRev, setModifiedSubjectOfRev] = useState("");
+  const [modifiedFileRevision, setModifiedFileRevision] = useState("");
+  const [modifiedFileSubject, setModifiedFileSubject] = useState("");
+  const [modifiedFileUpload, setModifiedFileUpload] = useState("");
+  const [modifiedFileCreated, setModifiedFileCreated] = useState("");
 
   const formatDate = (date) => {
     const formattedDate = new Date(date).toISOString().split("T")[0];
     return formattedDate;
   };
-  
+
   const handleAddFile = async (e) => {
     e.preventDefault();
-  
+
     try {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
       const userId = sessionStorage.getItem("userId");
       const taskId = location.state?.taskId; // Extract taskId from location state
-  
+
       const base64Credentials = btoa(`${username}:${password}`);
-  
+
       // Check for null values before sending data
-      if (!fileName || !fileCode || !rev || !subjectOfRev || !userId || !taskId) {
-        console.error("Please fill in all fields, ensure you are logged in, and provide a valid taskId");
+      if (
+        !fileName ||
+        !fileCode ||
+        !rev ||
+        !subjectOfRev ||
+        !userId ||
+        !taskId
+      ) {
+        console.error(
+          "Please fill in all fields, ensure you are logged in, and provide a valid taskId"
+        );
         return;
       }
-  
+
       const fileData = {
         fileName,
         fileCode,
@@ -45,7 +62,7 @@ export default function FormNewFile() {
         pdf_path,
         created_On: formatDate(date),
       };
-  
+
       const response = await fetch(
         `http://localhost:8080/admin/createFile/${taskId}/${userId}`,
         {
@@ -57,11 +74,11 @@ export default function FormNewFile() {
           body: JSON.stringify(fileData),
         }
       );
-  
+
       if (response.ok) {
         console.log("File saved successfully");
         console.log("userId:", userId);
-  
+
         fetchFiles();
       } else {
         console.error("Failed to save file:", response.statusText);
@@ -70,7 +87,6 @@ export default function FormNewFile() {
       console.error("Error saving file:", error);
     }
   };
-  
 
   const fetchFiles = async () => {
     try {
@@ -95,6 +111,58 @@ export default function FormNewFile() {
       setError(`Error fetching files: ${error.message}`);
     }
   };
+
+  useEffect(() => {
+    fetchFiles(); // Fetch files when the component mounts
+  }, []);
+
+  const handleDelete = async (fileId) => {
+    try {
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+      const token = btoa(`${username}:${password}`);
+      const response = await fetch(
+        `http://localhost:8080/admin/deleteFile/${fileId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Basic ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log("File deleted successfully");
+        fetchFiles();
+      } else {
+        console.error("Failed to delete file:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting file:", error);
+    }
+  };
+
+  const handleUpdate = (fileId) => {
+    setShowPrompt(true);
+    setFileIdToUpdate(fileId);
+  };
+  const confirmModification = () => {
+    setShowPrompt(false);
+    setModifiedFileName("");
+    setModifiedFileCode("");
+    setModifiedRev("");
+    setModifiedSubjectOfRev("");
+  };
+
+  const cancelModification = () => {
+    setShowPrompt(false);
+    setModifiedFileName("");
+    setModifiedFileCode("");
+    setModifiedRev("");
+    setModifiedSubjectOfRev("");
+  };
+
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
@@ -268,13 +336,151 @@ export default function FormNewFile() {
                   <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
                     {new Date(file.created_On).toLocaleDateString("fr-FR")}
                   </td>
-                  <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right"></td>
+                  <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                    <button
+                      className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                      onClick={() => handleDelete(file.fileId)} // Add onClick handler for delete
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                      onClick={() => handleUpdate(file.id)} // Add onClick handler for update
+                    >
+                      Modify
+                    </button>
+                    <button className="rounded-lg bg-green-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
+                      View
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
           {error && <div className="text-red-500">{error}</div>}
         </div>
+        {showPrompt && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
+            <div className="bg-white rounded-lg p-8 max-w-md">
+              <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+                Update File Information
+              </h2>
+              <div className="flex mb-3">
+                <div className="w-1/2 mr-2">
+                  <label
+                    htmlFor="modifiedFileName"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    File Name
+                  </label>
+                  <input
+                    id="modifiedFileName"
+                    type="text"
+                    value={modifiedFileName}
+                    onChange={(e) => setModifiedFileName(e.target.value)}
+                    className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                    placeholder="Enter modified file name"
+                  />
+                </div>
+                <div className="w-1/2 ml-2">
+                  <label
+                    htmlFor="modifiedFileCode"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    File Code
+                  </label>
+                  <input
+                    id="modifiedFileCode"
+                    type="text"
+                    value={modifiedFileCode}
+                    onChange={(e) => setModifiedFileCode(e.target.value)}
+                    className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                    placeholder="Enter modified file code"
+                  />
+                </div>
+              </div>
+              <div className="mb-3">
+                <label
+                  htmlFor="modifiedFileRevision"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Revision
+                </label>
+                <input
+                  id="modifiedFileRevision"
+                  type="text"
+                  value={modifiedFileRevision}
+                  onChange={(e) => setModifiedFileRevision(e.target.value)}
+                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                  placeholder="Enter modified file Revision"
+                />
+              </div>
+              <div className="mb-3">
+                <label
+                  htmlFor="modifiedFileSubject"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Subject of revision
+                </label>
+                <input
+                  id="modifiedFileSubject"
+                  type="text"
+                  value={modifiedFileSubject}
+                  onChange={(e) => setModifiedFileSubject(e.target.value)}
+                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                  placeholder="Enter modified file Subject of revision"
+                />
+              </div>
+              <div className="mb-3">
+                <label
+                  htmlFor="Upload"
+                  className="block text-gray-700 font-bold mb-2"
+                >
+                  Upload file
+                </label>
+                <link
+                  rel="stylesheet"
+                  href="https://unpkg.com/flowbite@1.4.4/dist/flowbite.min.css"
+                />
+                <input
+                  type="file"
+                  id="Upload"
+                  name="Upload"
+                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                />
+              </div>
+              <div className="mb-3">
+                <label
+                  htmlFor="modifiedFileCreated"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Created On
+                </label>
+                <input
+                  id="modifiedFileCreated"
+                  type="date"
+                  value={modifiedFileCreated}
+                  onChange={(e) => setModifiedFileCreated(e.target.value)}
+                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                />
+              </div>
+              <div className="flex justify-end mt-5">
+                <button
+                  onClick={confirmModification}
+                  className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={cancelModification}
+                  className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

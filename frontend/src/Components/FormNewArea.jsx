@@ -364,8 +364,8 @@ export default function FormNewArea(props) {
           </tbody>
         </table>
         {showPrompt && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
-            <div className="bg-white rounded-lg p-8 w-96">
+          <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
+          <div className="bg-white rounded-lg p-8 w-96">
               <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
                 Update Area
               </h2>
