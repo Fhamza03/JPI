@@ -13,15 +13,13 @@ export default function FormNewFile() {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
   const [showPrompt, setShowPrompt] = useState(false);
-  const [fileIdToUpdate, setFileIdToUpdate] = useState(null);
+  const [fileId, setFileId] = useState("");
   const [modifiedFileName, setModifiedFileName] = useState("");
   const [modifiedFileCode, setModifiedFileCode] = useState("");
-  const [modifiedRev, setModifiedRev] = useState("");
-  const [modifiedSubjectOfRev, setModifiedSubjectOfRev] = useState("");
   const [modifiedFileRevision, setModifiedFileRevision] = useState("");
   const [modifiedFileSubject, setModifiedFileSubject] = useState("");
-  const [modifiedFileUpload, setModifiedFileUpload] = useState("");
   const [modifiedFileCreated, setModifiedFileCreated] = useState("");
+  const [modifiedPdf_path, setModifiedPdf_Path] = useState(null);
 
   const formatDate = (date) => {
     const formattedDate = new Date(date).toISOString().split("T")[0];
@@ -93,6 +91,7 @@ export default function FormNewFile() {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
       const token = btoa(`${username}:${password}`);
+
       const response = await fetch(
         `http://localhost:8080/getFilesbyTask/${taskId}`,
         {
@@ -101,6 +100,7 @@ export default function FormNewFile() {
           },
         }
       );
+
       if (response.ok) {
         const data = await response.json();
         setFiles(data);
@@ -113,7 +113,7 @@ export default function FormNewFile() {
   };
 
   useEffect(() => {
-    fetchFiles(); // Fetch files when the component mounts
+    fetchFiles();
   }, []);
 
   const handleDelete = async (fileId) => {
@@ -121,6 +121,7 @@ export default function FormNewFile() {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
       const token = btoa(`${username}:${password}`);
+
       const response = await fetch(
         `http://localhost:8080/admin/deleteFile/${fileId}`,
         {
@@ -143,24 +144,78 @@ export default function FormNewFile() {
     }
   };
 
-  const handleUpdate = (fileId) => {
+  const handleModifyFile = (
+    fileId,
+    fileName,
+    fileCode,
+    rev,
+    pdf_path,
+    subjectOfRev,
+    created_On
+  ) => {
+    setFileId(fileId);
+    setModifiedFileName(fileName);
+    setModifiedFileCode(fileCode);
+    setModifiedFileRevision(rev);
+    setModifiedPdf_Path(pdf_path);
+    setModifiedFileSubject(subjectOfRev);
+    setModifiedFileCreated(formatDate(created_On));
     setShowPrompt(true);
-    setFileIdToUpdate(fileId);
   };
-  const confirmModification = () => {
+
+  const confirmModification = async () => {
+    try {
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+      const userId = sessionStorage.getItem("userId");
+      const token = btoa(`${username}:${password}`);
+
+      const fileData = {
+        fileName: modifiedFileName,
+        fileCode: modifiedFileCode,
+        rev: modifiedFileRevision,
+        subjectOfRev: modifiedFileSubject,
+        pdf_path: modifiedPdf_path,
+        created_On: formatDate(modifiedFileCreated),
+      };
+
+      const response = await fetch(
+        `http://localhost:8080/admin/updateFile/${fileId}/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Basic ${token}`,
+          },
+          body: JSON.stringify(fileData),
+        }
+      );
+
+      if (response.ok) {
+        console.log("File updated successfully");
+        fetchFiles();
+      } else {
+        console.error("Failed to update file:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating file:", error);
+    }
+
     setShowPrompt(false);
     setModifiedFileName("");
     setModifiedFileCode("");
-    setModifiedRev("");
-    setModifiedSubjectOfRev("");
+    setModifiedFileRevision("");
+    setModifiedFileSubject("");
+    setModifiedFileCreated("");
   };
 
   const cancelModification = () => {
     setShowPrompt(false);
     setModifiedFileName("");
     setModifiedFileCode("");
-    setModifiedRev("");
-    setModifiedSubjectOfRev("");
+    setModifiedFileRevision("");
+    setModifiedFileSubject("");
+    setModifiedFileCreated("");
   };
 
   return (
@@ -345,7 +400,17 @@ export default function FormNewFile() {
                     </button>
                     <button
                       className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                      onClick={() => handleUpdate(file.id)} // Add onClick handler for update
+                      onClick={() =>
+                        handleModifyFile(
+                          file.fileId,
+                          file.fileName,
+                          file.fileCode,
+                          file.rev,
+                          file.pdf_path,
+                          file.subjectOfRev,
+                          file.created_On
+                        )
+                      }
                     >
                       Modify
                     </button>
@@ -420,7 +485,7 @@ export default function FormNewFile() {
                   htmlFor="modifiedFileSubject"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Subject of revision
+                  Subject of Revision
                 </label>
                 <input
                   id="modifiedFileSubject"
@@ -436,16 +501,13 @@ export default function FormNewFile() {
                   htmlFor="Upload"
                   className="block text-gray-700 font-bold mb-2"
                 >
-                  Upload file
+                  Upload File
                 </label>
-                <link
-                  rel="stylesheet"
-                  href="https://unpkg.com/flowbite@1.4.4/dist/flowbite.min.css"
-                />
                 <input
                   type="file"
                   id="Upload"
                   name="Upload"
+                  onChange={(e) => setModifiedPdf_Path(e.target.value)}
                   className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 />
               </div>

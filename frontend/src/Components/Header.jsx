@@ -9,7 +9,9 @@ const Header = () => {
         {/* logo */}
         <div className="inline-flex">
           <h1 className="text-sm text-xl font-sans">
-            <b className="text-white">Engineering Modular System Project Information</b>
+            <b className="text-white">
+              Engineering Modular System Project Information
+            </b>
           </h1>
         </div>
         {/* end logo */}
