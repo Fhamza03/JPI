@@ -1,15 +1,98 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
 export default function Projects() {
   const [selectedLocation, setSelectedLocation] = useState("All");
+  const [projects, setProjects] = useState([]);
+  const [lastClickTime, setLastClickTime] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [databaseLocations, setDatabaseLocations] = useState([]);
 
-  // Dummy database locations for testing
-  const databaseLocations = ["All locations", "CASABLANCA", "JORF", "LAAYOUNE"];
+  const history = useHistory();
 
-  // Function to handle selection change
-  const handleLocationChange = (e) => {
-    setSelectedLocation(e.target.value);
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+
+      const base64Credentials = btoa(`${username}:${password}`);
+
+      const response = await fetch("http://localhost:8080/getAllProjects", {
+        headers: {
+          Authorization: `Basic ${base64Credentials}`, // Add authorization header
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProjects(data);
+        const locations = data.map((project) => project.databaseLocation);
+        const uniqueLocations = [...new Set(locations)];
+        setDatabaseLocations(uniqueLocations);
+      } else {
+        throw new Error("Failed to fetch projects");
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
   };
+
+  const handleLocationChange = (event) => {
+    setSelectedLocation(event.target.value);
+  };
+
+  const filteredProjects =
+    selectedLocation === "All"
+      ? projects
+      : projects.filter(
+          (project) => project.databaseLocation === selectedLocation
+        );
+
+  const searchedProjects = searchQuery
+    ? filteredProjects.filter((project) =>
+        Object.values(project).some(
+          (value) =>
+            typeof value === "string" &&
+            value.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      )
+    : selectedLocation === "" // Check if "All Database Locations" is selected
+    ? projects // If selectedLocation is empty, display all projects
+    : filteredProjects;
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleClick = (projectId) => {
+    const now = new Date().getTime();
+    const timeDiff = now - lastClickTime;
+    setLastClickTime(now);
+
+    if (timeDiff < 300) {
+      handleDoubleClick(projectId);
+    }
+  };
+
+  const handleDoubleClick = (projectId) => {
+    console.log("Double-clicked project ID:", projectId);
+    const selected = projects.find(
+      (project) => project.projectId === projectId
+    );
+    console.log("Selected project:", selected);
+    setSelectedProject(selected);
+    console.log("Selected project state:", selectedProject);
+    history.push({
+      pathname: "/user/Databases",
+      state: { project: selected },
+    });
+  };
+
   return (
     <>
       <section className="container px-4 mx-auto">
@@ -20,6 +103,7 @@ export default function Projects() {
               onChange={handleLocationChange}
               className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:border-blue-400 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 dark:focus:border-blue-300"
             >
+              <option value="">All Database Locations</option>
               {databaseLocations.map((location, index) => (
                 <option key={index} value={location}>
                   {location}
@@ -67,6 +151,8 @@ export default function Projects() {
             <input
               type="text"
               placeholder="Search"
+              value={searchQuery} // Bind value to the searchQuery state
+              onChange={handleSearchChange} // Connect onChange event to handleSearchChange function
               className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
@@ -116,7 +202,37 @@ export default function Projects() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900"></tbody>
+                  <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                    {searchedProjects.map((project) => (
+                      <tr
+                        key={project.projectId}
+                        onClick={() => handleClick(project.projectId)}
+                      >
+                        {/* Project details cells */}
+                        <td className="text-center p-4 border-b border-blue-gray-50">
+                          {project.databaseLocation}
+                        </td>
+                        <td className="text-center p-4 border-b border-blue-gray-50">
+                          {project.projectName}
+                        </td>
+                        <td className="text-center p-4 border-b border-blue-gray-50">
+                          {project.projectCode}
+                        </td>
+                        <td className="text-center p-4 border-b border-blue-gray-50">
+                          {project.client}
+                        </td>
+                        <td className="text-center p-4 border-b border-blue-gray-50">
+                          {project.location}
+                        </td>
+                        <td className="text-center p-4 border-b border-blue-gray-50">
+                          {project.leadOffice}
+                        </td>
+                        <td className="text-center p-4 border-b border-blue-gray-50">
+                          {project.serverName}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               </div>
             </div>
