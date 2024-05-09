@@ -62,7 +62,7 @@ export default function Tasks() {
     <div className="flex justify-center pt-10">
       <div className="max-w-screen-lg w-full">
         <div className="flex justify-between">
-          <div className="w-1/2 bg-white border border-gray-300 rounded-lg p-6 m-4">
+          <div className="w-1/3 bg-white border border-gray-300 rounded-lg p-6 m-4">
             <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
               Department Information
             </h2>
@@ -73,7 +73,7 @@ export default function Tasks() {
               <strong>Department name :</strong> <i>{departementName}</i>
             </p>
           </div>
-          <div className="w-1/2 bg-white border border-gray-300 rounded-lg p-6 m-4">
+          <div className="w-2/3 bg-white border border-gray-300 rounded-lg p-6 m-4">
             <h2 className="text-2xl font-semibold mb-4">Department Tasks</h2>
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-800">
@@ -100,7 +100,10 @@ export default function Tasks() {
               </thead>
               <tbody>
                 {filteredTasks.map((task, index) => (
-                  <tr key={index}>
+                  <tr
+                    key={index}
+                    className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
+                  >
                     <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
                       {task.taskCode}
                     </td>

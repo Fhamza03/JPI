@@ -53,7 +53,7 @@ export default function Files() {
     <div className="flex justify-center pt-10">
       <div className="max-w-screen-lg w-full">
         <div className="flex justify-between">
-          <div className="w-1/2 bg-white border border-gray-300 rounded-lg p-6 m-4">
+        <div className="w-1/3 bg-white border border-gray-300 rounded-lg p-6 m-4">
             <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
               Task Information
             </h2>
@@ -64,7 +64,7 @@ export default function Files() {
               <strong>Task name :</strong> <i>{taskName}</i>
             </p>
           </div>
-          <div className="w-1/2 bg-white border border-gray-300 rounded-lg p-6 m-4">
+          <div className="w-2/3 bg-white border border-gray-300 rounded-lg p-6 m-4">
             <h2 className="text-2xl font-semibold mb-4">Task Files</h2>
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-800">
@@ -91,7 +91,9 @@ export default function Files() {
             </thead>
             <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
               {files.map((file, index) => (
-                <tr key={index}>
+                <tr key={index}
+                className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
+                >
                   <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
                     {file.fileCode}
                   </td>
