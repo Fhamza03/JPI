@@ -170,7 +170,6 @@ export default function FormNewDepartement() {
 
       if (response.ok) {
         console.log("Department deleted successfully");
-        // After deleting, you may want to refresh the list of departments
         fetchDepartements(subAreaId);
       } else {
         console.error("Failed to delete department:", response.statusText);

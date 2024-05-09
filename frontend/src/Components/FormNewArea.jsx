@@ -30,7 +30,7 @@ export default function FormNewArea(props) {
         `http://localhost:8080/getAriasByDatabase/${databaseId}`,
         {
           headers: {
-            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+            Authorization: `Basic ${base64Credentials}`, 
           },
         }
       );
@@ -76,7 +76,7 @@ export default function FormNewArea(props) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+            Authorization: `Basic ${base64Credentials}`,
           },
           body: JSON.stringify(areaData),
         }
