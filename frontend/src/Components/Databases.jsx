@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 
 export default function Databases() {
@@ -20,10 +20,10 @@ export default function Databases() {
       // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
-  
+
       const response = await fetch("http://localhost:8080/getAllDatabases", {
         headers: {
           Authorization: `Basic ${base64Credentials}`, // Add authorization header
@@ -44,15 +44,15 @@ export default function Databases() {
       // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
-  
+
       const response = await fetch(
         `http://localhost:8080/getDatabasesByProject/${projectId}`,
         {
           headers: {
-            Authorization: `Basic ${base64Credentials}`, 
+            Authorization: `Basic ${base64Credentials}`,
           },
         }
       );
@@ -77,7 +77,7 @@ export default function Databases() {
     <div className="flex justify-center pt-10">
       <div className="max-w-screen-lg w-full">
         <div className="flex justify-between">
-        <div className="w-1/3 bg-white border border-gray-300 rounded-lg p-6 m-4">
+          <div className="w-1/3 bg-white border border-gray-300 rounded-lg p-6 m-4">
             <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
               Project Information
             </h2>
@@ -142,12 +142,9 @@ export default function Databases() {
                     <td className="text-center">
                       <button
                         onClick={() =>
-                          handleArea(
-                            database.databaseId,
-                            database.databaseType
-                          )
+                          handleArea(database.databaseId, database.databaseType)
                         }
-                        className="middle none center mr-4 rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                         data-ripple-light="true"
                       >
                         Add area
