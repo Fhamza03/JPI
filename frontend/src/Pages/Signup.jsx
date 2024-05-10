@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import EMSPI from "../images/EMSPI.png";
-import LogoSignUp from "../images/LogoSignUp.jpg";
+import Construction from "../images/Construction.jpg";
 import { Link } from "react-router-dom";
 
 export default function SignUp() {
@@ -68,10 +68,10 @@ export default function SignUp() {
       <div className="flex h-screen">
         {/* Left Pane */}
         <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
-          <img className="w-full h-full object-cover" src={LogoSignUp} alt="" />
+          <img className="w-full h-full object-cover" src={Construction} alt="" />
         </div>
         {/* Right Pane */}
-        <div className="w-full bg-sky-800 lg:w-1/2 flex items-center justify-center bg-opacity-30 backdrop-filter backdrop-blur-lg">
+        <div className="w-full bg-slate-300 lg:w-1/2 flex items-center justify-center bg-opacity-50 backdrop-filter backdrop-blur-lg">
           <div className="w-full lg:w-2/3 flex items-center justify-center">
             <div className="max-w-4xl w-full p-8 rounded-lg border border-gray-300 bg-white shadow-2xl">
               <div className="flex items-center justify-center mb-3">
@@ -253,7 +253,7 @@ export default function SignUp() {
                 </div>
                 <div className="flex -mx-3">
                   <div className="w-full px-3 mb-0">
-                    <button className="block w-full mb-2 max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold text-center">
+                    <button className="block w-full mb-2 max-w-xs mx-auto bg-sky-600 hover:bg-sky-800 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold text-center">
                       Sign up
                     </button>
                     <p className="text-center">

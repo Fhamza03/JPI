@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import EMSPI from "../images/EMSPI.png";
-import LogoSignUp from "../images/LogoSignUp.jpg";
+import Construction from "../images/Construction.jpg";
 import { Link } from "react-router-dom";
-
 
 export default function Login() {
   const [credentials, setCredentials] = useState({
@@ -62,10 +61,10 @@ export default function Login() {
     <div className="flex h-screen">
       {/* Left Pane */}
       <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
-        <img className="w-full h-full object-cover" src={LogoSignUp} alt="" />
+        <img className="w-full h-full object-cover" src={Construction} alt="" />
       </div>
       {/* Right Pane */}
-      <div className="w-full bg-sky-800 lg:w-1/2 flex items-center justify-center bg-opacity-30 backdrop-filter backdrop-blur-lg">
+      <div className="w-full bg-slate-300 lg:w-1/2 flex items-center justify-center bg-opacity-50 backdrop-filter backdrop-blur-lg">
         <div className="w-full lg:w-2/3 flex items-center justify-center">
           <div className="max-w-md w-full p-6 rounded-lg border border-gray-300 bg-white shadow-2xl">
             <div className="flex items-center justify-center mb-3 mt-6">
@@ -98,16 +97,13 @@ export default function Login() {
                   value={credentials.userPassword}
                   onChange={handleChange}
                 />
-                <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg">
+                <button className="bg-sky-600 hover:bg-sky-800 text-white font-semibold py-2 rounded-lg">
                   Login
                 </button>
-                <p>
+                <p className="ml-2">
                   Don't have an account?{" "}
-                  <Link
-                  className="text-sky-600 hover:underline"
-                  to="/signup"
-                  >
-                  Sign up here
+                  <Link className="text-sky-600 hover:underline" to="/signup">
+                    Sign up here
                   </Link>
                 </p>
               </div>
