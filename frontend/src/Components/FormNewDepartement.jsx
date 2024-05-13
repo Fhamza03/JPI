@@ -16,6 +16,8 @@ export default function FormNewDepartement() {
   const [modifiedDepartementCode, setModifiedDepartementCode] = useState("");
   const [modifiedDepartementName, setModifiedDepartementName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const filteredDepartements = departements.filter(
     (dept) =>
@@ -187,6 +189,25 @@ export default function FormNewDepartement() {
     });
   };
 
+  const itemsPerPage = 5;
+
+// Calculate the total number of pages
+const totalPages = Math.ceil(filteredDepartements.length / itemsPerPage);
+
+// Calculate the start and end index of items to display for the current page
+const startIndex = (currentPage - 1) * itemsPerPage;
+const endIndex = Math.min(startIndex + itemsPerPage, filteredDepartements.length);
+const DepartementsForPage = filteredDepartements.slice(startIndex, endIndex);
+
+// Define functions for handling pagination
+const handlePreviousPage = () => {
+  setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+};
+
+const handleNextPage = () => {
+  setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+};
+
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
       {/* Two cards in the same line */}
@@ -328,14 +349,14 @@ export default function FormNewDepartement() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-            {filteredDepartements.map((dept, index) => (
-              <tr key={index}>
-                <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
-                  {dept.departementCode}
-                </td>
-                <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
-                  {dept.departementName}
-                </td>
+          {DepartementsForPage.map((dept, index) => (
+            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}>
+              <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
+                {dept.departementCode}
+              </td>
+              <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
+                {dept.departementName}
+              </td>
                 <td className="text-center p-4 border-b border-blue-gray-50">
                   <button
                     onClick={() =>
@@ -372,6 +393,58 @@ export default function FormNewDepartement() {
             ))}
           </tbody>
         </table>
+        <div className="mt-6 sm:flex sm:items-center sm:justify-between ">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                Page{" "}
+                <span className="font-medium text-gray-700 dark:text-gray-100">
+                  {currentPage} of {totalPages}
+                </span>
+              </div>
+              <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
+                <button
+                  className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-5 h-5 rtl:-scale-x-100"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                    />
+                  </svg>
+                  <span>previous</span>
+                </button>
+                <button
+                  className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                >
+                  <span>Next</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-5 h-5 rtl:-scale-x-100"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                    />
+                  </svg>
+                </button>{" "}
+              </div>
+            </div>
         {showPrompt && (
           <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
           <div className="bg-white rounded-lg p-8 w-96">

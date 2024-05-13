@@ -13,7 +13,6 @@ export default function Tasks() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -64,25 +63,25 @@ export default function Tasks() {
     });
   };
 
-// Calculate the number of items per page
-const itemsPerPage = 5;
+  // Calculate the number of items per page
+  const itemsPerPage = 5;
 
-// Calculate the total number of pages
-const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
 
-// Calculate the start and end index of items to display for the current page
-const startIndex = (currentPage - 1) * itemsPerPage;
-const endIndex = Math.min(startIndex + itemsPerPage, filteredTasks.length);
-const TasksForPage = filteredTasks.slice(startIndex, endIndex);
+  // Calculate the start and end index of items to display for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredTasks.length);
+  const TasksForPage = filteredTasks.slice(startIndex, endIndex);
 
-// Define functions for handling pagination
-const handlePreviousPage = () => {
-  setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-};
+  // Define functions for handling pagination
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
 
-const handleNextPage = () => {
-  setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-};
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
 
   return (
     <div className="flex justify-center pt-10">
@@ -152,27 +151,30 @@ const handleNextPage = () => {
                 </tr>
               </thead>
               <tbody>
-          {TasksForPage.map((task, index) => (
-            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}>
-              <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
-                {task.taskCode}
-              </td>
-              <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
-                {task.taskName}
-              </td>
-              <td className="text-center p-4 border-b border-blue-gray-50">
-                <button
-                  onClick={() =>
-                    handleFile(task.taskId, task.taskCode, task.taskName)
-                  }
-                  className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                >
-                  Add File
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+                {TasksForPage.map((task, index) => (
+                  <tr
+                    key={index}
+                    className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
+                  >
+                    <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
+                      {task.taskCode}
+                    </td>
+                    <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
+                      {task.taskName}
+                    </td>
+                    <td className="text-center p-4 border-b border-blue-gray-50">
+                      <button
+                        onClick={() =>
+                          handleFile(task.taskId, task.taskCode, task.taskName)
+                        }
+                        className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                      >
+                        Add File
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
             <div className="mt-6 sm:flex sm:items-center sm:justify-between ">
               <div className="text-sm text-gray-500 dark:text-gray-400">

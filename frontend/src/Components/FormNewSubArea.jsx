@@ -14,6 +14,8 @@ export default function FormNewSubArea() {
   const [modifiedSubAreaCode, setModifiedSubAreaCode] = useState("");
   const [modifiedSubAreaName, setModifiedSubAreaName] = useState("");
   const [showPrompt, setShowPrompt] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const history = useHistory();
 
   const handleToggleSubAreaInput = () => {
@@ -179,6 +181,25 @@ export default function FormNewSubArea() {
     });
   };
 
+  const itemsPerPage = 5;
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(subAreas.length / itemsPerPage);
+
+  // Calculate the start and end index of items to display for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, subAreas.length);
+  const subAreasForPage = subAreas.slice(startIndex, endIndex);
+
+  // Define functions for handling pagination
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
@@ -317,7 +338,7 @@ export default function FormNewSubArea() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-            {subAreas
+            {subAreasForPage
               .filter(
                 (subArea) =>
                   subArea.subAreaCode
@@ -328,14 +349,15 @@ export default function FormNewSubArea() {
                     .includes(searchQuery.toLowerCase())
               )
               .map((subArea, index) => (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
+                >
                   <td className="text-center py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
                     {subArea.subAreaCode}{" "}
-                    {/* Access subAreaCode from subArea object */}
                   </td>
                   <td className="text-center py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
                     {subArea.subAreaName}{" "}
-                    {/* Access subAreaName from subArea object */}
                   </td>
                   <td className="text-center p-4 border-b border-blue-gray-50">
                     <button
@@ -373,64 +395,116 @@ export default function FormNewSubArea() {
               ))}
           </tbody>
         </table>
+        <div className="mt-6 sm:flex sm:items-center sm:justify-between ">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            Page{" "}
+            <span className="font-medium text-gray-700 dark:text-gray-100">
+              {currentPage} of {totalPages}
+            </span>
+          </div>
+          <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
+            <button
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5 rtl:-scale-x-100"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                />
+              </svg>
+              <span>previous</span>
+            </button>
+            <button
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              <span>Next</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5 rtl:-scale-x-100"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                />
+              </svg>
+            </button>{" "}
+          </div>
+        </div>
       </div>
       {showPrompt && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
           <div className="bg-white rounded-lg p-8 w-96">
-              <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
-                Update Sub-Area
-              </h2>
-              {/* Sub-area code input with label */}
-              <div className="mb-3">
-                <label
-                  htmlFor="subAreaCodeInput"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Sub-Area Code
-                </label>
-                <input
-                  id="subAreaCodeInput"
-                  type="text"
-                  value={modifiedSubAreaCode}
-                  onChange={handleSearchChange}
-                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
-                  placeholder="Enter new sub-area code"
-                />
-              </div>
-              {/* Sub-area name input with label */}
-              <div className="mb-3">
-                <label
-                  htmlFor="subAreaNameInput"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Sub-Area Name
-                </label>
-                <input
-                  id="subAreaNameInput"
-                  type="text"
-                  value={modifiedSubAreaName}
-                  onChange={(e) => setModifiedSubAreaName(e.target.value)}
-                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
-                  placeholder="Enter new sub-area name"
-                />
-              </div>
-              <div className="flex justify-end mt-5">
-                <button
-                  onClick={confirmModification}
-                  className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={cancelModification}
-                  className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                >
-                  Cancel
-                </button>
-              </div>
+            <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+              Update Sub-Area
+            </h2>
+            {/* Sub-area code input with label */}
+            <div className="mb-3">
+              <label
+                htmlFor="subAreaCodeInput"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Sub-Area Code
+              </label>
+              <input
+                id="subAreaCodeInput"
+                type="text"
+                value={modifiedSubAreaCode}
+                onChange={handleSearchChange}
+                className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                placeholder="Enter new sub-area code"
+              />
+            </div>
+            {/* Sub-area name input with label */}
+            <div className="mb-3">
+              <label
+                htmlFor="subAreaNameInput"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Sub-Area Name
+              </label>
+              <input
+                id="subAreaNameInput"
+                type="text"
+                value={modifiedSubAreaName}
+                onChange={(e) => setModifiedSubAreaName(e.target.value)}
+                className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                placeholder="Enter new sub-area name"
+              />
+            </div>
+            <div className="flex justify-end mt-5">
+              <button
+                onClick={confirmModification}
+                className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
+              >
+                Update
+              </button>
+              <button
+                onClick={cancelModification}
+                className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              >
+                Cancel
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 }
