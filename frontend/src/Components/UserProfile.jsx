@@ -84,7 +84,6 @@ export default function UserProfile() {
               Edit Profile
             </p>
           </button>
-
           <LogoutButton />
         </ul>
       )}

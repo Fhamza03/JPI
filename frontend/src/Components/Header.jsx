@@ -1,25 +1,26 @@
 import React from "react";
 import UserProfile from "./UserProfile";
+import EMSPI from "../images/EMSPI.png";
 
 const Header = () => {
   return (
     <>
       {/* component */}
-      <nav className="bg-sky-700 w-full flex relative justify-between items-center mx-auto px-8 h-20">
-        {/* logo */}
-        <div className="inline-flex">
-          <h1 className="text-sm text-xl font-sans">
-            <b className="text-white">
-              Engineering Modular System Project Information
-            </b>
-          </h1>
+      <nav className="relative">
+        {/* Sky blue color block */}
+        <div className="bg-sky-800 w-full h-12"></div>
+
+        {/* Logo */}
+        <div className="absolute left-0 top-0 flex items-center ml-4">
+          <img src={EMSPI} alt="Logo" className="w-24 h-auto" />
+          <p className="text-white text-2xl font-semibold tracking-wide">
+            {" "}
+            Engineering Modular System Project Information
+          </p>
         </div>
-        {/* end logo */}
-        {/* User profile */}
-        <div className="flex-initial">
-          <UserProfile />
-        </div>
-        {/* end user profile */}
+
+        {/* Black color block */}
+        <div className="bg-slate-700 w-full h-12"></div>
       </nav>
     </>
   );

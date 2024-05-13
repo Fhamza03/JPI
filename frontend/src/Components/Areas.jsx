@@ -73,7 +73,7 @@ export default function Areas() {
     <div className="flex justify-center pt-10">
       <div className="max-w-screen-lg w-full">
         <div className="flex justify-between">
-          <div className="w-1/3 bg-white border border-gray-300 rounded-lg p-6 m-4">
+          <div className="w-1/3 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
             <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
               Database Information
             </h2>
@@ -81,7 +81,7 @@ export default function Areas() {
               <strong>Database type :</strong> <i>{databaseType}</i>
             </p>
           </div>
-          <div className="w-2/3 bg-white border border-gray-300 rounded-lg p-6 m-4">
+          <div className="w-2/3 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
             <h2 className="text-2xl font-semibold mb-4">Database Areas</h2>
             <div className="flex items-center justify-end mb-3">
               <div className="relative flex items-center">
@@ -110,7 +110,7 @@ export default function Areas() {
                 />
               </div>
             </div>
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-md">
               <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
                   <th
@@ -160,9 +160,9 @@ export default function Areas() {
                               area.areaName
                             )
                           }
-                          className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:..."
+                          className="rounded-lg bg-sky-700 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:..."
                         >
-                          Sub Area
+                          View Sub-Areas
                         </button>
                       </td>
                     </tr>
@@ -178,7 +178,7 @@ export default function Areas() {
               </div>
               <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
                 <button
-                  className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+                  className="shadow-md flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
                   onClick={handlePreviousPage}
                   disabled={currentPage === 1}
                 >
@@ -199,7 +199,7 @@ export default function Areas() {
                   <span>previous</span>
                 </button>
                 <button
-                  className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+                  className="shadow-md flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
                   onClick={handleNextPage}
                   disabled={currentPage === totalPages}
                 >

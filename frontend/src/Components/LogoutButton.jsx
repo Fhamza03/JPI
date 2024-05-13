@@ -25,20 +25,15 @@ const LogoutButton = () => {
         onClick={handleLogout}
       >
         <svg
+          className="w-6 h-6 text-gray-800 dark:text-white"
+          data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          aria-hidden="true"
-          className="h-4 w-4"
+          viewBox="0 0 16 16"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M5.636 5.636a9 9 0 1012.728 0M12 3v9"
-          />
+          <path d="M10.95 15.84h-11V.17h11v3.88h-1V1.17h-9v13.67h9v-2.83h1v3.83z" />
+          <path d="M5 8h6v1H5zM11 5.96l4.4 2.54-4.4 2.54V5.96z" />
         </svg>
+
         <p className="block font-sans text-sm font-normal leading-normal text-inherit antialiased">
           Sign Out
         </p>
