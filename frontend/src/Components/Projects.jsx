@@ -8,6 +8,7 @@ export default function Projects() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProject, setSelectedProject] = useState(null);
   const [databaseLocations, setDatabaseLocations] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const history = useHistory();
 
@@ -91,6 +92,20 @@ export default function Projects() {
       pathname: "/user/Databases",
       state: { project: selected },
     });
+  };
+
+  const totalPages = Math.ceil(searchedProjects.length / 7);
+
+  const startIndex = (currentPage - 1) * 7;
+  const endIndex = Math.min(startIndex + 7, searchedProjects.length);
+  const projectsForPage = searchedProjects.slice(startIndex, endIndex);
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
   return (
@@ -209,10 +224,17 @@ export default function Projects() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                    {searchedProjects.map((project) => (
+                    {projectsForPage.map((project,index) => (
                       <tr
                         key={project.projectId}
                         onClick={() => handleClick(project.projectId)}
+                        onMouseEnter={() => {
+                          document.body.style.cursor = "pointer";
+                        }}
+                        onMouseLeave={() => {
+                          document.body.style.cursor = "default";
+                        }}
+                        className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
                       >
                         {/* Project details cells */}
                         <td className="text-center p-4 border-b border-blue-gray-50">
@@ -248,14 +270,13 @@ export default function Projects() {
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Page{" "}
             <span className="font-medium text-gray-700 dark:text-gray-100">
-              1 of 10
+            {currentPage} of {totalPages}
             </span>
           </div>
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
-            <a
-              href="#"
-              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-            >
+          <button
+            className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+            onClick={handlePreviousPage} disabled={currentPage === 1}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -271,11 +292,10 @@ export default function Projects() {
                 />
               </svg>
               <span>previous</span>
-            </a>
-            <a
-              href="#"
-              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-            >
+            </button>
+            <button
+            className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+            onClick={handleNextPage} disabled={currentPage === totalPages}>
               <span>Next</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -291,7 +311,7 @@ export default function Projects() {
                   d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
                 />
               </svg>
-            </a>
+            </button>{" "}
           </div>
         </div>
       </section>

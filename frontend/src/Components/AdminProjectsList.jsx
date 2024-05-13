@@ -9,26 +9,25 @@ export default function AdminProjectsList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [lastClickTime, setLastClickTime] = useState(0);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch projects and database locations when the component mounts
   useEffect(() => {
     fetchProjects();
   }, []);
 
-  // Fetch projects and database locations from API
   const fetchProjects = async () => {
     try {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       const base64Credentials = btoa(`${username}:${password}`);
-  
+
       const response = await fetch("http://localhost:8080/getAllProjects", {
         headers: {
           Authorization: `Basic ${base64Credentials}`, // Add authorization header
         },
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         setProjects(data);
@@ -42,7 +41,6 @@ export default function AdminProjectsList() {
       console.error("Error fetching projects:", error);
     }
   };
-  
 
   const handleLocationChange = (event) => {
     setSelectedLocation(event.target.value);
@@ -114,10 +112,10 @@ export default function AdminProjectsList() {
       // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
-  
+
       const response = await fetch(
         `http://localhost:8080/admin/deleteProject/${projectId}`,
         {
@@ -139,7 +137,19 @@ export default function AdminProjectsList() {
       console.error("Error removing project:", error);
     }
   };
-  
+
+  const totalPages = Math.ceil(searchedProjects.length / 7);
+  const startIndex = (currentPage - 1) * 7;
+  const endIndex = Math.min(startIndex + 7, searchedProjects.length);
+  const projectsForPage = searchedProjects.slice(startIndex, endIndex);
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
 
   return (
     <div>
@@ -267,10 +277,17 @@ export default function AdminProjectsList() {
                   </thead>
                   {/* Table body */}
                   <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-                    {searchedProjects.map((project) => (
+                    {projectsForPage.map((project, index) => (
                       <tr
                         key={project.projectId}
                         onClick={() => handleClick(project.projectId)}
+                        onMouseEnter={() => {
+                          document.body.style.cursor = "pointer";
+                        }}
+                        onMouseLeave={() => {
+                          document.body.style.cursor = "default";
+                        }}
+                        className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
                       >
                         {/* Project details cells */}
                         <td className="text-center p-4 border-b border-blue-gray-50">
@@ -349,13 +366,14 @@ export default function AdminProjectsList() {
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Page{" "}
             <span className="font-medium text-gray-700 dark:text-gray-100">
-              1 of 10
+              {currentPage} of {totalPages}
             </span>
           </div>
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
-            <a
-              href="#"
+            <button
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -372,10 +390,11 @@ export default function AdminProjectsList() {
                 />
               </svg>
               <span>previous</span>
-            </a>
-            <a
-              href="#"
+            </button>
+            <button
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
             >
               <span>Next</span>
               <svg
@@ -392,7 +411,7 @@ export default function AdminProjectsList() {
                   d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
                 />
               </svg>
-            </a>
+            </button>{" "}
           </div>
         </div>
       </section>
