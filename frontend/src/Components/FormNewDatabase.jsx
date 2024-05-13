@@ -8,16 +8,19 @@ export default function FormNewDatabase() {
 
   const [showDatabaseInput, setShowDatabaseInput] = useState(false);
   const [databaseType, setDatabaseType] = useState("");
+  const [databaseId, setDatabaseId] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [databaseTypes, setDatabaseTypes] = useState([]);
   const [projectDatabases, setProjectDatabases] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [oldValue, setOldValue] = useState("");
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [modifiedDatabaseType, setModifiedDatabaseType] = useState("");
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-
 
   useEffect(() => {
     fetchDatabaseTypes();
@@ -31,10 +34,10 @@ export default function FormNewDatabase() {
       // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
-  
+
       const response = await fetch("http://localhost:8080/getAllDatabases", {
         headers: {
           Authorization: `Basic ${base64Credentials}`, // Add authorization header
@@ -72,17 +75,16 @@ export default function FormNewDatabase() {
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
-  
 
   const fetchProjectDatabases = async (projectId) => {
     try {
       // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
-  
+
       const response = await fetch(
         `http://localhost:8080/getDatabasesByProject/${projectId}`,
         {
@@ -102,7 +104,6 @@ export default function FormNewDatabase() {
       console.error("Error fetching project databases:", error);
     }
   };
-  
 
   const handleToggleDatabaseInput = () => {
     setShowDatabaseInput(!showDatabaseInput);
@@ -114,12 +115,12 @@ export default function FormNewDatabase() {
       // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       if (!project || !project.projectId) {
         console.error("Project or projectId not found");
         return;
       }
-  
+
       const projectId = project.projectId;
       const response = await fetch(
         `http://localhost:8080/admin/createDatabase/${projectId}`,
@@ -134,7 +135,7 @@ export default function FormNewDatabase() {
           }),
         }
       );
-  
+
       if (response && response.ok) {
         console.log("Database info saved successfully");
         setDatabaseType("");
@@ -147,11 +148,59 @@ export default function FormNewDatabase() {
       console.error("Error saving database info:", error);
     }
   };
+
+  const confirmModification = async () => {
+    setShowPrompt(false);
+    const username = sessionStorage.getItem("username");
+    const password = sessionStorage.getItem("password");
+    const DatabaseData = {
+      databaseType: modifiedDatabaseType
+    };
+    try {
+      let response = await fetch(
+        `http://localhost:8080/admin/updateDatabase/${databaseId}/${project.projectId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+          },
+          body: JSON.stringify(DatabaseData),
+        }
+      );
+      if (response.ok) {
+        console.log("Database updated successfully");
+        // Update projectDatabases with modified value
+        const updatedDatabases = projectDatabases.map(database => {
+          if (database.databaseId === databaseId) {
+            return {
+              ...database,
+              databaseType: modifiedDatabaseType
+            };
+          }
+          return database;
+        });
+        setProjectDatabases(updatedDatabases);
+        setModifiedDatabaseType(""); // Clear modified value
+      } else {
+        console.error("Failed to update Database:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating Database:", error);
+    }
+  };
   
 
-  const handleOpenDatabase = (databaseType) => {
-    // Handle opening the database based on the database type
-    console.log(`Opening database: ${databaseType}`);
+  const cancelModification = () => {
+    setModifiedDatabaseType("");
+    setShowPrompt(false);
+  };
+
+  const handleModifyDatabase = async (databaseId, databaseType) => {
+    setDatabaseId(databaseId);
+    setOldValue(databaseType); // Set the old value
+    setModifiedDatabaseType(databaseType);
+    setShowPrompt(true);
   };
 
   const handleDeleteDatabase = async (databaseId) => {
@@ -159,7 +208,7 @@ export default function FormNewDatabase() {
       // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       const response = await fetch(
         `http://localhost:8080/admin/deleteDatabase/${databaseId}`,
         {
@@ -180,7 +229,6 @@ export default function FormNewDatabase() {
       console.error("Error deleting database:", error);
     }
   };
-  
 
   const handleAddArea = (databaseId, databaseType) => {
     history.push("/admin/NewArea", {
@@ -258,33 +306,33 @@ export default function FormNewDatabase() {
             </button>
           )}
 
-<div className="flex items-center justify-end mb-3">
-              <div className="relative flex items-center">
-                <span className="absolute">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5 mx-3 text-gray-400 dark:text-gray-600"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                    />
-                  </svg>
-                </span>
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className="block py-1.5 pr-5 pl-10 text-gray-700 bg-white border border-gray-200 rounded-lg w-52 md:w-80 placeholder-gray-400/70 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-              </div>
+          <div className="flex items-center justify-end mb-3">
+            <div className="relative flex items-center">
+              <span className="absolute">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-5 h-5 mx-3 text-gray-400 dark:text-gray-600"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                  />
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="block py-1.5 pr-5 pl-10 text-gray-700 bg-white border border-gray-200 rounded-lg w-52 md:w-80 placeholder-gray-400/70 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              />
             </div>
+          </div>
           {/* Your existing table */}
           <div className="mt-4">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -311,7 +359,7 @@ export default function FormNewDatabase() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-              {DatabasesForPage.map((database, index) => (
+                {DatabasesForPage.map((database, index) => (
                   <tr
                     key={database.databaseId}
                     className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
@@ -323,7 +371,10 @@ export default function FormNewDatabase() {
                       {/* Add onClick handler with databaseId and databaseType */}
                       <button
                         onClick={() =>
-                          handleOpenDatabase(database.databaseType)
+                          handleModifyDatabase(
+                            database.databaseId,
+                            database.databaseType
+                          )
                         }
                         className="focus:outline-none"
                       >
@@ -380,7 +431,7 @@ export default function FormNewDatabase() {
                             database.databaseType
                           )
                         }
-                        className="middle none center mr-4 rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                         data-ripple-light="true"
                       >
                         Add area
@@ -481,6 +532,45 @@ export default function FormNewDatabase() {
           </p>
         </div>
       </div>
+      {showPrompt && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
+          <div className="bg-white rounded-lg p-8 w-96">
+            <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+              Update Database
+            </h2>
+            <div className="mb-3">
+              <label
+                htmlFor="subAreaCodeInput"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Database type
+              </label>
+              <input
+                id="databaseType"
+                type="text"
+                value={modifiedDatabaseType}
+                onChange={(e) => setModifiedDatabaseType(e.target.value)}
+                className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                placeholder="Enter new database type"
+              />
+            </div>
+            <div className="flex justify-end mt-5">
+              <button
+                onClick={confirmModification}
+                className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
+              >
+                Update
+              </button>
+              <button
+                onClick={cancelModification}
+                className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -27,10 +27,12 @@ public class DatabaseController {
         }
     }
 
-    @PostMapping("/admin/updateDatabase/{databaseId}")
-    public DatabaseModel updateDatabase(@PathVariable Integer databaseId, @RequestBody DatabaseModel database){
+    @PostMapping("/admin/updateDatabase/{databaseId}/{projectId}")
+    public DatabaseModel updateDatabase(@PathVariable Integer databaseId, @PathVariable Integer projectId, @RequestBody DatabaseModel database){
         try{
+            ProjectModel project = projectService.getProjectById(projectId);
             database.setDatabaseId(databaseId);
+            database.setProject(project);
             return databaseService.updateDatabase(database);
         }catch (Exception e){
             throw new RuntimeException("FAILED TO UPDATE DATABASE");
