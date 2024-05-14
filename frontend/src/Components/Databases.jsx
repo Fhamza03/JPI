@@ -75,7 +75,7 @@ export default function Databases() {
     }
   };
   const handleArea = (databaseId, databaseType) => {
-    history.push("/user/Areas", {
+    history.push("/user/UserProject", {
       databaseId: databaseId,
       databaseType: databaseType,
     });
