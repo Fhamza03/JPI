@@ -12,9 +12,13 @@ export default function AreaProject() {
   const [expandedSubAreas, setExpandedSubAreas] = useState({});
   const [tasks, setTasks] = useState({});
   const [expandedDepartments, setExpandedDepartments] = useState({});
-  const [expandedFiles,setExpandedFiles] = useState({});
+  const [expandedFiles, setExpandedFiles] = useState({});
   const [files, setFiles] = useState({});
 
+  const formatDate = (date) => {
+    const formattedDate = new Date(date).toISOString().split("T")[0];
+    return formattedDate;
+  };
 
   const fetchAreas = async () => {
     try {
@@ -127,9 +131,9 @@ export default function AreaProject() {
       if (response.ok) {
         const data = await response.json();
         setTasks((prevTasks) => ({
-            ...prevTasks,
-            [departementId]: data,
-          }));
+          ...prevTasks,
+          [departementId]: data,
+        }));
       } else {
         console.error("Failed to fetch tasks:", response.statusText);
       }
@@ -143,7 +147,7 @@ export default function AreaProject() {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
       const base64Credentials = btoa(`${username}:${password}`);
-  
+
       const response = await fetch(
         `http://localhost:8080/getFilesbyTask/${taskId}`,
         {
@@ -152,7 +156,7 @@ export default function AreaProject() {
           },
         }
       );
-  
+
       if (response.ok) {
         const data = await response.json();
         setFiles((prevFiles) => ({
@@ -166,7 +170,6 @@ export default function AreaProject() {
       console.error("Error fetching files:", error);
     }
   };
-  
 
   const handleSubArea = async (areaId) => {
     if (!subAreas[areaId]) {
@@ -190,12 +193,12 @@ export default function AreaProject() {
 
   const handleTasks = async (departmentId) => {
     if (!tasks[departmentId]) {
-        await fetchTasks(departmentId);
-      }
-      setExpandedDepartments((prevExpandedDepartment) => ({
-        ...prevExpandedDepartment,
-        [departmentId]: !prevExpandedDepartment[departmentId],
-      }));
+      await fetchTasks(departmentId);
+    }
+    setExpandedDepartments((prevExpandedDepartment) => ({
+      ...prevExpandedDepartment,
+      [departmentId]: !prevExpandedDepartment[departmentId],
+    }));
   };
 
   const handleFiles = async (taskId) => {
@@ -209,7 +212,7 @@ export default function AreaProject() {
   };
 
   return (
-    <>
+    <div className="dark:bg-gray-800 rounded-lg shadow-xl p-4 ml-8 mr-8 mt-8">
       <ul>
         {areas.map((area) => (
           <li key={area.id}>
@@ -340,15 +343,87 @@ export default function AreaProject() {
                                           </div>
                                           {files[task.taskId] &&
                                             files[task.taskId].length > 0 && (
-                                              <ul className="ml-6">
-                                                {files[task.taskId].map(
-                                                  (file) => (
-                                                    <li key={file.id}>
-                                                      {file.fileName}
-                                                    </li>
-                                                  )
-                                                )}
-                                              </ul>
+                                              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-sm">
+                                                <thead className="bg-gray-50 dark:bg-gray-800">
+                                                  <th
+                                                    scope="col"
+                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                  >
+                                                    Document number
+                                                  </th>
+  
+                                                  <th
+                                                    scope="col"
+                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                  >
+                                                    Revision
+                                                  </th>
+                                                  <th
+                                                    scope="col"
+                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                  >
+                                                    Date of Creation
+                                                  </th>
+                                                  <th
+                                                    scope="col"
+                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                  >
+                                                    Title
+                                                  </th>
+                                                  <th
+                                                    scope="col"
+                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                  >
+                                                    Subject of revesion
+                                                  </th>
+                                                  <th
+                                                    scope="col"
+                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                  >
+                                                    Options
+                                                  </th>
+                                                </thead>
+                                                <tbody>
+                                                  {files[task.taskId].map(
+                                                    (file,index) => (
+                                                      <tr key={file.id}
+                                                      className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
+                                                      >
+                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                          {subArea.subAreaCode}-
+                                                          {
+                                                            department.departementCode
+                                                          }
+                                                          -{task.taskCode}-
+                                                          {file.fileCode}
+                                                        </td>
+                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                          {file.rev}
+                                                        </td>
+                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                          {formatDate(
+                                                            file.created_On
+                                                          )}
+                                                        </td>
+                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                          {file.fileName}
+                                                        </td>
+                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                          {file.subjectOfRev}
+                                                        </td>
+                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                          <button className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
+                                                            Modify
+                                                          </button>
+                                                          <button className="rounded-lg bg-green-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
+                                                            View
+                                                          </button>
+                                                        </td>
+                                                      </tr>
+                                                    )
+                                                  )}
+                                                </tbody>
+                                              </table>
                                             )}
                                         </li>
                                       )
@@ -366,7 +441,7 @@ export default function AreaProject() {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
-   
+  
 }
