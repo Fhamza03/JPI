@@ -12,6 +12,7 @@ export default function AreaProject() {
   const [expandedSubAreas, setExpandedSubAreas] = useState({});
   const [tasks, setTasks] = useState({});
   const [expandedDepartments, setExpandedDepartments] = useState({});
+  const [expandedFiles,setExpandedFiles] = useState({});
   const [files, setFiles] = useState({});
 
 
@@ -197,13 +198,13 @@ export default function AreaProject() {
       }));
   };
 
-  const toggleFiles = async (taskId) => {
+  const handleFiles = async (taskId) => {
     if (!files[taskId]) {
       await fetchFiles(taskId);
     }
-    setFiles((prevFiles) => ({
-      ...prevFiles,
-      [taskId]: !prevFiles[taskId],
+    setExpandedFiles((prevExpandedFiles) => ({
+      ...prevExpandedFiles,
+      [taskId]: !prevExpandedFiles[taskId],
     }));
   };
 
@@ -318,12 +319,15 @@ export default function AreaProject() {
                                               height={20}
                                               fill="currentColor"
                                               viewBox="0 0 24 24"
-                                              onClick={() => fetchFiles(task.id)}
+                                              onClick={() =>
+                                                handleFiles(task.taskId)
+                                              }
                                             >
                                               <path
                                                 fillRule="evenodd"
                                                 d={
-                                                  files[task.id] && files[task.id].length > 0
+                                                  files[task.id] &&
+                                                  files[task.id].length > 0
                                                     ? "M10 8V16L17 12Z"
                                                     : "M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
                                                 }
@@ -334,15 +338,18 @@ export default function AreaProject() {
                                               {task.taskCode} - {task.taskName}
                                             </span>
                                           </div>
-                                          {files[task.taskId] && files[task.taskId].length > 0 && (
-                                            <ul className="ml-6">
-                                              {files[task.taskId].map((file) => (
-                                                <li key={file.id}>
-                                                  {file.fileName}
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          )}
+                                          {files[task.taskId] &&
+                                            files[task.taskId].length > 0 && (
+                                              <ul className="ml-6">
+                                                {files[task.taskId].map(
+                                                  (file) => (
+                                                    <li key={file.id}>
+                                                      {file.fileName}
+                                                    </li>
+                                                  )
+                                                )}
+                                              </ul>
+                                            )}
                                         </li>
                                       )
                                     )}
@@ -360,5 +367,6 @@ export default function AreaProject() {
         ))}
       </ul>
     </>
-  );  
+  );
+   
 }
