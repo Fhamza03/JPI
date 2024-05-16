@@ -224,7 +224,7 @@ export default function Projects() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                    {projectsForPage.map((project,index) => (
+                    {projectsForPage.map((project, index) => (
                       <tr
                         key={project.projectId}
                         onClick={() => handleClick(project.projectId)}
@@ -270,13 +270,15 @@ export default function Projects() {
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Page{" "}
             <span className="font-medium text-gray-700 dark:text-gray-100">
-            {currentPage} of {totalPages}
+              {currentPage} of {totalPages}
             </span>
           </div>
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
-          <button
-            className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-            onClick={handlePreviousPage} disabled={currentPage === 1}>
+            <button
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -294,8 +296,10 @@ export default function Projects() {
               <span>previous</span>
             </button>
             <button
-            className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-            onClick={handleNextPage} disabled={currentPage === totalPages}>
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
               <span>Next</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

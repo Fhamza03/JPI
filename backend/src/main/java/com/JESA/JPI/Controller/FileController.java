@@ -53,7 +53,7 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @PostMapping("/admin/updateFile/{fileId}/{userId}")
+    @PostMapping("updateFile/{fileId}/{userId}")
     public FileModel updateFile(@PathVariable Integer fileId, @PathVariable Integer userId, @RequestBody FileModel file){
         try {
             TaskModel task = fileService.getFile(fileId).getTask();

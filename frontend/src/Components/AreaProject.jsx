@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useLocation , useHistory} from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 export default function AreaProject() {
   const location = useLocation();
   const history = useHistory();
-  const { databaseId, databaseType } = location.state || {};
+  const { databaseId, databaseType , project } = location.state || {};
   const [areas, setAreas] = useState([]);
   const [subAreas, setSubAreas] = useState({});
   const [departments, setDepartments] = useState({});
@@ -15,7 +15,6 @@ export default function AreaProject() {
   const [expandedDepartments, setExpandedDepartments] = useState({});
   const [expandedFiles, setExpandedFiles] = useState({});
   const [files, setFiles] = useState({});
-  
 
   const formatDate = (date) => {
     const formattedDate = new Date(date).toISOString().split("T")[0];
@@ -213,23 +212,27 @@ export default function AreaProject() {
     }));
   };
 
-   const handleModifyFile = (
+  const handleModifyFile = (
     fileId,
     fileName,
     fileCode,
     rev,
     pdf_path,
     subjectOfRev,
-    created_On
+    created_On,
+    project,
+    taskId
   ) => {
-    history.push("/user/File",{
-      fileId:fileId,
-      fileName:fileName,
-      fileCode:fileCode,
-      rev:rev,
-      pdf_path:pdf_path,
-      subjectOfRev:subjectOfRev,
-      created_On:created_On
+    history.push("/user/File", {
+      fileId: fileId,
+      fileName: fileName,
+      fileCode: fileCode,
+      rev: rev,
+      pdf_path: pdf_path,
+      subjectOfRev: subjectOfRev,
+      created_On: created_On,
+      project:project,
+      taskId:taskId
     });
   };
 
@@ -367,44 +370,44 @@ export default function AreaProject() {
                                             files[task.taskId].length > 0 && (
                                               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-sm">
                                                 <thead className="bg-gray-50 dark:bg-gray-800">
-                                                <tr>
-                                                  <th
-                                                    scope="col"
-                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                  >
-                                                    Document number
-                                                  </th>
+                                                  <tr>
+                                                    <th
+                                                      scope="col"
+                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                    >
+                                                      Document number
+                                                    </th>
 
-                                                  <th
-                                                    scope="col"
-                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                  >
-                                                    Revision
-                                                  </th>
-                                                  <th
-                                                    scope="col"
-                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                  >
-                                                    Date of Creation
-                                                  </th>
-                                                  <th
-                                                    scope="col"
-                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                  >
-                                                    Title
-                                                  </th>
-                                                  <th
-                                                    scope="col"
-                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                  >
-                                                    Subject of revesion
-                                                  </th>
-                                                  <th
-                                                    scope="col"
-                                                    className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                  >
-                                                    Options
-                                                  </th>
+                                                    <th
+                                                      scope="col"
+                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                    >
+                                                      Revision
+                                                    </th>
+                                                    <th
+                                                      scope="col"
+                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                    >
+                                                      Date of Creation
+                                                    </th>
+                                                    <th
+                                                      scope="col"
+                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                    >
+                                                      Title
+                                                    </th>
+                                                    <th
+                                                      scope="col"
+                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                    >
+                                                      Subject of revesion
+                                                    </th>
+                                                    <th
+                                                      scope="col"
+                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                    >
+                                                      Options
+                                                    </th>
                                                   </tr>
                                                 </thead>
                                                 <tbody>
@@ -441,19 +444,22 @@ export default function AreaProject() {
                                                           {file.subjectOfRev}
                                                         </td>
                                                         <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                                                          <button 
-                                                          onClick={() =>
-                                                            handleModifyFile(
-                                                              file.fileId,
-                                                              file.fileName,
-                                                              file.fileCode,
-                                                              file.rev,
-                                                              file.pdf_path,
-                                                              file.subjectOfRev,
-                                                              file.created_On
-                                                            )
-                                                          }
-                                                          className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
+                                                          <button
+                                                            onClick={() =>
+                                                              handleModifyFile(
+                                                                file.fileId,
+                                                                file.fileName,
+                                                                file.fileCode,
+                                                                file.rev,
+                                                                file.pdf_path,
+                                                                file.subjectOfRev,
+                                                                file.created_On,
+                                                                project,
+                                                                task.taskId
+                                                              )
+                                                            }
+                                                            className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                                                          >
                                                             Modify
                                                           </button>
                                                           <button className="rounded-lg bg-green-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">

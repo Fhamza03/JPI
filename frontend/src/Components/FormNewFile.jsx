@@ -181,7 +181,7 @@ export default function FormNewFile() {
         fileName: modifiedFileName,
         fileCode: modifiedFileCode,
         rev: modifiedFileRevision,
-        subjectOfRev: modifiedFileSubject,
+        rev: modifiedFileSubject,
         pdf_path: modifiedPdf_path,
         created_On: formatDate(modifiedFileCreated),
       };
