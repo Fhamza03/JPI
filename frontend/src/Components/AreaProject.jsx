@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import * as XLSX from "xlsx";
+import SuccessAlert from "../Components/SuccessAlert";
+import WarningAlert from "../Components/WarningAlert";
 
 export default function AreaProject() {
   const location = useLocation();
   const history = useHistory();
-  const { databaseId, databaseType , project } = location.state || {};
+  const { databaseId, databaseType, project } = location.state || {};
   const [areas, setAreas] = useState([]);
   const [subAreas, setSubAreas] = useState({});
   const [departments, setDepartments] = useState({});
@@ -15,6 +18,14 @@ export default function AreaProject() {
   const [expandedDepartments, setExpandedDepartments] = useState({});
   const [expandedFiles, setExpandedFiles] = useState({});
   const [files, setFiles] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showWarningAlert, setShowWarningAlert] = useState(false);
+  const [hasSelectedFiles, setHasSelectedFiles] = useState(false);
+  useEffect(() => {
+    setHasSelectedFiles(selectedFiles.length > 0);
+  }, [selectedFiles]);
 
   const formatDate = (date) => {
     const formattedDate = new Date(date).toISOString().split("T")[0];
@@ -101,7 +112,6 @@ export default function AreaProject() {
 
       if (response.ok) {
         const data = await response.json();
-        // Store departments under their respective subareas in the state
         setDepartments((prevDepartments) => ({
           ...prevDepartments,
           [subAreaId]: data,
@@ -231,13 +241,93 @@ export default function AreaProject() {
       pdf_path: pdf_path,
       subjectOfRev: subjectOfRev,
       created_On: created_On,
-      project:project,
-      taskId:taskId
+      project: project,
+      taskId: taskId,
     });
+  };
+
+  const AddToStore = (file) => {
+    const data = {
+      fileCode: file.fileCode,
+      rev: file.rev,
+      createdOn: formatDate(file.created_On),
+      fileName: file.fileName,
+      subjectOfRev: file.subjectOfRev,
+    };
+
+    const fileAlreadyExists = selectedFiles.some((selectedFile) => {
+      return (
+        selectedFile.fileCode === data.fileCode &&
+        selectedFile.rev === data.rev &&
+        selectedFile.createdOn === data.createdOn &&
+        selectedFile.fileName === data.fileName &&
+        selectedFile.subjectOfRev === data.subjectOfRev
+      );
+    });
+
+    if (fileAlreadyExists) {
+      setShowWarningAlert(true);
+      return;
+    }
+
+    setSelectedFiles((prevSelectedFiles) => {
+      const updatedSelectedFiles = [...prevSelectedFiles, data];
+      setShowSuccessAlert(true);
+      return updatedSelectedFiles;
+    });
+  };
+
+  const handleRemoveFromStore = (index) => {
+    setSelectedFiles((prevSelectedFiles) => {
+      const updatedSelectedFiles = [...prevSelectedFiles];
+      updatedSelectedFiles.splice(index, 1);
+      console.log("Store:", updatedSelectedFiles);
+      return updatedSelectedFiles;
+    });
+  };
+
+  const handleExportAll = () => {
+    setShowPrompt(true);
+  };
+  const cancelExport = () => {
+    setShowPrompt(false);
+  };
+  const exportFiles = () => {
+    let workBook = XLSX.utils.book_new(),
+      workSheet = XLSX.utils.json_to_sheet(selectedFiles);
+    XLSX.utils.book_append_sheet(workBook, workSheet, "JesaFiles");
+    XLSX.writeFile(workBook, "JesaFile.xlsx");
+    setShowPrompt(false);
   };
 
   return (
     <div className="dark:bg-gray-800 rounded-lg shadow-xl p-4 ml-8 mr-8 mt-8">
+      {showSuccessAlert && (
+        <SuccessAlert
+          message="You have successfully added the file to the store."
+          onclose={() => setShowSuccessAlert(false)}
+        />
+      )}
+      {showWarningAlert && (
+        <WarningAlert
+          message="The file already exists in the store."
+          onclose={() => setShowWarningAlert(false)}
+        />
+      )}
+
+      <div className="flex justify-start mb-4 mt-3">
+        <button
+          onClick={handleExportAll}
+          className={`rounded-lg bg-blue-500 py-2 px-4 text-xs font-bold uppercase text-white shadow-lg shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none ${
+            !hasSelectedFiles
+              ? "disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              : ""
+          }`}
+          disabled={!hasSelectedFiles}
+        >
+          Export All
+        </button>
+      </div>
       <ul>
         {areas.map((area) => (
           <li key={area.id}>
@@ -465,6 +555,14 @@ export default function AreaProject() {
                                                           <button className="rounded-lg bg-green-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
                                                             View
                                                           </button>
+                                                          <button
+                                                            onClick={() =>
+                                                              AddToStore(file)
+                                                            }
+                                                            className="rounded-lg bg-orange-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                                                          >
+                                                            Add to Store
+                                                          </button>
                                                         </td>
                                                       </tr>
                                                     )
@@ -488,6 +586,82 @@ export default function AreaProject() {
           </li>
         ))}
       </ul>
+      {showPrompt && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
+          <div className="bg-white rounded-lg p-8 max-w-3xl shadow-2xl">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-lg">
+              <thead className="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    Document number
+                  </th>
+                  <th className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    Revision
+                  </th>
+                  <th className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    Date of Creation
+                  </th>
+                  <th className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    Title
+                  </th>
+                  <th className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    Subject of revision
+                  </th>
+                  <th className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    Options
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedFiles.map((file, index) => (
+                  <tr
+                    key={index}
+                    className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
+                  >
+                    <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                      {file.fileCode}
+                    </td>
+                    <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                      {file.rev}
+                    </td>
+                    <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                      {file.createdOn}
+                    </td>
+                    <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                      {file.fileName}
+                    </td>
+                    <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                      {file.subjectOfRev}
+                    </td>
+                    <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                      <button
+                        onClick={() => handleRemoveFromStore(index)}
+                        className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="flex justify-end mt-5">
+              <button
+                onClick={exportFiles}
+                className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
+              >
+                Export All
+              </button>
+              <button
+                onClick={cancelExport}
+                className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
