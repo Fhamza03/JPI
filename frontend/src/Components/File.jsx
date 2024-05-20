@@ -180,10 +180,7 @@ export default function File() {
         </h2>
         <div>
           {fileData && (
-            <div className="card bg-white border border-gray-300 rounded-lg m-4 pt-4 pb-5 pr-2 pl-2 shadow-xl">
-              <h2 className="text-xl text-sky-700 font-bold mb-5 ml-4">
-                File Information
-              </h2>
+            <div>
               <div className="flex justify-between mb-2 bg-slate-200 rounded-lg">
                 <p className="ml-4 mt-2 mb-2">
                   <strong>File Code :</strong> <span>{fileData.fileCode}</span>
@@ -203,20 +200,6 @@ export default function File() {
                 <p className="mt-2 mb-2">
                   <strong>Created on :</strong>{" "}
                   <span>{fileData.created_On}</span>
-                </p>
-                <p className="mt-2 mb-2 mr-4">
-                  <strong>Created by :</strong>{" "}
-                  <span>{fileData.createdBy}</span>
-                </p>
-              </div>
-              <div className="flex justify-between mb-2 bg-slate-200 rounded-lg">
-                <p className="ml-4 mt-2 mb-2">
-                  <strong>Modified By :</strong>{" "}
-                  <span>{fileData.modifiedBy}</span>
-                </p>
-                <p className="mr-4 mt-2 mb-2">
-                  <strong>Modified on :</strong>{" "}
-                  <span>{fileData.modifiedOn}</span>
                 </p>
               </div>
             </div>

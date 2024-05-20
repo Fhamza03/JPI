@@ -565,8 +565,8 @@ export default function AreaProject() {
                                                           <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
                                                             {file.subjectOfRev}
                                                           </td>
-                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                                                            <button
+                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right flex justify-between">
+                                                            <svg
                                                               onClick={() =>
                                                                 handleModifyFile(
                                                                   file.fileId,
@@ -580,21 +580,48 @@ export default function AreaProject() {
                                                                   task.taskId
                                                                 )
                                                               }
-                                                              className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                                                              className="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
+                                                              aria-hidden="true"
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                              width={24}
+                                                              height={24}
+                                                              fill="currentColor"
+                                                              viewBox="0 0 24 24"
                                                             >
-                                                              Modify
-                                                            </button>
-                                                            <button className="rounded-lg bg-green-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
-                                                              View
-                                                            </button>
-                                                            <button
+                                                              <path
+                                                                fillRule="evenodd"
+                                                                d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z"
+                                                                clipRule="evenodd"
+                                                              />
+                                                              <path
+                                                                fillRule="evenodd"
+                                                                d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z"
+                                                                clipRule="evenodd"
+                                                              />
+                                                            </svg>
+                                                            <svg
                                                               onClick={() =>
                                                                 AddToStore(file)
                                                               }
-                                                              className="rounded-lg bg-orange-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                                                              className="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
+                                                              aria-hidden="true"
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                              width={24}
+                                                              height={24}
+                                                              fill="currentColor"
+                                                              viewBox="0 0 24 24"
                                                             >
-                                                              Add to Store
-                                                            </button>
+                                                              <path
+                                                                fillRule="evenodd"
+                                                                d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v6.41A7.5 7.5 0 1 0 10.5 22H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z"
+                                                                clipRule="evenodd"
+                                                              />
+                                                              <path
+                                                                fillRule="evenodd"
+                                                                d="M9 16a6 6 0 1 1 12 0 6 6 0 0 1-12 0Zm6-3a1 1 0 0 1 1 1v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 1 1 0-2h1v-1a1 1 0 0 1 1-1Z"
+                                                                clipRule="evenodd"
+                                                              />
+                                                            </svg>
                                                           </td>
                                                         </tr>
                                                       )
