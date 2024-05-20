@@ -8,6 +8,13 @@ export default function AreaProject() {
   const location = useLocation();
   const history = useHistory();
   const { databaseId, databaseType, project } = location.state || {};
+  const [fileId, setFileId] = useState("");
+  const [fileName, setFileName] = useState("");
+  const [pdf_path, setPdfPath] = useState("");
+  const [date, setDate] = useState("");
+  const [fileCode, setFileCode] = useState("");
+  const [rev, setRev] = useState("");
+  const [subjectOfRev, setsubjectOfRev] = useState("");
   const [areas, setAreas] = useState([]);
   const [subAreas, setSubAreas] = useState({});
   const [departments, setDepartments] = useState({});
@@ -20,6 +27,8 @@ export default function AreaProject() {
   const [files, setFiles] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [promptAddFile, setPromptAddFile] = useState(false);
+  const [showList, setShowList] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showWarningAlert, setShowWarningAlert] = useState(false);
   const [hasSelectedFiles, setHasSelectedFiles] = useState(false);
@@ -300,6 +309,15 @@ export default function AreaProject() {
     setShowPrompt(false);
   };
 
+  const addFile = () => {
+    setPromptAddFile(true);
+  };
+  const ShowPromptToAddFile = () => {
+    setPromptAddFile(true);
+  };
+  const cancelAddFile = () => {
+    setPromptAddFile(false);
+  };
   return (
     <div className="dark:bg-gray-800 rounded-lg shadow-xl p-4 ml-8 mr-8 mt-8">
       {showSuccessAlert && (
@@ -458,117 +476,132 @@ export default function AreaProject() {
                                           </div>
                                           {expandedFiles[task.taskId] &&
                                             files[task.taskId].length > 0 && (
-                                              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-sm">
-                                                <thead className="bg-gray-50 dark:bg-gray-800">
-                                                  <tr>
-                                                    <th
-                                                      scope="col"
-                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                    >
-                                                      Document number
-                                                    </th>
-
-                                                    <th
-                                                      scope="col"
-                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                    >
-                                                      Revision
-                                                    </th>
-                                                    <th
-                                                      scope="col"
-                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                    >
-                                                      Date of Creation
-                                                    </th>
-                                                    <th
-                                                      scope="col"
-                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                    >
-                                                      Title
-                                                    </th>
-                                                    <th
-                                                      scope="col"
-                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                    >
-                                                      Subject of revesion
-                                                    </th>
-                                                    <th
-                                                      scope="col"
-                                                      className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                                                    >
-                                                      Options
-                                                    </th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                  {files[task.taskId].map(
-                                                    (file, index) => (
-                                                      <tr
-                                                        key={file.id}
-                                                        className={
-                                                          index % 2 === 0
-                                                            ? "bg-white"
-                                                            : "bg-gray-200"
-                                                        }
+                                              <div>
+                                                <div className="flex justify-end mb-4 mt-3">
+                                                  <button
+                                                    onClick={() =>
+                                                      ShowPromptToAddFile()
+                                                    }
+                                                    className="rounded-lg bg-blue-500 py-2 px-4 text-xs font-bold uppercase text-white shadow-lg shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+                                                  >
+                                                    Add File in {task.taskName}
+                                                  </button>
+                                                </div>
+                                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-sm">
+                                                  <thead className="bg-gray-50 dark:bg-gray-800">
+                                                    <tr>
+                                                      <th
+                                                        scope="col"
+                                                        className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                                                       >
-                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                                                          {subArea.subAreaCode}-
-                                                          {
-                                                            department.departementCode
+                                                        Document number
+                                                      </th>
+
+                                                      <th
+                                                        scope="col"
+                                                        className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                      >
+                                                        Revision
+                                                      </th>
+                                                      <th
+                                                        scope="col"
+                                                        className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                      >
+                                                        Date of Creation
+                                                      </th>
+                                                      <th
+                                                        scope="col"
+                                                        className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                      >
+                                                        Title
+                                                      </th>
+                                                      <th
+                                                        scope="col"
+                                                        className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                      >
+                                                        Subject of revesion
+                                                      </th>
+                                                      <th
+                                                        scope="col"
+                                                        className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                                      >
+                                                        Options
+                                                      </th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {files[task.taskId].map(
+                                                      (file, index) => (
+                                                        <tr
+                                                          key={file.id}
+                                                          className={
+                                                            index % 2 === 0
+                                                              ? "bg-white"
+                                                              : "bg-gray-200"
                                                           }
-                                                          -{task.taskCode}-
-                                                          {file.fileCode}
-                                                        </td>
-                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                                                          {file.rev}
-                                                        </td>
-                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                                                          {formatDate(
-                                                            file.created_On
-                                                          )}
-                                                        </td>
-                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                                                          {file.fileName}
-                                                        </td>
-                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                                                          {file.subjectOfRev}
-                                                        </td>
-                                                        <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
-                                                          <button
-                                                            onClick={() =>
-                                                              handleModifyFile(
-                                                                file.fileId,
-                                                                file.fileName,
-                                                                file.fileCode,
-                                                                file.rev,
-                                                                file.pdf_path,
-                                                                file.subjectOfRev,
-                                                                file.created_On,
-                                                                project,
-                                                                task.taskId
-                                                              )
+                                                        >
+                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                            {
+                                                              subArea.subAreaCode
                                                             }
-                                                            className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                                                          >
-                                                            Modify
-                                                          </button>
-                                                          <button className="rounded-lg bg-green-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
-                                                            View
-                                                          </button>
-                                                          <button
-                                                            onClick={() =>
-                                                              AddToStore(file)
+                                                            -
+                                                            {
+                                                              department.departementCode
                                                             }
-                                                            className="rounded-lg bg-orange-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                                                          >
-                                                            Add to Store
-                                                          </button>
-                                                        </td>
-                                                      </tr>
-                                                    )
-                                                  )}
-                                                </tbody>
-                                              </table>
+                                                            -{task.taskCode}-
+                                                            {file.fileCode}
+                                                          </td>
+                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                            {file.rev}
+                                                          </td>
+                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                            {formatDate(
+                                                              file.created_On
+                                                            )}
+                                                          </td>
+                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                            {file.fileName}
+                                                          </td>
+                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                            {file.subjectOfRev}
+                                                          </td>
+                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
+                                                            <button
+                                                              onClick={() =>
+                                                                handleModifyFile(
+                                                                  file.fileId,
+                                                                  file.fileName,
+                                                                  file.fileCode,
+                                                                  file.rev,
+                                                                  file.pdf_path,
+                                                                  file.subjectOfRev,
+                                                                  file.created_On,
+                                                                  project,
+                                                                  task.taskId
+                                                                )
+                                                              }
+                                                              className="rounded-lg bg-blue-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                                                            >
+                                                              Modify
+                                                            </button>
+                                                            <button className="rounded-lg bg-green-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
+                                                              View
+                                                            </button>
+                                                            <button
+                                                              onClick={() =>
+                                                                AddToStore(file)
+                                                              }
+                                                              className="rounded-lg bg-orange-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                                                            >
+                                                              Add to Store
+                                                            </button>
+                                                          </td>
+                                                        </tr>
+                                                      )
+                                                    )}
+                                                  </tbody>
+                                                </table>
+                                              </div>
                                             )}
                                         </li>
                                       )
@@ -654,6 +687,142 @@ export default function AreaProject() {
               </button>
               <button
                 onClick={cancelExport}
+                className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {promptAddFile && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
+          <div className="bg-white rounded-lg p-8 max-w-md">
+            <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+              Add New File
+            </h2>
+            <div className="flex mb-3">
+              <div className="w-1/2 mr-2">
+                <label
+                  htmlFor="modifiedFileName"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  File Name
+                </label>
+                <input
+                  id="modifiedFileName"
+                  type="text"
+                  onChange={(e) => setFileName(e.target.value)}
+                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                  placeholder="Enter modified file name"
+                />
+              </div>
+              <div className="w-1/2 ml-2">
+                <label
+                  htmlFor="modifiedFileCode"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  File Code
+                </label>
+                <input
+                  id="modifiedFileCode"
+                  type="text"
+                  onChange={(e) => setFileCode(e.target.value)}
+                  className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                  placeholder="Enter modified file code"
+                />
+              </div>
+            </div>
+            <div className="mb-3">
+              <label
+                htmlFor="modifiedFileRevision"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Revision
+              </label>
+              <input
+                id="modifiedFileRevision"
+                type="text"
+                onChange={(e) => setRev(e.target.value)}
+                className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                placeholder="Enter modified file Revision"
+              />
+            </div>
+            <div className="mb-3">
+              <label
+                htmlFor="modifiedFileSubject"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Subject of Revision
+              </label>
+              <input
+                id="modifiedFileSubject"
+                type="text"
+                onChange={(e) => setsubjectOfRev(e.target.value)}
+                className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                placeholder="Enter modified file Subject of revision"
+              />
+            </div>
+            <div className="mb-3 flex items-center">
+              <div>
+                <label
+                  htmlFor="Upload"
+                  className="block text-gray-700 font-bold mb-2"
+                >
+                  Upload File
+                </label>
+                <input
+                  type="file"
+                  id="Upload"
+                  name="Upload"
+                  onChange={(e) => setPdfPath(e.target.value)}
+                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                />
+              </div>
+              <div className="ml-4 relative">
+                <label
+                  htmlFor="CreateFile"
+                  className="block text-gray-700 font-bold mb-2 cursor-pointer"
+                  onClick={() => setShowList(true)}
+                >
+                  Create File
+                </label>
+                {showList && (
+                  <ul
+                    className="absolute top-full left-0 bg-white border border-gray-300 shadow-md rounded-lg p-2"
+                    onMouseLeave={() => setShowList(false)}
+                  >
+                    <li className="cursor-pointer">.docx File</li>
+                    <li className="cursor-pointer">.xlsx File</li>
+                    <li className="cursor-pointer">.dwg File</li>
+                  </ul>
+                )}
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label
+                htmlFor="modifiedFileCreated"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Created On
+              </label>
+              <input
+                id="modifiedFileCreated"
+                type="date"
+                onChange={(e) => setDate(e.target.value)}
+                className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+              />
+            </div>
+            <div className="flex justify-end mt-5">
+              <button
+                onClick={addFile}
+                className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
+              >
+                Add File
+              </button>
+              <button
+                onClick={cancelAddFile}
                 className="flex items-center justify-center w-24 h-12 rounded-lg bg-red-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               >
                 Cancel

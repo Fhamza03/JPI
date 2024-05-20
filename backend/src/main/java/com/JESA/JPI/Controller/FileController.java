@@ -74,4 +74,12 @@ public class FileController {
             throw new RuntimeException("Failed to delete file "+fileId);
         }
     }
+    @GetMapping("/getFile/{fileId}")
+    public FileModel getFile(@PathVariable Integer fileId){
+        try{
+            return fileService.getFile(fileId);
+        } catch (Exception e) {
+            throw new RuntimeException("FAILED TO GET THE FILE WITH THE ID : " + fileId);
+        }
+    }
 }
