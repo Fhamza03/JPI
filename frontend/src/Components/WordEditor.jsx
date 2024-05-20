@@ -41,23 +41,55 @@ export default function WordEditor() {
     }
   };
 
-  const handleSave = () => {
-    if (editor) {
-      const documentContent = editor.root.innerHTML;
-      console.log("Document saved:", documentContent);
-    }
-  };
+  // const handleSave = () => {
+  //   if (editor) {
+  //     const documentContent = editor.root.innerHTML;
+  //     console.log("Document saved:", documentContent);
+  //   }
+  // };
 
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-5xl px-6 py-8 bg-white rounded-lg shadow-md">
-        <input type="file" onChange={handleUploadFile} />
-        <button
-          onClick={handleSave}
-          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        {/* <div className="flex justify-end">
+          <button
+            onClick={handleSave}
+            className="rounded-lg pr-8 pl-8 bg-sky-700 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            data-ripple-light="true"
+          >
+            Save
+          </button>
+        </div> */}
+        <label
+          htmlFor="dropzone-file"
+          className="mx-auto cursor-pointer flex max-w-md flex-col items-center rounded-xl border-2 border-dashed border-blue-400 bg-white p-3 text-center mb-4"
         >
-          Save
-        </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-blue-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <h2 className="mt-4 text-md font-medium text-gray-700 tracking-wide">
+            Upload File
+          </h2>
+
+          <input
+            id="dropzone-file"
+            type="file"
+            className="hidden"
+            onChange={handleUploadFile}
+          />
+        </label>
+
         <div id="toolbar" className="toolbar mt-4">
           {toolbarOptions.map((row, rowIndex) => (
             <span key={rowIndex}>

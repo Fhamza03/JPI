@@ -86,8 +86,8 @@ export default function FormNewSubArea() {
 
   const handleModifySubArea = async (subAreaId, subAreaCode, subAreaName) => {
     setSubAreaId(subAreaId);
-    setModifiedSubAreaCode(subAreaCode); // Set modifiedSubAreaCode with the old value
-    setModifiedSubAreaName(subAreaName); // Set modifiedSubAreaName with the old value
+    setModifiedSubAreaCode(subAreaCode);
+    setModifiedSubAreaName(subAreaName); 
     setShowPrompt(true);
   };
 
@@ -144,14 +144,13 @@ export default function FormNewSubArea() {
       const credentials = btoa(`${username}:${password}`);
       let url = `http://localhost:8080/getSubAreasByArea/${areaId}`;
 
-      // Append searchQuery to the URL if it's not empty
       if (searchQuery.trim() !== "") {
         url += `?search=${encodeURIComponent(searchQuery.trim())}`;
       }
 
       const response = await fetch(url, {
         headers: {
-          Authorization: `Basic ${credentials}`, // Add basic authentication
+          Authorization: `Basic ${credentials}`,
         },
       });
       if (!response.ok) {
@@ -466,7 +465,7 @@ export default function FormNewSubArea() {
                 id="subAreaCodeInput"
                 type="text"
                 value={modifiedSubAreaCode}
-                onChange={handleSearchChange}
+                onChange={(e) => setModifiedSubAreaCode(e.target.value)}
                 className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                 placeholder="Enter new sub-area code"
               />

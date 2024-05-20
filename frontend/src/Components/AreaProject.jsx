@@ -80,14 +80,13 @@ export default function AreaProject() {
       const credentials = btoa(`${username}:${password}`);
       let url = `http://localhost:8080/getSubAreasByArea/${areaId}`;
 
-      // Append searchQuery to the URL if it's not empty
       if (searchQuery.trim() !== "") {
         url += `?search=${encodeURIComponent(searchQuery.trim())}`;
       }
 
       const response = await fetch(url, {
         headers: {
-          Authorization: `Basic ${credentials}`, // Add basic authentication
+          Authorization: `Basic ${credentials}`,
         },
       });
       if (!response.ok) {
@@ -309,14 +308,75 @@ export default function AreaProject() {
     setShowPrompt(false);
   };
 
-  const addFile = () => {
-    setPromptAddFile(true);
-  };
   const ShowPromptToAddFile = () => {
     setPromptAddFile(true);
   };
   const cancelAddFile = () => {
     setPromptAddFile(false);
+  };
+
+  const handleAddFile = async (e,taskId) => {
+    setPromptAddFile(true);
+    e.preventDefault();
+
+    try {
+      const username = sessionStorage.getItem("username");
+      const password = sessionStorage.getItem("password");
+      const userId = sessionStorage.getItem("userId");
+      const taskId = location.state?.taskId;
+
+      const base64Credentials = btoa(`${username}:${password}`);
+
+      if (
+        !fileName ||
+        !fileCode ||
+        !rev ||
+        !subjectOfRev ||
+        !userId ||
+        !taskId
+      ) {
+        console.error(
+          "Please fill in all fields, ensure you are logged in, and provide a valid taskId"
+        );
+        
+        return;
+      }
+
+      const fileData = {
+        fileName,
+        fileCode,
+        rev,
+        subjectOfRev,
+        pdf_path,
+        created_On: formatDate(date),
+      };
+
+      const response = await fetch(
+        `http://localhost:8080/admin/createFile/${taskId}/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Basic ${base64Credentials}`,
+          },
+          body: JSON.stringify(fileData),
+        }
+      );
+
+      if (response.ok) {
+        console.log("File saved successfully");
+        
+        setPromptAddFile(false);
+
+        fetchFiles();
+      } else {
+        console.error("Failed to save file:", response.statusText);
+        
+      }
+    } catch (error) {
+      console.error("Error saving file:", error);
+      
+    }
   };
   return (
     <div className="dark:bg-gray-800 rounded-lg shadow-xl p-4 ml-8 mr-8 mt-8">
@@ -790,40 +850,37 @@ export default function AreaProject() {
                 placeholder="Enter modified file Subject of revision"
               />
             </div>
-            <div className="mb-3 flex items-center">
+            <div className="mb-3">
               <div>
                 <label
-                  htmlFor="Upload"
-                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="dropzone-file"
+                  className="mx-auto cursor-pointer flex max-w-md flex-col items-center rounded-xl border-2 border-dashed border-gray-500 bg-white p-3 text-center "
                 >
-                  Upload File
-                </label>
-                <input
-                  type="file"
-                  id="Upload"
-                  name="Upload"
-                  onChange={(e) => setPdfPath(e.target.value)}
-                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                />
-              </div>
-              <div className="ml-4 relative">
-                <label
-                  htmlFor="CreateFile"
-                  className="block text-gray-700 font-bold mb-2 cursor-pointer"
-                  onClick={() => setShowList(true)}
-                >
-                  Create File
-                </label>
-                {showList && (
-                  <ul
-                    className="absolute top-full left-0 bg-white border border-gray-300 shadow-md rounded-lg p-2"
-                    onMouseLeave={() => setShowList(false)}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
                   >
-                    <li className="cursor-pointer">.docx File</li>
-                    <li className="cursor-pointer">.xlsx File</li>
-                    <li className="cursor-pointer">.dwg File</li>
-                  </ul>
-                )}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    />
+                  </svg>
+                  <h2 className="mt-4 text-md font-medium text-gray-500 tracking-wide">
+                    Upload File
+                  </h2>
+
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => setPdfPath(e.target.value)}
+                  />
+                </label>
               </div>
             </div>
 
@@ -843,7 +900,7 @@ export default function AreaProject() {
             </div>
             <div className="flex justify-end mt-5">
               <button
-                onClick={addFile}
+                onClick={handleAddFile}
                 className="flex items-center justify-center w-24 h-12 rounded-lg bg-green-500 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-3"
               >
                 Add File

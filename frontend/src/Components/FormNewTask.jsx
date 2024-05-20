@@ -18,7 +18,6 @@ export default function FormNewTask() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-
   const filteredTasks = tasks.filter(
     (task) =>
       task.taskCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -39,7 +38,7 @@ export default function FormNewTask() {
     const taskData = {
       taskCode: modifiedTaskCode,
       taskName: modifiedTaskName,
-      taskId: taskId, // Make sure you define departementId
+      taskId: taskId,
     };
     try {
       let response = await fetch(
@@ -48,7 +47,7 @@ export default function FormNewTask() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
           },
           body: JSON.stringify(taskData),
         }
@@ -59,6 +58,7 @@ export default function FormNewTask() {
         setModifiedTaskCode("");
         setModifiedTaskName("");
       } else {
+        console.log(`Problem in task ${taskId}`);
         console.error("Failed to update task:", response.statusText);
       }
     } catch (error) {
@@ -132,7 +132,7 @@ export default function FormNewTask() {
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch(
-        `http://localhost:8080/getTasksByDepartement/${departementId}`, // Replace YOUR_ENDPOINT with your actual endpoint for fetching tasks by departementId
+        `http://localhost:8080/getTasksByDepartement/${departementId}`,
         {
           headers: {
             Authorization: `Basic ${base64Credentials}`,
@@ -170,7 +170,6 @@ export default function FormNewTask() {
       if (response.ok) {
         fetchTasks(departementId);
         console.log("Task deleted successfully");
-        // Fetch tasks again if needed
       } else {
         console.error("Failed to delete task:", response.statusText);
       }
@@ -182,7 +181,7 @@ export default function FormNewTask() {
     setShowTaskInput(true);
     setShowTaskErrorMessage(false);
   };
-  const handleAddFile = (taskId,taskCode,taskName) => {
+  const handleAddFile = (taskId, taskCode, taskName) => {
     history.push("/admin/NewFile", {
       taskId: taskId,
       taskCode: taskCode,
@@ -192,27 +191,23 @@ export default function FormNewTask() {
 
   const itemsPerPage = 5;
 
-// Calculate the total number of pages
-const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
 
-// Calculate the start and end index of items to display for the current page
-const startIndex = (currentPage - 1) * itemsPerPage;
-const endIndex = Math.min(startIndex + itemsPerPage, filteredTasks.length);
-const TasksForPage = filteredTasks.slice(startIndex, endIndex);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredTasks.length);
+  const TasksForPage = filteredTasks.slice(startIndex, endIndex);
 
-// Define functions for handling pagination
-const handlePreviousPage = () => {
-  setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-};
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
 
-const handleNextPage = () => {
-  setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-};
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
 
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
-        {/* Task Information Card */}
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
           <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
             Task Information
@@ -348,14 +343,17 @@ const handleNextPage = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
-          {TasksForPage.map((task, index) => (
-            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}>
-              <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
-                {task.taskCode}
-              </td>
-              <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
-                {task.taskName}
-              </td>
+            {TasksForPage.map((task, index) => (
+              <tr
+                key={index}
+                className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
+              >
+                <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
+                  {task.taskCode}
+                </td>
+                <td className="text-center py-3.5 px-4 text-sm text-gray-600 dark:text-gray-400">
+                  {task.taskName}
+                </td>
                 <td className="text-center p-4 border-b border-blue-gray-50">
                   {/* Button for Options */}
                   <button
@@ -370,14 +368,12 @@ const handleNextPage = () => {
                   >
                     Modify
                   </button>
-                  {/* Button for Options */}
                   <button
                     onClick={() => handleDeleteTask(task.taskId)}
                     className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
                   >
                     Delete
                   </button>
-                  {/* Button for Options */}
                   <button
                     onClick={() =>
                       handleAddFile(task.taskId, task.taskCode, task.taskName)
@@ -392,61 +388,61 @@ const handleNextPage = () => {
           </tbody>
         </table>
         <div className="mt-6 sm:flex sm:items-center sm:justify-between ">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                Page{" "}
-                <span className="font-medium text-gray-700 dark:text-gray-100">
-                  {currentPage} of {totalPages}
-                </span>
-              </div>
-              <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
-                <button
-                  className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 1}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5 rtl:-scale-x-100"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-                    />
-                  </svg>
-                  <span>previous</span>
-                </button>
-                <button
-                  className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                >
-                  <span>Next</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5 rtl:-scale-x-100"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                    />
-                  </svg>
-                </button>{" "}
-              </div>
-            </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            Page{" "}
+            <span className="font-medium text-gray-700 dark:text-gray-100">
+              {currentPage} of {totalPages}
+            </span>
+          </div>
+          <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
+            <button
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5 rtl:-scale-x-100"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                />
+              </svg>
+              <span>previous</span>
+            </button>
+            <button
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              <span>Next</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5 rtl:-scale-x-100"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                />
+              </svg>
+            </button>{" "}
+          </div>
+        </div>
         {/* Conditional Rendering for Prompt */}
         {showPrompt && (
           <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
-          <div className="bg-white rounded-lg p-8 w-96">
+            <div className="bg-white rounded-lg p-8 w-96">
               <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
                 Update Task
               </h2>
