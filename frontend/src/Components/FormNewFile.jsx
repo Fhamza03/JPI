@@ -258,7 +258,7 @@ export default function FormNewFile() {
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
         <div className="w-1/3 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold mb-4">
             File Information
           </h2>
           <form>
@@ -372,7 +372,7 @@ export default function FormNewFile() {
           </form>
         </div>
         <div className="w-2/3 p-4 bg-gray-100 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold mb-4">
             Task Information
           </h2>
           <div>
@@ -384,7 +384,7 @@ export default function FormNewFile() {
             </p>
           </div>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl text-sky-700 font-bold font-serif">
+          <h2 className="text-2xl text-sky-700 font-bold mb-4 mt-3">
               List of Files
             </h2>
             <div className="relative flex items-center">

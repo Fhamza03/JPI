@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 
 export default function FormNewDatabase() {
   const location = useLocation();
@@ -154,7 +154,7 @@ export default function FormNewDatabase() {
     const username = sessionStorage.getItem("username");
     const password = sessionStorage.getItem("password");
     const DatabaseData = {
-      databaseType: modifiedDatabaseType
+      databaseType: modifiedDatabaseType,
     };
     try {
       let response = await fetch(
@@ -171,11 +171,11 @@ export default function FormNewDatabase() {
       if (response.ok) {
         console.log("Database updated successfully");
         // Update projectDatabases with modified value
-        const updatedDatabases = projectDatabases.map(database => {
+        const updatedDatabases = projectDatabases.map((database) => {
           if (database.databaseId === databaseId) {
             return {
               ...database,
-              databaseType: modifiedDatabaseType
+              databaseType: modifiedDatabaseType,
             };
           }
           return database;
@@ -189,7 +189,6 @@ export default function FormNewDatabase() {
       console.error("Error updating Database:", error);
     }
   };
-  
 
   const cancelModification = () => {
     setModifiedDatabaseType("");
@@ -243,19 +242,15 @@ export default function FormNewDatabase() {
   return (
     <div>
       <div className="flex mt-11 mr-4 ml-4">
-        {/* Right part */}
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+          <h2 className="text-2xl text-sky-700 font-bold mb-3">
             Project Databases
           </h2>
-          {/* Render database details here if needed */}
           {showDatabaseInput ? (
             <div className="flex flex-col">
               {" "}
-              {/* Flex container with column layout */}
               <div className="flex items-center">
                 {" "}
-                {/* Input and buttons container */}
                 <input
                   type="text"
                   value={databaseType}
@@ -269,7 +264,7 @@ export default function FormNewDatabase() {
                       handleSaveDatabaseType();
                       handleToggleDatabaseInput();
                     } else {
-                      setShowErrorMessage(true); 
+                      setShowErrorMessage(true);
                     }
                   }}
                   className="middle none center mr-1 rounded-lg bg-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -332,7 +327,6 @@ export default function FormNewDatabase() {
               />
             </div>
           </div>
-          {/* Your existing table */}
           <div className="mt-4">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-800">
@@ -422,7 +416,6 @@ export default function FormNewDatabase() {
                       </button>
                     </td>
                     <td className="text-center">
-                      {/* Pass both databaseId and databaseType */}
                       <button
                         onClick={() =>
                           handleAddArea(
@@ -430,7 +423,7 @@ export default function FormNewDatabase() {
                             database.databaseType
                           )
                         }
-                        className="rounded-lg bg-orange-300 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        className="rounded-lg bg-sky-700 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                         data-ripple-light="true"
                       >
                         Add area
@@ -498,36 +491,36 @@ export default function FormNewDatabase() {
         {/* Left part */}
         <div className="w-1/2 p-4 bg-gray-100 mr-3 rounded-xl shadow-xl">
           {/* Left part content */}
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+          <h2 className="text-2xl text-sky-700 font-bold mb-3">
             Project Information
           </h2>
           <p className="mb-2">
-            <strong>Project Name :</strong> <i>{project.projectName}</i>
+            <strong>Project Name :</strong> {project.projectName}
           </p>
           <p className="mb-2">
-            <strong>Project Code :</strong> <i>{project.projectCode}</i>
+            <strong>Project Code :</strong> {project.projectCode}
           </p>
           <p className="mb-2">
-            <strong>Client :</strong> <i>{project.client}</i>
+            <strong>Client :</strong> {project.client}
           </p>
           <p className="mb-2">
-            <strong>Lead Server :</strong> <i>{project.leadServer}</i>
+            <strong>Lead Server :</strong> {project.leadServer}
           </p>
           <p className="mb-2">
-            <strong>Lead Office :</strong> <i>{project.leadOffice}</i>
+            <strong>Lead Office :</strong> {project.leadOffice}
           </p>
           <p className="mb-2">
-            <strong>Location :</strong> <i>{project.location}</i>
+            <strong>Location :</strong> {project.location}
           </p>
           <p className="mb-2">
             <strong>Database Location :</strong>{" "}
             <i>{project.databaseLocation}</i>
           </p>
           <p className="mb-2">
-            <strong>Line of Business :</strong> <i>{project.lineOfBusiness}</i>
+            <strong>Line of Business :</strong> {project.lineOfBusiness}
           </p>
           <p>
-            <strong>Server Name :</strong> <i>{project.serverName}</i>
+            <strong>Server Name :</strong> {project.serverName}
           </p>
         </div>
       </div>

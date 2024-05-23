@@ -491,49 +491,54 @@ export default function AreaProject() {
                                     {tasks[department.departementId].map(
                                       (task) => (
                                         <li key={task.id}>
-                                          <div className="flex items-center">
-                                            <svg
-                                              className="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
-                                              aria-hidden="true"
-                                              xmlns="http://www.w3.org/2000/svg"
-                                              width={20}
-                                              height={20}
-                                              fill="currentColor"
-                                              viewBox="0 0 24 24"
-                                              onClick={() =>
-                                                handleFiles(task.taskId)
-                                              }
-                                            >
-                                              <path
-                                                fillRule="evenodd"
-                                                d={
-                                                  files[task.id] &&
-                                                  files[task.id].length > 0
-                                                    ? "M10 8V16L17 12Z"
-                                                    : "M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
+                                          <div className="flex justify-between mb-4 mt-3">
+                                            <div>
+                                              <div className="flex items-center">
+                                                <svg
+                                                  className="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
+                                                  aria-hidden="true"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width={20}
+                                                  height={20}
+                                                  fill="currentColor"
+                                                  viewBox="0 0 24 24"
+                                                  onClick={() =>
+                                                    handleFiles(task.taskId)
+                                                  }
+                                                >
+                                                  <path
+                                                    fillRule="evenodd"
+                                                    d={
+                                                      files[task.id] &&
+                                                      files[task.id].length > 0
+                                                        ? "M10 8V16L17 12Z"
+                                                        : "M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
+                                                    }
+                                                    clipRule="evenodd"
+                                                  />
+                                                </svg>
+                                                <span>
+                                                  {task.taskCode} -{" "}
+                                                  {task.taskName}
+                                                </span>
+                                              </div>
+                                            </div>
+                                            <div>
+                                              <button
+                                                onClick={() =>
+                                                  ShowPromptToAddFile(
+                                                    task.taskId
+                                                  )
                                                 }
-                                                clipRule="evenodd"
-                                              />
-                                            </svg>
-                                            <span>
-                                              {task.taskCode} - {task.taskName}
-                                            </span>
+                                                className="rounded-lg bg-blue-500 py-2 px-4 text-xs font-bold uppercase text-white shadow-lg shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+                                              >
+                                                Add File in {task.taskName}
+                                              </button>
+                                            </div>
                                           </div>
                                           {expandedFiles[task.taskId] &&
                                             files[task.taskId].length > 0 && (
                                               <div>
-                                                <div className="flex justify-end mb-4 mt-3">
-                                                  <button
-                                                    onClick={() =>
-                                                      ShowPromptToAddFile(
-                                                        task.taskId
-                                                      )
-                                                    }
-                                                    className="rounded-lg bg-blue-500 py-2 px-4 text-xs font-bold uppercase text-white shadow-lg shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
-                                                  >
-                                                    Add File in {task.taskName}
-                                                  </button>
-                                                </div>
                                                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-sm">
                                                   <thead className="bg-gray-50 dark:bg-gray-800">
                                                     <tr>
@@ -612,7 +617,7 @@ export default function AreaProject() {
                                                           <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
                                                             {file.subjectOfRev}
                                                           </td>
-                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right flex justify-between">
+                                                          <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right flex justify-center">
                                                             <svg
                                                               onClick={() =>
                                                                 handleModifyFile(

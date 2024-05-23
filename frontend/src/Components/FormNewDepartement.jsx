@@ -216,7 +216,7 @@ export default function FormNewDepartement() {
       <div className="flex">
         {/* Sub-Area Information Card */}
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold mb-4">
             Departement Information
           </h2>
           {showDepartementInput ? (
@@ -285,19 +285,23 @@ export default function FormNewDepartement() {
         </div>
         {/* Department Information Card */}
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold mb-3">
             SubArea Information
           </h2>
           <div>
-            <h1>Name: {subAreaName}</h1>
-            <h1>Code: {subAreaCode}</h1>
+          <p>
+          <strong>SubArea Code: </strong>{subAreaCode}
+          </p>
+          <p className="mb-2">
+          <strong>SubArea Name: </strong>{subAreaName}
+
+          </p>
           </div>
         </div>
       </div>
-      {/* Additional Card */}
       <div className="w-full p-4 bg-gray-100 rounded-xl shadow-xl mt-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl text-sky-700 font-bold font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold ">
             List of Departements
           </h2>
           <div className="relative flex items-center">

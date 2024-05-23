@@ -203,7 +203,7 @@ export default function FormNewSubArea() {
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold mb-4">
             SubArea Information
           </h2>
           {showSubAreaInput ? (
@@ -270,7 +270,7 @@ export default function FormNewSubArea() {
         </div>
 
         <div className="w-1/2 p-4 bg-gray-100 mr-3 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold mb-3">
             Area Information
           </h2>
           <div>
@@ -284,7 +284,7 @@ export default function FormNewSubArea() {
 
       <div className="w-full p-4 bg-gray-100 rounded-xl shadow-xl mt-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl text-sky-700 font-bold font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold ">
             List of SubArea
           </h2>
           <div className="relative flex items-center">

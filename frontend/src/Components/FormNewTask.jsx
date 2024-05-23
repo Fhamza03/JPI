@@ -209,7 +209,7 @@ export default function FormNewTask() {
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold mb-4">
             Task Information
           </h2>
           {showTaskInput ? (
@@ -274,7 +274,7 @@ export default function FormNewTask() {
         </div>
         {/* Department Information Card */}
         <div className="w-1/2 p-4 bg-gray-100 rounded-xl shadow-xl">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold mb-2">
             Department Information
           </h2>
           <div>
@@ -288,7 +288,7 @@ export default function FormNewTask() {
       {/* Additional Card for Tasks List */}
       <div className="w-full p-4 bg-gray-100 rounded-xl shadow-xl mt-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl text-sky-700 font-bold font-serif">
+        <h2 className="text-2xl text-sky-700 font-bold ">
             List of Tasks
           </h2>
           <div className="relative flex items-center">

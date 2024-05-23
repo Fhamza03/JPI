@@ -114,33 +114,33 @@ export default function Databases() {
               Project Information
             </h2>
             <p className="mb-2">
-              <strong>Project Name :</strong> <i>{project.projectName}</i>
+              <strong>Project Name :</strong> {project.projectName}
             </p>
             <p className="mb-2">
-              <strong>Project Code :</strong> <i>{project.projectCode}</i>
+              <strong>Project Code :</strong> {project.projectCode}
             </p>
             <p className="mb-2">
-              <strong>Client :</strong> <i>{project.client}</i>
+              <strong>Client :</strong> {project.client}
             </p>
             <p className="mb-2">
-              <strong>Lead Server :</strong> <i>{project.leadServer}</i>
+              <strong>Lead Server :</strong> {project.leadServer}
             </p>
             <p className="mb-2">
-              <strong>Lead Office :</strong> <i>{project.leadOffice}</i>
+              <strong>Lead Office :</strong> {project.leadOffice}
             </p>
             <p className="mb-2">
-              <strong>Location :</strong> <i>{project.location}</i>
+              <strong>Location :</strong> {project.location}
             </p>
             <p className="mb-2">
               <strong>Database Location :</strong>{" "}
-              <i>{project.databaseLocation}</i>
+              {project.databaseLocation}
             </p>
             <p className="mb-2">
               <strong>Line of Business :</strong>{" "}
-              <i>{project.lineOfBusiness}</i>
+              {project.lineOfBusiness}
             </p>
             <p>
-              <strong>Server Name :</strong> <i>{project.serverName}</i>
+              <strong>Server Name :</strong> {project.serverName}
             </p>
           </div>
           <div className="w-3/5 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
