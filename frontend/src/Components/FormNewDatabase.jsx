@@ -260,17 +260,16 @@ export default function FormNewDatabase() {
                   type="text"
                   value={databaseType}
                   onChange={(e) => setDatabaseType(e.target.value)}
-                  className="input-field mr-3 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
+                  className="mb-3 input-field mr-3 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                   placeholder="Enter database type"
                 />
                 <button
                   onClick={() => {
                     if (databaseType.trim() !== "") {
-                      // Validate if input is not empty
-                      handleSaveDatabaseType(); // Save data if input is not empty
-                      handleToggleDatabaseInput(); // Close input field
+                      handleSaveDatabaseType();
+                      handleToggleDatabaseInput();
                     } else {
-                      setShowErrorMessage(true); // Show error message if input is empty
+                      setShowErrorMessage(true); 
                     }
                   }}
                   className="middle none center mr-1 rounded-lg bg-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -279,7 +278,7 @@ export default function FormNewDatabase() {
                 </button>
                 <button
                   onClick={() => {
-                    setShowErrorMessage(false); // Hide error message when toggling input field
+                    setShowErrorMessage(false);
                     handleToggleDatabaseInput();
                   }}
                   className="middle none center mr-4 rounded-lg bg-red-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"

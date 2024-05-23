@@ -106,11 +106,11 @@ export default function Databases() {
   };
 
   return (
-    <div className="flex justify-center pt-10">
-      <div className="max-w-screen-lg w-full">
+    <div className="pt-10">
+      <div>
         <div className="flex justify-between">
-          <div className="w-1/3 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
-            <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
+          <div className="w-2/5 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
+            <h2 className="text-2xl text-sky-700 font-bold mb-4">
               Project Information
             </h2>
             <p className="mb-2">
@@ -143,8 +143,8 @@ export default function Databases() {
               <strong>Server Name :</strong> <i>{project.serverName}</i>
             </p>
           </div>
-          <div className="w-2/3 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
-            <h2 className="text-2xl font-semibold mb-4">Project Databases</h2>
+          <div className="w-3/5 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
+            <h2 className="text-2xl text-sky-700 font-bold mb-4">Project Databases</h2>
             <div className="flex items-center justify-end mb-3">
               <div className="relative flex items-center">
                 <span className="absolute">

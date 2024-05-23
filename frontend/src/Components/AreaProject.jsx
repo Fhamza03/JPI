@@ -838,37 +838,23 @@ export default function AreaProject() {
               />
             </div>
             <div className="mb-3">
-              <div>
-                <label
-                  htmlFor="dropzone-file"
-                  className="mx-auto cursor-pointer flex max-w-md flex-col items-center rounded-xl border-2 border-dashed border-gray-500 bg-white p-3 text-center "
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-gray-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    />
-                  </svg>
-                  <h2 className="mt-4 text-md font-medium text-gray-500 tracking-wide">
-                    Upload File
-                  </h2>
-
-                  <input
-                    id="dropzone-file"
-                    type="file"
-                    className="hidden"
-                    onChange={(e) => setPdfPath(e.target.value)}
-                  />
-                </label>
-              </div>
+              <label
+                htmlFor="Upload"
+                className="block text-gray-700 font-bold mb-2"
+              >
+                Upload file
+              </label>
+              <link
+                rel="stylesheet"
+                href="https://unpkg.com/flowbite@1.4.4/dist/flowbite.min.css"
+              />
+              <input
+                type="file"
+                id="Upload"
+                name="Upload"
+                onChange={(e) => setPdfPath(e.target.value)}
+                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              />
             </div>
 
             <div className="mb-3">

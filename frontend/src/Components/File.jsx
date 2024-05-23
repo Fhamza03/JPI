@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function File() {
@@ -291,8 +291,12 @@ export default function File() {
                 htmlFor="Upload"
                 className="block text-gray-700 font-bold mb-2"
               >
-                Upload File
+                Upload file
               </label>
+              <link
+                rel="stylesheet"
+                href="https://unpkg.com/flowbite@1.4.4/dist/flowbite.min.css"
+              />
               <input
                 type="file"
                 id="Upload"

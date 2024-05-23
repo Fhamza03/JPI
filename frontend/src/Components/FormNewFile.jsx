@@ -404,7 +404,6 @@ export default function FormNewFile() {
                   />
                 </svg>
               </span>
-              {/* Input for Search */}
               <input
                 type="text"
                 value={searchQuery}
@@ -480,9 +479,6 @@ export default function FormNewFile() {
                       }
                     >
                       Modify
-                    </button>
-                    <button className="rounded-lg bg-green-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2">
-                      View
                     </button>
                   </td>
                 </tr>
