@@ -14,7 +14,7 @@ export default function AreaProject() {
   const [date, setDate] = useState("");
   const [fileCode, setFileCode] = useState("");
   const [rev, setRev] = useState("");
-  const [subjectOfRev, setsubjectOfRev] = useState("");
+  const [subjectOfRev, setSubjectOfRev] = useState("");
   const [areas, setAreas] = useState([]);
   const [subAreas, setSubAreas] = useState({});
   const [departments, setDepartments] = useState({});
@@ -22,6 +22,7 @@ export default function AreaProject() {
   const [expandedAreas, setExpandedAreas] = useState({});
   const [expandedSubAreas, setExpandedSubAreas] = useState({});
   const [tasks, setTasks] = useState({});
+  const [taskId,setTaskId] = useState(0);
   const [expandedDepartments, setExpandedDepartments] = useState({});
   const [expandedFiles, setExpandedFiles] = useState({});
   const [files, setFiles] = useState({});
@@ -161,14 +162,14 @@ export default function AreaProject() {
     }
   };
 
-  const fetchFiles = async (taskId) => {
+  const fetchFiles = async (id) => {
     try {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch(
-        `http://localhost:8080/getFilesbyTask/${taskId}`,
+        `http://localhost:8080/getFilesbyTask/${id}`,
         {
           headers: {
             Authorization: `Basic ${base64Credentials}`,
@@ -180,10 +181,11 @@ export default function AreaProject() {
         const data = await response.json();
         setFiles((prevFiles) => ({
           ...prevFiles,
-          [taskId]: data,
+          [id]: data,
         }));
       } else {
         console.error("Failed to fetch files:", response.statusText);
+        console.log(id)
       }
     } catch (error) {
       console.error("Error fetching files:", error);
@@ -308,14 +310,15 @@ export default function AreaProject() {
     setShowPrompt(false);
   };
 
-  const ShowPromptToAddFile = () => {
+  const ShowPromptToAddFile = (taskId) => {
     setPromptAddFile(true);
+    setTaskId(taskId);
   };
   const cancelAddFile = () => {
     setPromptAddFile(false);
   };
 
-  const handleAddFile = async (e,taskId) => {
+  const handleAddFile = async (e) => {
     setPromptAddFile(true);
     e.preventDefault();
 
@@ -323,24 +326,8 @@ export default function AreaProject() {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
       const userId = sessionStorage.getItem("userId");
-      const taskId = location.state?.taskId;
 
       const base64Credentials = btoa(`${username}:${password}`);
-
-      if (
-        !fileName ||
-        !fileCode ||
-        !rev ||
-        !subjectOfRev ||
-        !userId ||
-        !taskId
-      ) {
-        console.error(
-          "Please fill in all fields, ensure you are logged in, and provide a valid taskId"
-        );
-        
-        return;
-      }
 
       const fileData = {
         fileName,
@@ -352,7 +339,7 @@ export default function AreaProject() {
       };
 
       const response = await fetch(
-        `http://localhost:8080/admin/createFile/${taskId}/${userId}`,
+        `http://localhost:8080/createFile/${taskId}/${userId}`,
         {
           method: "POST",
           headers: {
@@ -365,17 +352,15 @@ export default function AreaProject() {
 
       if (response.ok) {
         console.log("File saved successfully");
-        
+        console.log(fileData);
         setPromptAddFile(false);
 
-        fetchFiles();
+        fetchFiles(taskId);
       } else {
         console.error("Failed to save file:", response.statusText);
-        
       }
     } catch (error) {
       console.error("Error saving file:", error);
-      
     }
   };
   return (
@@ -540,7 +525,7 @@ export default function AreaProject() {
                                                 <div className="flex justify-end mb-4 mt-3">
                                                   <button
                                                     onClick={() =>
-                                                      ShowPromptToAddFile()
+                                                      ShowPromptToAddFile(task.taskId)
                                                     }
                                                     className="rounded-lg bg-blue-500 py-2 px-4 text-xs font-bold uppercase text-white shadow-lg shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
                                                   >
@@ -845,7 +830,7 @@ export default function AreaProject() {
               <input
                 id="modifiedFileSubject"
                 type="text"
-                onChange={(e) => setsubjectOfRev(e.target.value)}
+                onChange={(e) => setSubjectOfRev(e.target.value)}
                 className="input-field w-full h-12 rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
                 placeholder="Enter modified file Subject of revision"
               />

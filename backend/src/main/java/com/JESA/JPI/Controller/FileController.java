@@ -33,7 +33,7 @@ public class FileController {
             throw new RuntimeException("Failed to get Files ot task " + taskId);
         }
     }
-    @PostMapping("/admin/createFile/{taskId}/{userId}")
+    @PostMapping("/createFile/{taskId}/{userId}")
     public ResponseEntity<FileModel> createFile(@PathVariable Integer taskId, @PathVariable Integer userId,@RequestBody FileModel file,
                                                 HttpSession session) {
         try {
@@ -53,7 +53,7 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @PostMapping("updateFile/{fileId}/{userId}")
+    @PostMapping("/updateFile/{fileId}/{userId}")
     public FileModel updateFile(@PathVariable Integer fileId, @PathVariable Integer userId, @RequestBody FileModel file){
         try {
             TaskModel task = fileService.getFile(fileId).getTask();
