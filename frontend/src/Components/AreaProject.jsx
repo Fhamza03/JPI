@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import * as XLSX from "xlsx";
 import SuccessAlert from "../Components/SuccessAlert";
 import WarningAlert from "../Components/WarningAlert";
@@ -22,7 +22,7 @@ export default function AreaProject() {
   const [expandedAreas, setExpandedAreas] = useState({});
   const [expandedSubAreas, setExpandedSubAreas] = useState({});
   const [tasks, setTasks] = useState({});
-  const [taskId,setTaskId] = useState(0);
+  const [taskId, setTaskId] = useState(0);
   const [expandedDepartments, setExpandedDepartments] = useState({});
   const [expandedFiles, setExpandedFiles] = useState({});
   const [files, setFiles] = useState({});
@@ -185,7 +185,7 @@ export default function AreaProject() {
         }));
       } else {
         console.error("Failed to fetch files:", response.statusText);
-        console.log(id)
+        console.log(id);
       }
     } catch (error) {
       console.error("Error fetching files:", error);
@@ -525,7 +525,9 @@ export default function AreaProject() {
                                                 <div className="flex justify-end mb-4 mt-3">
                                                   <button
                                                     onClick={() =>
-                                                      ShowPromptToAddFile(task.taskId)
+                                                      ShowPromptToAddFile(
+                                                        task.taskId
+                                                      )
                                                     }
                                                     className="rounded-lg bg-blue-500 py-2 px-4 text-xs font-bold uppercase text-white shadow-lg shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
                                                   >

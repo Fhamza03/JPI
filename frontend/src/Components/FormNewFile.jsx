@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function FormNewFile() {
@@ -9,7 +9,7 @@ export default function FormNewFile() {
   const [date, setDate] = useState("");
   const [fileCode, setFileCode] = useState("");
   const [rev, setRev] = useState("");
-  const [subjectOfRev, setsubjectOfRev] = useState("");
+  const [subjectOfRev, setSubjectOfRev] = useState("");
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
   const [showPrompt, setShowPrompt] = useState(false);
@@ -68,7 +68,7 @@ export default function FormNewFile() {
       };
 
       const response = await fetch(
-        `http://localhost:8080/admin/createFile/${taskId}/${userId}`,
+        `http://localhost:8080/createFile/${taskId}/${userId}`,
         {
           method: "POST",
           headers: {
@@ -81,7 +81,11 @@ export default function FormNewFile() {
 
       if (response.ok) {
         console.log("File saved successfully");
-        console.log("userId:", userId);
+        setFileName("");
+        setFileCode("");
+        setRev("");
+        setSubjectOfRev("");
+        setDate("");
 
         fetchFiles();
       } else {
@@ -180,13 +184,13 @@ export default function FormNewFile() {
         fileName: modifiedFileName,
         fileCode: modifiedFileCode,
         rev: modifiedFileRevision,
-        rev: modifiedFileSubject,
+        subjectOfRev: modifiedFileSubject,
         pdf_path: modifiedPdf_path,
         created_On: formatDate(modifiedFileCreated),
       };
 
       const response = await fetch(
-        `http://localhost:8080/admin/updateFile/${fileId}/${userId}`,
+        `http://localhost:8080/updateFile/${fileId}/${userId}`,
         {
           method: "POST",
           headers: {
@@ -318,7 +322,7 @@ export default function FormNewFile() {
                 id="Subject"
                 name="Subject"
                 value={subjectOfRev}
-                onChange={(e) => setsubjectOfRev(e.target.value)}
+                onChange={(e) => setSubjectOfRev(e.target.value)}
                 className="input-field mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none border-gray-500 required"
               />
             </div>
