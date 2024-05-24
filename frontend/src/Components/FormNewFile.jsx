@@ -39,11 +39,10 @@ export default function FormNewFile() {
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
       const userId = sessionStorage.getItem("userId");
-      const taskId = location.state?.taskId; // Extract taskId from location state
+      const taskId = location.state?.taskId;
 
       const base64Credentials = btoa(`${username}:${password}`);
 
-      // Check for null values before sending data
       if (
         !fileName ||
         !fileCode ||
@@ -86,8 +85,6 @@ export default function FormNewFile() {
         setRev("");
         setSubjectOfRev("");
         setDate("");
-
-        fetchFiles();
       } else {
         console.error("Failed to save file:", response.statusText);
       }
@@ -124,7 +121,7 @@ export default function FormNewFile() {
 
   useEffect(() => {
     fetchFiles();
-  }, []);
+  }, [files]);
 
   const handleDelete = async (fileId) => {
     try {
@@ -258,7 +255,7 @@ export default function FormNewFile() {
     <div className="flex flex-col mt-11 mr-4 ml-4">
       <div className="flex">
         <div className="w-1/3 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
-        <h2 className="text-2xl text-sky-700 font-bold mb-4">
+          <h2 className="text-2xl text-sky-700 font-bold mb-4">
             File Information
           </h2>
           <form>
@@ -372,7 +369,7 @@ export default function FormNewFile() {
           </form>
         </div>
         <div className="w-2/3 p-4 bg-gray-100 rounded-xl shadow-xl">
-        <h2 className="text-2xl text-sky-700 font-bold mb-4">
+          <h2 className="text-2xl text-sky-700 font-bold mb-4">
             Task Information
           </h2>
           <div>
@@ -384,7 +381,7 @@ export default function FormNewFile() {
             </p>
           </div>
           <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl text-sky-700 font-bold mb-4 mt-3">
+            <h2 className="text-2xl text-sky-700 font-bold mb-4 mt-3">
               List of Files
             </h2>
             <div className="relative flex items-center">
