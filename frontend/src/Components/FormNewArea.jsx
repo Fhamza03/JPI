@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import SuccessAlert from "../Components/SuccessAlert";
+
 
 export default function FormNewArea(props) {
   const location = useLocation();
@@ -16,6 +18,8 @@ export default function FormNewArea(props) {
   const [showPrompt, setShowPrompt] = useState(false);
   const [showAreaInput, setShowAreaInput] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
 
 
   // Fetch areas
@@ -84,7 +88,7 @@ export default function FormNewArea(props) {
         }
       );
       if (response.ok) {
-        console.log("Area saved successfully");
+        setShowSuccessAlert(true);
         setAreaCode("");
         setAreaName("");
         fetchAreas();
@@ -205,6 +209,12 @@ export default function FormNewArea(props) {
 
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
+      {showSuccessAlert && (
+        <SuccessAlert
+          message="You have successfully added the area."
+          onclose={() => setShowSuccessAlert(false)}
+        />
+      )}
       <div className="flex">
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
         <h2 className="text-2xl text-sky-700 font-bold mb-4">

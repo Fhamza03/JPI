@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import SuccessAlert from "../Components/SuccessAlert";
 
 export default function FormNewDatabase() {
   const location = useLocation();
@@ -17,6 +18,7 @@ export default function FormNewDatabase() {
   const [oldValue, setOldValue] = useState("");
   const [showPrompt, setShowPrompt] = useState(false);
   const [modifiedDatabaseType, setModifiedDatabaseType] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -137,7 +139,7 @@ export default function FormNewDatabase() {
       );
 
       if (response && response.ok) {
-        console.log("Database info saved successfully");
+        setShowSuccessAlert(true);
         setDatabaseType("");
         setShowDatabaseInput(false);
         fetchProjectDatabases(project.projectId);
@@ -242,6 +244,12 @@ export default function FormNewDatabase() {
   return (
     <div>
       <div className="flex mt-11 mr-4 ml-4">
+        {showSuccessAlert && (
+          <SuccessAlert
+            message="You have successfully added the database."
+            onclose={() => setShowSuccessAlert(false)}
+          />
+        )}
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
           <h2 className="text-2xl text-sky-700 font-bold mb-3">
             Project Databases

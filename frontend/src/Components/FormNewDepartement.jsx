@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import SuccessAlert from "../Components/SuccessAlert";
+
 
 export default function FormNewDepartement() {
   const location = useLocation();
@@ -17,6 +19,8 @@ export default function FormNewDepartement() {
   const [modifiedDepartementName, setModifiedDepartementName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
 
   const filteredDepartements = departements.filter(
     (dept) =>
@@ -104,7 +108,7 @@ export default function FormNewDepartement() {
       );
 
       if (response.ok) {
-        console.log("Department saved successfully");
+        setShowSuccessAlert(true);
         setDepartementCode("");
         setDepartementName("");
         fetchDepartements(subAreaId);
@@ -158,7 +162,6 @@ export default function FormNewDepartement() {
       const password = sessionStorage.getItem("password");
       const base64Credentials = btoa(`${username}:${password}`);
 
-      // Implement your delete logic here, using the /admin/deleteDepartement/{departementId} endpoint
       const response = await fetch(
         `http://localhost:8080/admin/deleteDepartement/${departementId}`,
         {
@@ -212,9 +215,13 @@ export default function FormNewDepartement() {
 
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
-      {/* Two cards in the same line */}
+      {showSuccessAlert && (
+        <SuccessAlert
+          message="You have successfully added the departement."
+          onclose={() => setShowSuccessAlert(false)}
+        />
+      )}
       <div className="flex">
-        {/* Sub-Area Information Card */}
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
         <h2 className="text-2xl text-sky-700 font-bold mb-4">
             Departement Information

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import SuccessAlert from "../Components/SuccessAlert";
 
 export default function FormNewTask() {
   const location = useLocation();
@@ -17,6 +18,8 @@ export default function FormNewTask() {
   const [modifiedTaskName, setModifiedTaskName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
 
   const filteredTasks = tasks.filter(
     (task) =>
@@ -77,7 +80,7 @@ export default function FormNewTask() {
       const password = sessionStorage.getItem("password");
 
       const base64Credentials = btoa(`${username}:${password}`);
-
+      
       const taskData = {
         taskCode: taskCode,
         taskName: taskName,
@@ -97,7 +100,7 @@ export default function FormNewTask() {
       );
 
       if (response.ok) {
-        console.log("Task saved successfully");
+        setShowSuccessAlert(true);
         const newTask = {
           taskCode: taskCode,
           taskName: taskName,
@@ -207,6 +210,12 @@ export default function FormNewTask() {
 
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
+      {showSuccessAlert && (
+        <SuccessAlert
+          message="You have successfully added the task."
+          onclose={() => setShowSuccessAlert(false)}
+        />
+      )}
       <div className="flex">
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
         <h2 className="text-2xl text-sky-700 font-bold mb-4">

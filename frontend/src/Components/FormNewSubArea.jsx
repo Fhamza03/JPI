@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import SuccessAlert from "../Components/SuccessAlert";
 
 export default function FormNewSubArea() {
   const location = useLocation();
@@ -15,6 +16,8 @@ export default function FormNewSubArea() {
   const [modifiedSubAreaName, setModifiedSubAreaName] = useState("");
   const [showPrompt, setShowPrompt] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
 
   const history = useHistory();
 
@@ -48,7 +51,7 @@ export default function FormNewSubArea() {
         }
       );
       if (response.ok) {
-        console.log("Sub-Area saved successfully");
+        setShowSuccessAlert(true);
         setSubAreaCode("");
         setSubAreaName("");
         fetchSubAreas();
@@ -201,6 +204,12 @@ export default function FormNewSubArea() {
 
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
+      {showSuccessAlert && (
+        <SuccessAlert
+          message="You have successfully added the subArea."
+          onclose={() => setShowSuccessAlert(false)}
+        />
+      )}
       <div className="flex">
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
         <h2 className="text-2xl text-sky-700 font-bold mb-4">

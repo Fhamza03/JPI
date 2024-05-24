@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import SuccessAlert from "../Components/SuccessAlert";
+import WarningAlert from "../Components/WarningAlert";
 
 export default function FormNewFile() {
   const location = useLocation();
@@ -22,6 +24,10 @@ export default function FormNewFile() {
   const [modifiedPdf_path, setModifiedPdf_Path] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showWarningAlert, setShowWarningAlert] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
+
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -51,9 +57,7 @@ export default function FormNewFile() {
         !userId ||
         !taskId
       ) {
-        console.error(
-          "Please fill in all fields, ensure you are logged in, and provide a valid taskId"
-        );
+        setShowWarningAlert(true)
         return;
       }
 
@@ -79,7 +83,7 @@ export default function FormNewFile() {
       );
 
       if (response.ok) {
-        console.log("File saved successfully");
+        setShowSuccessAlert(true);
         setFileName("");
         setFileCode("");
         setRev("");
@@ -112,6 +116,7 @@ export default function FormNewFile() {
         const data = await response.json();
         setFiles(data);
       } else {
+        console.log(taskId)
         setError(`Failed to fetch files: ${response.statusText}`);
       }
     } catch (error) {
@@ -253,6 +258,18 @@ export default function FormNewFile() {
 
   return (
     <div className="flex flex-col mt-11 mr-4 ml-4">
+      {showSuccessAlert && (
+        <SuccessAlert
+          message="You have successfully added the file."
+          onclose={() => setShowSuccessAlert(false)}
+        />
+      )}
+      {showWarningAlert && (
+        <WarningAlert
+          message="Please fill in all fields."
+          onclose={() => setShowWarningAlert(false)}
+        />
+      )}
       <div className="flex">
         <div className="w-1/3 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
           <h2 className="text-2xl text-sky-700 font-bold mb-4">

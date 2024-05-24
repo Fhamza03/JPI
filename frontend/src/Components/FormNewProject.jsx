@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import SuccessAlert from "../Components/SuccessAlert";
+import WarningAlert from "../Components/WarningAlert";
 
 export default function FormNewProject() {
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showWarningAlert, setShowWarningAlert] = useState(false);
   const history = useHistory();
   const location = useLocation();
 
@@ -24,26 +28,23 @@ export default function FormNewProject() {
     }
   }, [location.state]);
 
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     // Validate if all fields are filled
     const allFieldsFilled = Object.values(project).every(
       (value) => value !== ""
     );
     if (!allFieldsFilled) {
-      setShowErrorAlert(true);
+      setShowWarningAlert(true);
       return;
     }
-  
+
     try {
       // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
-  
+
       const response = await fetch(
         "http://localhost:8080/admin/createProject",
         {
@@ -55,11 +56,10 @@ export default function FormNewProject() {
           body: JSON.stringify(project),
         }
       );
-  
+
       if (response.ok) {
-        console.log("Project created successfully");
         setShowSuccessAlert(true);
-        // Clear input fields after successful submission
+        setShowSuccessAlert(true);
         setProject({
           projectName: "",
           projectCode: "",
@@ -78,23 +78,26 @@ export default function FormNewProject() {
       console.error("Error creating project:", error);
     }
   };
-  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProject({ ...project, [name]: value });
   };
 
-  const handleSuccessAlertClose = () => {
-    setShowSuccessAlert(false);
-  };
-
-  const handleErrorAlertClose = () => {
-    setShowErrorAlert(false);
-  };
-
   return (
     <div className="flex justify-center mt-8">
+      {showSuccessAlert && (
+        <SuccessAlert
+          message="You have successfully added the project."
+          onclose={() => setShowSuccessAlert(false)}
+        />
+      )}
+      {showWarningAlert && (
+        <WarningAlert
+          message="Please fill all the project informations."
+          onclose={() => setShowWarningAlert(false)}
+        />
+      )}
       <div className="max-w-4xl bg-white shadow-2xl rounded-lg overflow-hidden mt-5 mb-6 p-6 w-full">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -262,132 +265,6 @@ export default function FormNewProject() {
             </button>
           </div>
         </form>
-        {/* Success alert */}
-        {showSuccessAlert && (
-          <div
-            aria-live="assertive"
-            className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
-          >
-            <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
-              <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                <div className="p-4">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <svg
-                        className="h-6 w-6 text-green-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="ml-3 w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-medium text-gray-900">
-                        Project saved successfully !
-                      </p>
-                    </div>
-                    <div className="ml-4 flex flex-shrink-0">
-                      <button
-                        type="button"
-                        className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        onClick={() => setShowSuccessAlert(false)}
-                      >
-                        <span className="sr-only">Close</span>
-                        <svg
-                          className="h-5 w-5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M10.293 9.293a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                          <path
-                            fillRule="evenodd"
-                            d="M11.707 9.293a1 1 0 00-1.414 0l-4 4a1 1 0 101.414 1.414l4-4a1 1 0 000-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Error alert */}
-        {showErrorAlert && (
-          <div
-            aria-live="assertive"
-            className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
-          >
-            <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
-              <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                <div className="p-4">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <svg
-                        className="h-6 w-6 text-red-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </div>
-                    <div className="ml-3 w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-medium text-gray-900">
-                        You have to complete all the information of the project
-                      </p>
-                    </div>
-                    <div className="ml-4 flex flex-shrink-0">
-                      <button
-                        type="button"
-                        className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        onClick={() => setShowErrorAlert(false)}
-                      >
-                        <span className="sr-only">Close</span>
-                        <svg
-                          className="h-5 w-5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M10.293 9.293a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                          <path
-                            fillRule="evenodd"
-                            d="M11.707 9.293a1 1 0 00-1.414 0l-4 4a1 1 0 101.414 1.414l4-4a1 1 0 000-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
