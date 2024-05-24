@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 
-
 export default function AdminSideBar() {
   return (
     <>
@@ -169,9 +168,9 @@ export default function AdminSideBar() {
             </div>
             <div>
               <label className="px-3 text-xs text-gray-500 uppercase dark:text-gray-400">
-                Settings
+                Account
               </label>
-              <div>
+              <div className="px-3">
                 <LogoutButton />
               </div>
             </div>

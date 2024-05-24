@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 
 export default function Databases() {
   const location = useLocation();
@@ -74,12 +74,11 @@ export default function Databases() {
       console.error("Error fetching project databases:", error);
     }
   };
-  const handleArea = (databaseId, databaseType,project) => {
+  const handleArea = (databaseId, databaseType, project) => {
     history.push("/user/UserProject", {
       databaseId: databaseId,
       databaseType: databaseType,
-      project: project
-
+      project: project,
     });
   };
 
@@ -132,19 +131,19 @@ export default function Databases() {
               <strong>Location :</strong> {project.location}
             </p>
             <p className="mb-2">
-              <strong>Database Location :</strong>{" "}
-              {project.databaseLocation}
+              <strong>Database Location :</strong> {project.databaseLocation}
             </p>
             <p className="mb-2">
-              <strong>Line of Business :</strong>{" "}
-              {project.lineOfBusiness}
+              <strong>Line of Business :</strong> {project.lineOfBusiness}
             </p>
             <p>
               <strong>Server Name :</strong> {project.serverName}
             </p>
           </div>
           <div className="w-3/5 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
-            <h2 className="text-2xl text-sky-700 font-bold mb-4">Project Databases</h2>
+            <h2 className="text-2xl text-sky-700 font-bold mb-4">
+              Project Databases
+            </h2>
             <div className="flex items-center justify-end mb-3">
               <div className="relative flex items-center">
                 <span className="absolute">
@@ -201,7 +200,11 @@ export default function Databases() {
                     <td className="text-center">
                       <button
                         onClick={() =>
-                          handleArea(database.databaseId, database.databaseType,project)
+                          handleArea(
+                            database.databaseId,
+                            database.databaseType,
+                            project
+                          )
                         }
                         className="rounded-lg bg-sky-700 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                         data-ripple-light="true"

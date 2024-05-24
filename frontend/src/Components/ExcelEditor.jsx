@@ -37,7 +37,7 @@ export default function ExcelEditor() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="bg-gray-100 min-h-screen flex justify-center items-start py-8">
       <div className="w-full max-w-5xl px-6 py-8 bg-white rounded-lg shadow-md">
         <label
           htmlFor="dropzone-file"
