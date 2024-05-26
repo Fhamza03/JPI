@@ -85,7 +85,7 @@ export default function FormNewProject() {
   };
 
   return (
-    <div className="flex justify-center mt-8">
+    <div className="flex justify-center mt-5">
       {showSuccessAlert && (
         <SuccessAlert
           message="You have successfully added the project."
@@ -98,7 +98,7 @@ export default function FormNewProject() {
           onclose={() => setShowWarningAlert(false)}
         />
       )}
-      <div className="max-w-4xl bg-white shadow-2xl rounded-lg overflow-hidden mt-5 mb-6 p-6 w-full">
+      <div className="max-w-4xl bg-white shadow-2xl rounded-lg overflow-hidden p-6 w-full border border-sky-500">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label

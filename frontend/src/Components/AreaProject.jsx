@@ -700,7 +700,7 @@ export default function AreaProject() {
       </ul>
       {showPrompt && (
         <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
-          <div className="bg-white rounded-lg p-8 max-w-3xl shadow-2xl">
+          <div className="bg-white rounded-lg p-8 max-w-3xl shadow-2xl border border-sky-500">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-lg">
               <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
@@ -776,7 +776,7 @@ export default function AreaProject() {
       )}
       {promptAddFile && (
         <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
-          <div className="bg-white rounded-lg p-8 max-w-md">
+          <div className="bg-white rounded-lg p-8 max-w-md border border-sky-500">
             <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
               Add New File
             </h2>

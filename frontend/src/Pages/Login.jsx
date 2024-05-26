@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import EMSPI from "../images/EMSPI.png";
-import Construction from "../images/Construction.jpg";
+import Construction from "../images/Construction.jpeg";
 import { Link } from "react-router-dom";
 
 export default function Login() {
@@ -64,9 +64,9 @@ export default function Login() {
         <img className="w-full h-full object-cover" src={Construction} alt="" />
       </div>
       {/* Right Pane */}
-      <div className="w-full bg-slate-300 lg:w-1/2 flex items-center justify-center bg-opacity-50 backdrop-filter backdrop-blur-lg">
+      <div className="w-full bg-slate-200 lg:w-1/2 flex items-center justify-center bg-opacity-20 backdrop-filter backdrop-blur-xl">
         <div className="w-full lg:w-2/3 flex items-center justify-center">
-          <div className="max-w-md w-full p-6 rounded-lg border border-gray-300 bg-white shadow-2xl">
+          <div className="max-w-md w-full p-6 rounded-lg border border-sky-500 bg-white shadow-2xl">
             <div className="flex items-center justify-center mb-3 mt-6">
               <img
                 className="w-32 h-auto lg:w-33 lg:h-auto"

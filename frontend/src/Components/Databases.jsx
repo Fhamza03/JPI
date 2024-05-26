@@ -108,7 +108,7 @@ export default function Databases() {
     <div className="pt-10">
       <div>
         <div className="flex justify-between">
-          <div className="w-2/5 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
+          <div className="w-2/5 bg-white border border-sky-500 rounded-lg p-6 m-4 shadow-2xl">
             <h2 className="text-2xl text-sky-700 font-bold mb-4">
               Project Information
             </h2>
@@ -140,7 +140,7 @@ export default function Databases() {
               <strong>Server Name :</strong> {project.serverName}
             </p>
           </div>
-          <div className="w-3/5 bg-white border border-gray-300 rounded-lg p-6 m-4 shadow-2xl">
+          <div className="w-3/5 bg-white border border-sky-500 rounded-lg p-6 m-4 shadow-2xl">
             <h2 className="text-2xl text-sky-700 font-bold mb-4">
               Project Databases
             </h2>

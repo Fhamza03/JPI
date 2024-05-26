@@ -42,7 +42,6 @@ export default function App() {
           <ProtectedRoute exact path="/user/File" component={userFile} role={role} />
           <ProtectedRoute exact path="/user/WordFile" component={WordPage} role={role} />
           <ProtectedRoute exact path="/user/ExcelFile" component={ExcelPage} role={role} />
-
         </Switch>
       </div>
     </Router>
