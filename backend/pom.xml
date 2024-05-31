@@ -14,7 +14,7 @@
 	<name>JPI</name>
 	<description>Jacobs Project Information (JPI) - Application for project management</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -75,6 +75,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>jemspi</finalName>
 	</build>
 
 </project>

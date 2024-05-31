@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: jemspi-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jpi
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - jemspiNetwork
+
+  backend:
+    build:
+      context: ./backend
+    container_name: jemspi-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: jemspi-db
+      MYSQL_PORT: 3306
+      MYSQL_DB_NAME: JPI
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - jemspiNetwork
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: jemspi-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - jemspiNetwork
+
+volumes:
+  db-data:
+
+networks:
+  jemspiNetwork:
