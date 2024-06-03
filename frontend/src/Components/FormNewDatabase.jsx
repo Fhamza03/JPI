@@ -4,7 +4,7 @@ import SuccessAlert from "../Components/SuccessAlert";
 
 export default function FormNewDatabase() {
   const location = useLocation();
-  const { project } = location.state || {}; // Access project from location state
+  const { project } = location.state || {};
   const history = useHistory();
 
   const [showDatabaseInput, setShowDatabaseInput] = useState(false);
@@ -33,16 +33,14 @@ export default function FormNewDatabase() {
 
   const fetchDatabaseTypes = async () => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch("http://localhost:8080/getAllDatabases", {
         headers: {
-          Authorization: `Basic ${base64Credentials}`, // Add authorization header
+          Authorization: `Basic ${base64Credentials}`,
         },
       });
       if (response.ok) {
@@ -80,18 +78,16 @@ export default function FormNewDatabase() {
 
   const fetchProjectDatabases = async (projectId) => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch(
         `http://localhost:8080/getDatabasesByProject/${projectId}`,
         {
           headers: {
-            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+            Authorization: `Basic ${base64Credentials}`,
           },
         }
       );
@@ -109,12 +105,11 @@ export default function FormNewDatabase() {
 
   const handleToggleDatabaseInput = () => {
     setShowDatabaseInput(!showDatabaseInput);
-    setShowErrorMessage(false); // Hide error message when toggling input field
+    setShowErrorMessage(false); 
   };
 
   const handleSaveDatabaseType = async () => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
@@ -130,7 +125,7 @@ export default function FormNewDatabase() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
           },
           body: JSON.stringify({
             databaseType: databaseType,
@@ -172,7 +167,6 @@ export default function FormNewDatabase() {
       );
       if (response.ok) {
         console.log("Database updated successfully");
-        // Update projectDatabases with modified value
         const updatedDatabases = projectDatabases.map((database) => {
           if (database.databaseId === databaseId) {
             return {
@@ -183,7 +177,7 @@ export default function FormNewDatabase() {
           return database;
         });
         setProjectDatabases(updatedDatabases);
-        setModifiedDatabaseType(""); // Clear modified value
+        setModifiedDatabaseType("");
       } else {
         console.error("Failed to update Database:", response.statusText);
       }
@@ -199,14 +193,13 @@ export default function FormNewDatabase() {
 
   const handleModifyDatabase = async (databaseId, databaseType) => {
     setDatabaseId(databaseId);
-    setOldValue(databaseType); // Set the old value
+    setOldValue(databaseType);
     setModifiedDatabaseType(databaseType);
     setShowPrompt(true);
   };
 
   const handleDeleteDatabase = async (databaseId) => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
@@ -215,13 +208,12 @@ export default function FormNewDatabase() {
         {
           method: "DELETE",
           headers: {
-            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
           },
         }
       );
       if (response.ok) {
         console.log("Database deleted successfully");
-        // Update the UI by refetching project databases
         fetchProjectDatabases(project.projectId);
       } else {
         console.error("Failed to delete database");
@@ -290,16 +282,16 @@ export default function FormNewDatabase() {
                 </button>
               </div>
               {showErrorMessage &&
-                databaseType.trim() === "" && ( // Check if input is empty and error message is set to be shown
+                databaseType.trim() === "" && (
                   <p className="text-red-500 text-sm ml-2">
                     Please enter database information.
-                  </p> // Display error message if input is empty
+                  </p> 
                 )}
             </div>
           ) : (
             <button
               onClick={() => {
-                setShowErrorMessage(false); // Hide error message when toggling input field
+                setShowErrorMessage(false);
                 handleToggleDatabaseInput();
               }}
               className="middle none center mr-4 rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -369,7 +361,6 @@ export default function FormNewDatabase() {
                       {database.databaseType}
                     </td>
                     <td className="text-center p-4 border-b border-blue-gray-50">
-                      {/* Add onClick handler with databaseId and databaseType */}
                       <button
                         onClick={() =>
                           handleModifyDatabase(
@@ -496,9 +487,7 @@ export default function FormNewDatabase() {
           </div>
         </div>
 
-        {/* Left part */}
         <div className="w-1/2 p-4 bg-gray-100 mr-3 rounded-xl shadow-xl">
-          {/* Left part content */}
           <h2 className="text-2xl text-sky-700 font-bold mb-3">
             Project Information
           </h2>

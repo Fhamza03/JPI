@@ -25,7 +25,7 @@ export default function Projects() {
 
       const response = await fetch("http://localhost:8080/getAllProjects", {
         headers: {
-          Authorization: `Basic ${base64Credentials}`, // Add authorization header
+          Authorization: `Basic ${base64Credentials}`, 
         },
       });
 
@@ -62,8 +62,8 @@ export default function Projects() {
             value.toLowerCase().includes(searchQuery.toLowerCase())
         )
       )
-    : selectedLocation === "" // Check if "All Database Locations" is selected
-    ? projects // If selectedLocation is empty, display all projects
+    : selectedLocation === ""
+    ? projects
     : filteredProjects;
 
   const handleSearchChange = (event) => {
@@ -166,8 +166,8 @@ export default function Projects() {
             <input
               type="text"
               placeholder="Search"
-              value={searchQuery} // Bind value to the searchQuery state
-              onChange={handleSearchChange} // Connect onChange event to handleSearchChange function
+              value={searchQuery}
+              onChange={handleSearchChange}
               className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
@@ -236,7 +236,6 @@ export default function Projects() {
                         }}
                         className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
                       >
-                        {/* Project details cells */}
                         <td className="text-center p-4 border-b border-blue-gray-50">
                           {project.databaseLocation}
                         </td>

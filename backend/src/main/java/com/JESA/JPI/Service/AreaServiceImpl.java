@@ -10,6 +10,5 @@ public interface AreaServiceImpl {
     AreaModel createArea(AreaModel area);
     AreaModel updateArea(AreaModel area);
     void deleteArea(Integer areaId);
-//    List<AreaModel> getAreaOfDatabase(Integer databaseId);
 
 }

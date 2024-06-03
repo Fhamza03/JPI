@@ -21,15 +21,11 @@ export default function FormNewArea(props) {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
 
-
-  // Fetch areas
   const fetchAreas = async () => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch(
@@ -51,12 +47,10 @@ export default function FormNewArea(props) {
     fetchAreas();
   }, [databaseId]);
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // Save area
   const handleSaveArea = async () => {
     try {
       if (!databaseId) {
@@ -69,11 +63,9 @@ export default function FormNewArea(props) {
         databaseId: databaseId,
       };
 
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
 
       let response = await fetch(
@@ -100,14 +92,11 @@ export default function FormNewArea(props) {
     }
   };
 
-  // Delete area
   const handleDelete = async (areaId) => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch(
@@ -115,7 +104,7 @@ export default function FormNewArea(props) {
         {
           method: "DELETE",
           headers: {
-            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+            Authorization: `Basic ${base64Credentials}`,
           },
         }
       );
@@ -129,20 +118,17 @@ export default function FormNewArea(props) {
     }
   };
 
-  // Modify the `confirmModification` function to handle area updates
   const confirmModification = async () => {
-    setShowPrompt(false); // Close the prompt modal
+    setShowPrompt(false);
     const areaData = {
       areaCode: areaCode,
       areaName: areaName,
       databaseId: databaseId,
     };
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
   
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
   
       let response = await fetch(
@@ -151,14 +137,14 @@ export default function FormNewArea(props) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+            Authorization: `Basic ${base64Credentials}`,
           },
           body: JSON.stringify(areaData),
         }
       );
       if (response.ok) {
         console.log("Area updated successfully");
-        fetchAreas(); // Fetch areas again to update the list
+        fetchAreas();
       } else {
         console.error("Failed to update area:", response.statusText);
       }
@@ -172,12 +158,11 @@ export default function FormNewArea(props) {
     setAreaId(areaId);
     setAreaCode(areaCode);
     setAreaName(areaName);
-    setShowPrompt(true); // Show the prompt modal
+    setShowPrompt(true);
   };
 
-  // Cancel modification
   const cancelModification = () => {
-    setShowPrompt(false); // Close the prompt modal
+    setShowPrompt(false);
   };
   const handleToggleAreaInput = () => {
     setShowAreaInput(!showAreaInput);
@@ -193,10 +178,8 @@ export default function FormNewArea(props) {
 
   const totalPages = Math.ceil(areas.length / 5);
 
-  // Calculate the index of the first area for the current page
   const startIndex = (currentPage - 1) * 5;
 
-  // Slice the areas array to get areas for the current page
   const areasForPage = areas.slice(startIndex, startIndex + 5);
 
   const handleNextPage = () => {
@@ -240,7 +223,7 @@ export default function FormNewArea(props) {
                 <button
                   onClick={() => {
                     if (areaCode.trim() !== "" && areaName.trim() !== "") {
-                      handleSaveArea(); // Call handleSaveArea without passing areaId
+                      handleSaveArea(); 
                     } else {
                       setShowAreaErrorMessage(true);
                     }
@@ -452,7 +435,6 @@ export default function FormNewArea(props) {
               <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
                 Update Area
               </h2>
-              {/* Area code input with label */}
               <div className="mb-3">
                 <label
                   htmlFor="areaCodeInput"
@@ -469,7 +451,6 @@ export default function FormNewArea(props) {
                   placeholder="Enter new area code"
                 />
               </div>
-              {/* Area name input with label */}
               <div className="mb-3">
                 <label
                   htmlFor="areaNameInput"

@@ -72,7 +72,7 @@ export default function FormNewSubArea() {
         {
           method: "DELETE",
           headers: {
-            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
           },
         }
       );
@@ -110,7 +110,7 @@ export default function FormNewSubArea() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`, 
           },
           body: JSON.stringify(subAreaData),
         }
@@ -185,15 +185,12 @@ export default function FormNewSubArea() {
 
   const itemsPerPage = 5;
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(subAreas.length / itemsPerPage);
 
-  // Calculate the start and end index of items to display for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, subAreas.length);
   const subAreasForPage = subAreas.slice(startIndex, endIndex);
 
-  // Define functions for handling pagination
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
@@ -462,7 +459,6 @@ export default function FormNewSubArea() {
             <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
               Update Sub-Area
             </h2>
-            {/* Sub-area code input with label */}
             <div className="mb-3">
               <label
                 htmlFor="subAreaCodeInput"
@@ -479,7 +475,6 @@ export default function FormNewSubArea() {
                 placeholder="Enter new sub-area code"
               />
             </div>
-            {/* Sub-area name input with label */}
             <div className="mb-3">
               <label
                 htmlFor="subAreaNameInput"

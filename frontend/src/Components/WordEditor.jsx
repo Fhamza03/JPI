@@ -41,25 +41,10 @@ export default function WordEditor() {
     }
   };
 
-  // const handleSave = () => {
-  //   if (editor) {
-  //     const documentContent = editor.root.innerHTML;
-  //     console.log("Document saved:", documentContent);
-  //   }
-  // };
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-start py-8">
       <div className="w-full max-w-5xl px-6 py-8 bg-white rounded-lg shadow-md border border-sky-500">
-        {/* <div className="flex justify-end">
-          <button
-            onClick={handleSave}
-            className="rounded-lg pr-8 pl-8 bg-sky-700 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            data-ripple-light="true"
-          >
-            Save
-          </button>
-        </div> */}
         <label
           htmlFor="dropzone-file"
           className="mx-auto cursor-pointer flex max-w-md flex-col items-center rounded-xl border-2 border-dashed border-blue-400 bg-white p-3 text-center mb-4"

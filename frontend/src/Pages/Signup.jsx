@@ -64,13 +64,10 @@ export default function SignUp() {
 
   return (
     <>
-      {/* component */}
       <div className="flex h-screen">
-        {/* Left Pane */}
         <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
           <img className="w-full h-full object-cover" src={Construction} alt="" />
         </div>
-        {/* Right Pane */}
         <div className="w-full bg-slate-200 lg:w-1/2 flex items-center justify-center bg-opacity-20 backdrop-filter backdrop-blur-xl">
           <div className="w-full lg:w-2/3 flex items-center justify-center">
             <div className="max-w-4xl w-full p-8 rounded-lg border border-sky-500 bg-white shadow-2xl">
@@ -265,8 +262,6 @@ export default function SignUp() {
                   </div>
                 </div>
               </form>
-
-              {/* Success alert */}
               {showSuccessAlert && (
                 <div
                   aria-live="assertive"
@@ -323,8 +318,6 @@ export default function SignUp() {
                   </div>
                 </div>
               )}
-
-              {/* Error alert */}
               {showErrorAlert && (
                 <div
                   aria-live="assertive"

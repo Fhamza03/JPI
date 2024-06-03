@@ -236,18 +236,14 @@ export default function FormNewFile() {
       file.fileCode.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Calculate the number of items per page
   const itemsPerPage = 5;
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(filteredFiles.length / itemsPerPage);
 
-  // Calculate the start and end index of items to display for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, filteredFiles.length);
   const FilesForPage = filteredFiles.slice(startIndex, endIndex);
 
-  // Define functions for handling pagination
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
@@ -474,7 +470,7 @@ export default function FormNewFile() {
                   <td className="text-center py-3.5 px-4 text-sm font-normal text-left rtl:text-right">
                     <button
                       className="rounded-lg bg-red-500 py-1 px-3 text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
-                      onClick={() => handleDelete(file.fileId)} // Add onClick handler for delete
+                      onClick={() => handleDelete(file.fileId)}
                     >
                       Delete
                     </button>

@@ -32,11 +32,9 @@ export default function Login() {
         console.log("Login successful");
         const responseData = await response.json();
 
-        // Extract role and userId from the response data
         const role = responseData.role;
         const userId = responseData.userId;
 
-        // Store role and userId in session
         sessionStorage.setItem("role", role);
         sessionStorage.setItem("userId", userId);
         sessionStorage.setItem("username", credentials.username);
@@ -59,11 +57,9 @@ export default function Login() {
 
   return (
     <div className="flex h-screen">
-      {/* Left Pane */}
       <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
         <img className="w-full h-full object-cover" src={Construction} alt="" />
       </div>
-      {/* Right Pane */}
       <div className="w-full bg-slate-200 lg:w-1/2 flex items-center justify-center bg-opacity-20 backdrop-filter backdrop-blur-xl">
         <div className="w-full lg:w-2/3 flex items-center justify-center">
           <div className="max-w-md w-full p-6 rounded-lg border border-sky-500 bg-white shadow-2xl">

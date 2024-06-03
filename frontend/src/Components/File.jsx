@@ -5,12 +5,6 @@ export default function File() {
   const location = useLocation();
   const {
     fileId,
-    // fileName,
-    // fileCode,
-    // rev,
-    // pdf_path,
-    // subjectOfRev,
-    // created_On,
     project,
     taskId,
   } = location.state || {};
@@ -84,16 +78,6 @@ export default function File() {
       console.error("Error updating file:", error);
     }
   };
-
-  // const ChangeInfo = () => {
-  //   setName(name);
-  //   setCode(code);
-  //   setRevision(revision);
-  //   setSubject(subject);
-  //   setCreated(created);
-  //   setPath(path);
-  //   setShowPrompt(false);
-  // };
 
   const fetchFile = async (fileId) => {
     try {

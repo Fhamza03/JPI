@@ -62,40 +62,31 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserModel user, HttpServletRequest request) {
         try {
-            // Load user details including user ID
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
 
-            // Authenticate user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getUserPassword()));
 
-            // Set authentication in security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Set session attributes
             HttpSession session = request.getSession();
             session.setAttribute("username", userDetails.getUsername());
             session.setAttribute("role", userDetails.getAuthorities());
 
             LOGGER.info("User logged in: " + userDetails.getUsername());
 
-            // Extract role
             String role = userDetails.getAuthorities().iterator().next().getAuthority();
 
-            // Create response body with user ID and role
             Map<String, String> responseBody = new HashMap<>();
-            responseBody.put("userId", ((CustomUser) userDetails).getUserId()); // Include user ID
+            responseBody.put("userId", ((CustomUser) userDetails).getUserId()); 
             responseBody.put("role", role);
 
-            // Return successful response with user ID and role
             return ResponseEntity.ok(responseBody);
         } catch (UsernameNotFoundException e) {
             LOGGER.warning("User not found: " + user.getUsername());
-            // Return unauthorized response for invalid credentials
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", "Invalid username or password"));
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error occurred during login", e);
-            // Return internal server error response for other exceptions
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Error occurred during login" + e.getMessage()));
         }
     }

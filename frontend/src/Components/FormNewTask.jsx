@@ -281,7 +281,6 @@ export default function FormNewTask() {
             </button>
           )}
         </div>
-        {/* Department Information Card */}
         <div className="w-1/2 p-4 bg-gray-100 rounded-xl shadow-xl">
         <h2 className="text-2xl text-sky-700 font-bold mb-2">
             Department Information
@@ -294,7 +293,6 @@ export default function FormNewTask() {
           </div>
         </div>
       </div>
-      {/* Additional Card for Tasks List */}
       <div className="w-full p-4 bg-gray-100 rounded-xl shadow-xl mt-6">
         <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl text-sky-700 font-bold ">
@@ -317,7 +315,6 @@ export default function FormNewTask() {
                 />
               </svg>
             </span>
-            {/* Input for Search */}
             <input
               type="text"
               value={searchQuery}
@@ -327,7 +324,6 @@ export default function FormNewTask() {
             />
           </div>
         </div>
-        {/* Table for Tasks */}
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-800">
             <tr>
@@ -364,7 +360,6 @@ export default function FormNewTask() {
                   {task.taskName}
                 </td>
                 <td className="text-center p-4 border-b border-blue-gray-50">
-                  {/* Button for Options */}
                   <button
                     onClick={() =>
                       handleModifyTask(
@@ -448,14 +443,12 @@ export default function FormNewTask() {
             </button>{" "}
           </div>
         </div>
-        {/* Conditional Rendering for Prompt */}
         {showPrompt && (
           <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
             <div className="bg-white rounded-lg p-8 w-96">
               <h2 className="text-2xl text-sky-700 font-bold mb-4 font-serif">
                 Update Task
               </h2>
-              {/* Input for Task Code */}
               <div className="mb-3">
                 <label
                   htmlFor="taskCodeInput"
@@ -472,7 +465,6 @@ export default function FormNewTask() {
                   placeholder="Enter new task code"
                 />
               </div>
-              {/* Input for Task Name */}
               <div className="mb-3">
                 <label
                   htmlFor="taskNameInput"
@@ -489,7 +481,6 @@ export default function FormNewTask() {
                   placeholder="Enter new task name"
                 />
               </div>
-              {/* Buttons for Update and Cancel */}
               <div className="flex justify-end mt-5">
                 <button
                   onClick={confirmModification}

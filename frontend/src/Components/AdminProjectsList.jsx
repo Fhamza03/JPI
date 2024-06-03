@@ -24,7 +24,7 @@ export default function AdminProjectsList() {
 
       const response = await fetch("http://localhost:8080/getAllProjects", {
         headers: {
-          Authorization: `Basic ${base64Credentials}`, // Add authorization header
+          Authorization: `Basic ${base64Credentials}`,
         },
       });
 
@@ -74,7 +74,6 @@ export default function AdminProjectsList() {
     setLastClickTime(now);
 
     if (timeDiff < 300) {
-      // Adjust this value as needed
       handleDoubleClick(projectId);
     }
   };
@@ -84,16 +83,15 @@ export default function AdminProjectsList() {
     const selected = projects.find(
       (project) => project.projectId === projectId
     );
-    console.log("Selected project:", selected); // Log the selected project
-    setSelectedProject(selected); // Set the selected project state
-    console.log("Selected project state:", selectedProject); // Log the selected project state
+    console.log("Selected project:", selected); 
+    setSelectedProject(selected);
+    console.log("Selected project state:", selectedProject); 
     history.push({
       pathname: "/admin/NewDatabase",
-      state: { project: selected }, // Pass the selected project as state
+      state: { project: selected },
     });
   };
 
-  // Handler for editing project
   const handleEditProject = (projectId) => {
     const selectedProject = projects.find(
       (project) => project.projectId === projectId
@@ -106,14 +104,11 @@ export default function AdminProjectsList() {
     }
   };
 
-  // Handler for removing project
   const handleRemoveProject = async (projectId) => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch(
@@ -121,7 +116,7 @@ export default function AdminProjectsList() {
         {
           method: "DELETE",
           headers: {
-            Authorization: `Basic ${base64Credentials}`, // Add authorization header
+            Authorization: `Basic ${base64Credentials}`, 
           },
         }
       );
@@ -155,7 +150,6 @@ export default function AdminProjectsList() {
     <div>
       <section className="container px-4 mx-auto">
         <div className="mt-6 md:flex md:items-center md:justify-between">
-          {/* Location select dropdown */}
           <div className="relative flex items-center">
             <select
               value={selectedLocation}
@@ -189,7 +183,6 @@ export default function AdminProjectsList() {
               </svg>
             </span>
           </div>
-          {/* Search input */}
           <div className="relative flex items-center mt-4 md:mt-0">
             <span className="absolute">
               <svg
@@ -216,13 +209,11 @@ export default function AdminProjectsList() {
             />
           </div>
         </div>
-        {/* Table section */}
         <div className="flex flex-col mt-6">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
               <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg shadow-lg">
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  {/* Table header */}
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
                       <th
@@ -275,7 +266,6 @@ export default function AdminProjectsList() {
                       </th>
                     </tr>
                   </thead>
-                  {/* Table body */}
                   <tbody className="bg-white divide-y divide-black-200 dark:divide-black-700 dark:bg-white">
                     {projectsForPage.map((project, index) => (
                       <tr
@@ -289,7 +279,6 @@ export default function AdminProjectsList() {
                         }}
                         className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
                       >
-                        {/* Project details cells */}
                         <td className="text-center p-4 border-b border-blue-gray-50">
                           {project.databaseLocation}
                         </td>
@@ -312,7 +301,6 @@ export default function AdminProjectsList() {
                           {project.serverName}
                         </td>
                         <td className="text-left p-4 border-b border-blue-gray-50">
-                          {/* Edit and Remove icons */}
                           <svg
                             onClick={() =>
                               handleRemoveProject(project.projectId)
@@ -361,7 +349,6 @@ export default function AdminProjectsList() {
             </div>
           </div>
         </div>
-        {/* Pagination */}
         <div className="mt-6 sm:flex sm:items-center sm:justify-between ">
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Page{" "}
@@ -415,7 +402,6 @@ export default function AdminProjectsList() {
           </div>
         </div>
       </section>
-      {/* Check if selectedProject is not null before rendering FormNewDatabase */}
       {selectedProject ? (
         <FormNewDatabase project={selectedProject} />
       ) : (

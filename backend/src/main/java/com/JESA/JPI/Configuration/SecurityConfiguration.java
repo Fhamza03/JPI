@@ -29,25 +29,6 @@ public class SecurityConfiguration {
 
     @Autowired
     private UserDetailsService userDetailService;
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        return httpSecurity
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(registry -> {
-//                    registry.requestMatchers("/signup","/login").permitAll();
-//                    registry.requestMatchers("/admin/**").permitAll();
-//                    registry.requestMatchers("/user/**").hasRole("USER");
-//                    registry.requestMatchers("/**").permitAll();
-//                    registry.anyRequest().authenticated();
-//                })
-//                .logout((logout) -> logout
-//                        .logoutSuccessUrl("/logoutUser")
-//                        .deleteCookies("JSESSIONID")
-//                        .permitAll()
-//                )
-//                .build();
-//    }
 @Bean
 SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 

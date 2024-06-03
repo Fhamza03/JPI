@@ -34,8 +34,8 @@ export default function FormNewDepartement() {
     departementName
   ) => {
     setDepartementId(departementId);
-    setModifiedDepartementCode(departementCode); // Set modifiedDepartementCode with the old value
-    setModifiedDepartementName(departementName); // Set modifiedDepartementName with the old value
+    setModifiedDepartementCode(departementCode); 
+    setModifiedDepartementName(departementName); 
     setShowPrompt(true);
   };
 
@@ -55,7 +55,7 @@ export default function FormNewDepartement() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`, 
           },
           body: JSON.stringify(departmentData),
         }
@@ -193,10 +193,8 @@ export default function FormNewDepartement() {
 
   const itemsPerPage = 5;
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(filteredDepartements.length / itemsPerPage);
 
-  // Calculate the start and end index of items to display for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(
     startIndex + itemsPerPage,
@@ -204,7 +202,6 @@ export default function FormNewDepartement() {
   );
   const DepartementsForPage = filteredDepartements.slice(startIndex, endIndex);
 
-  // Define functions for handling pagination
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
@@ -290,7 +287,6 @@ export default function FormNewDepartement() {
             </button>
           )}
         </div>
-        {/* Department Information Card */}
         <div className="w-1/2 p-4 bg-gray-100 mr-10 rounded-xl shadow-xl">
         <h2 className="text-2xl text-sky-700 font-bold mb-3">
             SubArea Information
@@ -482,7 +478,6 @@ export default function FormNewDepartement() {
                   placeholder="Enter new departement code"
                 />
               </div>
-              {/* Sub-area name input with label */}
               <div className="mb-3">
                 <label
                   htmlFor="departementNameInput"

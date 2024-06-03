@@ -23,16 +23,14 @@ export default function Databases() {
 
   const fetchDatabaseTypes = async () => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch("http://localhost:8080/getAllDatabases", {
         headers: {
-          Authorization: `Basic ${base64Credentials}`, // Add authorization header
+          Authorization: `Basic ${base64Credentials}`, 
         },
       });
       if (response.ok) {
@@ -48,11 +46,9 @@ export default function Databases() {
 
   const fetchProjectDatabases = async (projectId) => {
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
-      // Encode credentials as base64
       const base64Credentials = btoa(`${username}:${password}`);
 
       const response = await fetch(

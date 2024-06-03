@@ -31,7 +31,6 @@ export default function FormNewProject() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Validate if all fields are filled
     const allFieldsFilled = Object.values(project).every(
       (value) => value !== ""
     );
@@ -41,7 +40,6 @@ export default function FormNewProject() {
     }
 
     try {
-      // Retrieve username and password from session storage
       const username = sessionStorage.getItem("username");
       const password = sessionStorage.getItem("password");
 
@@ -51,7 +49,7 @@ export default function FormNewProject() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(`${username}:${password}`)}`, // Add authorization header
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
           },
           body: JSON.stringify(project),
         }

@@ -56,8 +56,4 @@ public class AreaService implements  AreaServiceImpl{
         }
     }
 
-//    @Override
-//    public List<AreaModel> getAreaOfDatabase(Integer DatabaseDatabaseId) {
-//        return areaRepo.findByDatabaseId(DatabaseDatabaseId);
-//    }
 }
