@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import ExcelPage from "./Pages/ExcelPage";
 import Login from "./Pages/Login";
 import NewArea from "./Pages/NewArea";
 import NewDatabase from "./Pages/NewDatabase";
@@ -10,13 +11,12 @@ import NewSubArea from "./Pages/NewSubArea";
 import NewTask from "./Pages/NewTask";
 import Signup from "./Pages/Signup";
 import UserAreaProject from "./Pages/UserAreaProject";
+import WordPage from "./Pages/WordPage";
 import adminDashboard from "./Pages/adminDashboard";
 import userDashboard from "./Pages/userDashboard";
 import userDatabases from "./Pages/userDatabases";
 import userFile from "./Pages/userFile";
 import ProtectedRoute from "./hooks/ProtectedRoute";
-import ExcelPage from "./Pages/ExcelPage";
-import WordPage from "./Pages/WordPage";
 
 
 
