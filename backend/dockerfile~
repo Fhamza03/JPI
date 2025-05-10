@@ -1,0 +1,32 @@
+# Stage 1: Build the application using Maven
+FROM maven:3.8.4-openjdk-17-slim AS build
+
+# Set working directory for the build
+WORKDIR /app
+
+# Copy the pom.xml file to the container
+COPY pom.xml .
+
+# Copy the source code to the container
+COPY src ./src
+
+# Run Maven to build the application and package it, skipping tests
+RUN mvn clean package -DskipTests
+
+# Check the contents of the /app/target directory (optional, just for debugging)
+RUN ls -l /app/target
+
+# Stage 2: Create the final image using the OpenJDK runtime
+FROM openjdk:17-jdk-alpine
+
+# Set the working directory for the final image
+WORKDIR /app
+
+# Copy the JAR file from the build stage to the final image
+COPY --from=build /app/target/*.jar app.jar
+
+# Expose the port the application will run on
+EXPOSE 8080
+
+# Run the application with the appropriate command
+CMD ["java", "-jar", "app.jar"]
