@@ -1,0 +1,4 @@
+package com.JESA.JPI.Configuration;
+
+public class DotenvConfig {
+}
